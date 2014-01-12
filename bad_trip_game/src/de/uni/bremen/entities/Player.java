@@ -27,7 +27,27 @@ public class Player extends Sprite implements InputProcessor{
 		this.collisionLayer = collisionLayer;
 	}
 	
+	//============================== INTERNAL STATES ==============================//
+	//
+	//	Note: we should make the player as a state machine
+	//
+	//===============================================================================//
 
+	private int currentState=0;
+	
+	private enum States{
+		IDLE(0),JUMPING(1),DUCKING(2),WALK_LEFT(3),WALK_RIGHT(4),ACTION(5);
+		
+		private int code;
+		
+		private States(int c){
+			code = c;
+		}
+		
+		public int getCode(){
+			return code;
+		}
+	};
 	
 	//============================== PUBLIC PROPERTIES ==============================//
 	//
@@ -109,13 +129,15 @@ public class Player extends Sprite implements InputProcessor{
 
 	//============================== PRIVATE PROPERTIES ==============================//
 	//
-	//	
+	//	Properties, that condition the state behavior.
 	//	
 	//
 	//
 	//===============================================================================//
 	
 	private boolean canJump;
+	
+	private boolean animated;
 	
 	//============================== PLAYER ANIMATION ==============================//
 	//
@@ -124,7 +146,7 @@ public class Player extends Sprite implements InputProcessor{
 	//
 	//===============================================================================//
 	
-	private boolean animated;
+	
 	
 	private static final int FRAME_COLS = 6;
 	private static final int FRAME_ROWS = 5;
@@ -134,8 +156,6 @@ public class Player extends Sprite implements InputProcessor{
 	private Texture walkSheet;
 	private TextureRegion[] walkFrames;
 	private TextureRegion currentFrame;
-	
-	//private SpriteBatch spriteBatch;
 	
 	private float stateTime;
 	
@@ -149,8 +169,7 @@ public class Player extends Sprite implements InputProcessor{
                         walkFrames[index++] = tmp[i][j];
                 }
         }
-        walkAnimation = new Animation(0.025f, walkFrames);              // #11
-        //spriteBatch = new SpriteBatch();                                // #12
+        walkAnimation = new Animation(0.025f, walkFrames);   
         stateTime = 0f;
 	}
 
@@ -164,18 +183,30 @@ public class Player extends Sprite implements InputProcessor{
 		
 	@Override
 	public void draw(SpriteBatch batch){
+		
+		//update frame delta
 		update(Gdx.graphics.getDeltaTime());
-		if(!animated)
+		
+		//check current state
+		if(currentState == States.IDLE.getCode())
 		{
-			super.draw(batch);	
-		}else{
-            //Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);                                            // #14
-            stateTime += Gdx.graphics.getDeltaTime();                       // #15
+			super.draw(batch);
+			return;
+		}
+		
+		//... the other states
+		
+		if(currentState == States.WALK_RIGHT.getCode())
+		{
+			stateTime += Gdx.graphics.getDeltaTime();                       // #15
             currentFrame = walkAnimation.getKeyFrame(stateTime, true);      // #16
             float[]  vertz = getVertices();
             batch.draw(currentFrame,vertz[0],vertz[1]);
-            
+            return;
 		}
+		
+		//just for now since states are all implemented
+		super.draw(batch);
 	}
 
 
@@ -325,16 +356,17 @@ public class Player extends Sprite implements InputProcessor{
 		switch (keycode) {
 		case Keys.LEFT:
 			velocity.x = -speed;
-			animated=true;
+			currentState = States.WALK_LEFT.getCode();
 			break;
 		case Keys.RIGHT:
 			velocity.x = speed;
-			animated=true;
+			currentState = States.WALK_RIGHT.getCode();
 			break;
 		case Keys.UP:
 			if(canJump){
 				velocity.y = speed + Math.abs(velocity.x) * speed;
 				canJump = false;
+				currentState = States.JUMPING.getCode();
 			}
 			break;
 		default:
@@ -350,13 +382,13 @@ public class Player extends Sprite implements InputProcessor{
 		case Keys.LEFT:
 		case Keys.RIGHT:
 			velocity.x = 0;
-			animated=false;
 			break;
 		case Keys.UP:
 			break;
 		default:
 			break;
 		}
+		currentState = States.IDLE.getCode();
 		return true;
 	}
 
