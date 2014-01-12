@@ -63,7 +63,7 @@ public class PlayScreen implements Screen {
 		
 		player = new Player(new Sprite(new Texture("img/player.png")), 
 						   (TiledMapTileLayer) map.getLayers().get(0));
-		
+		player.initAnimation();
 		player.setPosition(27  * player.getCollisionLayer().getTileWidth(),
 						   (player.getCollisionLayer().getHeight()-29) * player.getCollisionLayer().getTileHeight());
 		Gdx.input.setInputProcessor(player);

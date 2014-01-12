@@ -3,8 +3,12 @@ package de.uni.bremen.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
@@ -23,6 +27,7 @@ public class Player extends Sprite implements InputProcessor{
 		this.collisionLayer = collisionLayer;
 	}
 	
+
 	
 	//============================== PUBLIC PROPERTIES ==============================//
 	//
@@ -111,6 +116,43 @@ public class Player extends Sprite implements InputProcessor{
 	//===============================================================================//
 	
 	private boolean canJump;
+	
+	//============================== PLAYER ANIMATION ==============================//
+	//
+	//	NOTE: just preparing animation yet, implementation will follow soon
+	//	STuff is done by: https://code.google.com/p/libgdx/wiki/SpriteAnimation
+	//
+	//===============================================================================//
+	
+	private boolean animated;
+	
+	private static final int FRAME_COLS = 6;
+	private static final int FRAME_ROWS = 5;
+	
+	
+	private Animation walkAnimation;
+	private Texture walkSheet;
+	private TextureRegion[] walkFrames;
+	private TextureRegion currentFrame;
+	
+	//private SpriteBatch spriteBatch;
+	
+	private float stateTime;
+	
+	public void initAnimation(){
+		walkSheet = new Texture("img/animation_sheet.png");
+        TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth() / FRAME_COLS, walkSheet.getHeight() / FRAME_ROWS);                                // #10
+        walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
+        int index = 0;
+        for (int i = 0; i < FRAME_ROWS; i++) {
+                for (int j = 0; j < FRAME_COLS; j++) {
+                        walkFrames[index++] = tmp[i][j];
+                }
+        }
+        walkAnimation = new Animation(0.025f, walkFrames);              // #11
+        //spriteBatch = new SpriteBatch();                                // #12
+        stateTime = 0f;
+	}
 
 	//============================== PUBLIC API FUNCTIONS ==============================//
 	//
@@ -123,7 +165,17 @@ public class Player extends Sprite implements InputProcessor{
 	@Override
 	public void draw(SpriteBatch batch){
 		update(Gdx.graphics.getDeltaTime());
-		super.draw(batch);
+		if(!animated)
+		{
+			super.draw(batch);	
+		}else{
+            //Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);                                            // #14
+            stateTime += Gdx.graphics.getDeltaTime();                       // #15
+            currentFrame = walkAnimation.getKeyFrame(stateTime, true);      // #16
+            float[]  vertz = getVertices();
+            batch.draw(currentFrame,vertz[0],vertz[1]);
+            
+		}
 	}
 
 
@@ -273,9 +325,11 @@ public class Player extends Sprite implements InputProcessor{
 		switch (keycode) {
 		case Keys.LEFT:
 			velocity.x = -speed;
+			animated=true;
 			break;
 		case Keys.RIGHT:
 			velocity.x = speed;
+			animated=true;
 			break;
 		case Keys.UP:
 			if(canJump){
@@ -296,6 +350,7 @@ public class Player extends Sprite implements InputProcessor{
 		case Keys.LEFT:
 		case Keys.RIGHT:
 			velocity.x = 0;
+			animated=false;
 			break;
 		case Keys.UP:
 			break;
