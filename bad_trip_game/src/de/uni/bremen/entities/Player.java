@@ -11,10 +11,11 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Player extends Sprite implements InputProcessor{
 
-	private Vector2 velocity = new Vector2();
-	private float speed = 80 * 2, gravity = 60 * 2.8f;
-	private boolean canJump;
-	private TiledMapTileLayer collisionLayer;
+	//============================== PUBLIC CONSTRUCTORS ==============================//
+	//
+	//
+	//
+	//===============================================================================//
 	
 	public Player(Sprite sprite, TiledMapTileLayer collisionLayer){
 		super(sprite);
@@ -23,6 +24,103 @@ public class Player extends Sprite implements InputProcessor{
 	}
 	
 	
+	//============================== PUBLIC PROPERTIES ==============================//
+	//
+	//	NOTE: I have put the variables and the getters/setters into one block
+	//	for reason of structure. Jan
+	//
+	//
+	//===============================================================================//
+	
+	
+	//============================== VELOCITY ==============================//
+	
+	/**
+	 * The vector for adding velocity to the player.
+	 */
+	private Vector2 velocity = new Vector2();
+	
+	public Vector2 getVelocity() {
+		return velocity;
+	}
+
+
+	public void setVelocity(Vector2 velocity) {
+		this.velocity = velocity;
+	}
+
+
+	//============================== SPEED ==============================//
+	
+	/**
+	 * The maximum speed value of the player.
+	 */	
+	private float speed = 160;
+			
+	public float getSpeed() {
+		return speed;
+	}
+
+
+	public void setSpeed(float speed) {
+		this.speed = speed;
+	}
+
+
+	//============================== GRAVITY ==============================//
+
+	/**
+	 * 
+	 * The gravity force, working on the player.
+	 */
+	private float gravity = 60 * 4.8f;
+	
+	public float getGravity() {
+		return gravity;
+	}
+
+
+	public void setGravity(float gravity) {
+		this.gravity = gravity;
+	}
+
+	
+	//============================== COLLISION LAYER ==============================//
+	
+	/**
+	 * Tile layer for the player.
+	 */
+	private TiledMapTileLayer collisionLayer;
+	
+	
+	public TiledMapTileLayer getCollisionLayer() {
+		return collisionLayer;
+	}
+
+
+	public void setCollisionLayer(TiledMapTileLayer collisionLayer) {
+		this.collisionLayer = collisionLayer;
+	}
+
+	//============================== PRIVATE PROPERTIES ==============================//
+	//
+	//	
+	//	
+	//
+	//
+	//===============================================================================//
+	
+	private boolean canJump;
+
+	//============================== PUBLIC API FUNCTIONS ==============================//
+	//
+	//	
+	//	
+	//
+	//
+	//===============================================================================//
+		
+	@Override
 	public void draw(SpriteBatch batch){
 		update(Gdx.graphics.getDeltaTime());
 		super.draw(batch);
@@ -169,47 +267,6 @@ public class Player extends Sprite implements InputProcessor{
 	public void dispose(){
 		getTexture().dispose();
 	}
-
-
-	public Vector2 getVelocity() {
-		return velocity;
-	}
-
-
-	public void setVelocity(Vector2 velocity) {
-		this.velocity = velocity;
-	}
-
-
-	public float getSpeed() {
-		return speed;
-	}
-
-
-	public void setSpeed(float speed) {
-		this.speed = speed;
-	}
-
-
-	public float getGravity() {
-		return gravity;
-	}
-
-
-	public void setGravity(float gravity) {
-		this.gravity = gravity;
-	}
-
-
-	public TiledMapTileLayer getCollisionLayer() {
-		return collisionLayer;
-	}
-
-
-	public void setCollisionLayer(TiledMapTileLayer collisionLayer) {
-		this.collisionLayer = collisionLayer;
-	}
-
 
 	@Override
 	public boolean keyDown(int keycode) {
