@@ -3,18 +3,23 @@ package de.uni.bremen.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
 
 public class Player extends Sprite implements InputProcessor{
 
-	private Vector2 velocity = new Vector2();
-	private float speed = 80 * 2, gravity = 60 * 2.8f;
-	private boolean canJump;
-	private TiledMapTileLayer collisionLayer;
+	//============================== PUBLIC CONSTRUCTORS ==============================//
+	//
+	//
+	//
+	//===============================================================================//
 	
 	public Player(Sprite sprite, TiledMapTileLayer collisionLayer){
 		super(sprite);
@@ -22,9 +27,194 @@ public class Player extends Sprite implements InputProcessor{
 		this.collisionLayer = collisionLayer;
 	}
 	
+	//============================== INTERNAL STATES ==============================//
+	//
+	//	Note: we should make the player as a state machine
+	//
+	//===============================================================================//
+
+	private int currentState=0;
 	
+	private enum States{
+		IDLE(0),JUMPING(1),DUCKING(2),WALK_LEFT(3),WALK_RIGHT(4),ACTION(5);
+		
+		private int code;
+		
+		private States(int c){
+			code = c;
+		}
+		
+		public int getCode(){
+			return code;
+		}
+	};
+	
+	//============================== PUBLIC PROPERTIES ==============================//
+	//
+	//	NOTE: I have put the variables and the getters/setters into one block
+	//	for reason of structure. Jan
+	//
+	//
+	//===============================================================================//
+	
+	
+	//============================== VELOCITY ==============================//
+	
+	/**
+	 * The vector for adding velocity to the player.
+	 */
+	private Vector2 velocity = new Vector2();
+	
+	public Vector2 getVelocity() {
+		return velocity;
+	}
+
+
+	public void setVelocity(Vector2 velocity) {
+		this.velocity = velocity;
+	}
+
+
+	//============================== SPEED ==============================//
+	
+	/**
+	 * The maximum speed value of the player.
+	 */	
+	private float speed = 160;
+			
+	public float getSpeed() {
+		return speed;
+	}
+
+
+	public void setSpeed(float speed) {
+		this.speed = speed;
+	}
+
+
+	//============================== GRAVITY ==============================//
+
+	/**
+	 * 
+	 * The gravity force, working on the player.
+	 */
+	private float gravity = 60 * 2.8f;
+	
+	public float getGravity() {
+		return gravity;
+	}
+
+
+	public void setGravity(float gravity) {
+		this.gravity = gravity;
+	}
+
+	
+	//============================== COLLISION LAYER ==============================//
+	
+	/**
+	 * Tile layer for the player.
+	 */
+	private TiledMapTileLayer collisionLayer;
+	
+	
+	public TiledMapTileLayer getCollisionLayer() {
+		return collisionLayer;
+	}
+
+
+	public void setCollisionLayer(TiledMapTileLayer collisionLayer) {
+		this.collisionLayer = collisionLayer;
+	}
+
+	//============================== PRIVATE PROPERTIES ==============================//
+	//
+	//	Properties, that condition the state behavior.
+	//	
+	//
+	//
+	//===============================================================================//
+	
+	private boolean canJump;
+	
+	private boolean animated;
+	
+	//============================== PLAYER ANIMATION ==============================//
+	//
+	//	NOTE: just preparing animation yet, implementation will follow soon
+	//	STuff is done by: https://code.google.com/p/libgdx/wiki/SpriteAnimation
+	//
+	//===============================================================================//
+	
+	
+	
+	private static final int FRAME_COLS = 6;
+	private static final int FRAME_ROWS = 5;
+	
+	
+	private Animation walkAnimation;
+	private Texture walkSheet;
+	private TextureRegion[] walkFrames;
+	private TextureRegion currentFrame;
+	
+	private float stateTime;
+	
+	public void initAnimation(){
+		walkSheet = new Texture("img/animation_sheet.png");
+        TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth() / FRAME_COLS, walkSheet.getHeight() / FRAME_ROWS);                                // #10
+        walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
+        int index = 0;
+        for (int i = 0; i < FRAME_ROWS; i++) {
+                for (int j = 0; j < FRAME_COLS; j++) {
+                        walkFrames[index++] = tmp[i][j];
+                }
+        }
+        walkAnimation = new Animation(0.025f, walkFrames);   
+        stateTime = 0f;
+	}
+
+	//============================== PUBLIC API FUNCTIONS ==============================//
+	//
+	//	
+	//	
+	//
+	//
+	//===============================================================================//
+		
+	@Override
 	public void draw(SpriteBatch batch){
+		
+		//update frame delta
 		update(Gdx.graphics.getDeltaTime());
+		
+		//check current state
+		if(currentState == States.IDLE.getCode())
+		{
+			super.draw(batch);
+			return;
+		}
+		
+		//... the other states
+
+		if(currentState == States.WALK_LEFT.getCode())
+		{
+			stateTime += Gdx.graphics.getDeltaTime();                       // #15
+            currentFrame = walkAnimation.getKeyFrame(stateTime, true);      // #16
+            float[]  vertz = getVertices();
+            batch.draw(currentFrame,vertz[0],vertz[1],0,0,getWidth(),getHeight(),-1.0f,1,0);
+            return;
+		}
+		
+		if(currentState == States.WALK_RIGHT.getCode())
+		{
+			stateTime += Gdx.graphics.getDeltaTime();                       // #15
+            currentFrame = walkAnimation.getKeyFrame(stateTime, true);      // #16
+            float[]  vertz = getVertices();
+            batch.draw(currentFrame,vertz[0],vertz[1],0,0,getWidth(),getHeight(),1.0f,1,0);
+            return;
+		}
+		
+		//just for now since states are all implemented
 		super.draw(batch);
 	}
 
@@ -170,60 +360,22 @@ public class Player extends Sprite implements InputProcessor{
 		getTexture().dispose();
 	}
 
-
-	public Vector2 getVelocity() {
-		return velocity;
-	}
-
-
-	public void setVelocity(Vector2 velocity) {
-		this.velocity = velocity;
-	}
-
-
-	public float getSpeed() {
-		return speed;
-	}
-
-
-	public void setSpeed(float speed) {
-		this.speed = speed;
-	}
-
-
-	public float getGravity() {
-		return gravity;
-	}
-
-
-	public void setGravity(float gravity) {
-		this.gravity = gravity;
-	}
-
-
-	public TiledMapTileLayer getCollisionLayer() {
-		return collisionLayer;
-	}
-
-
-	public void setCollisionLayer(TiledMapTileLayer collisionLayer) {
-		this.collisionLayer = collisionLayer;
-	}
-
-
 	@Override
 	public boolean keyDown(int keycode) {
 		switch (keycode) {
 		case Keys.LEFT:
 			velocity.x = -speed;
+			currentState = States.WALK_LEFT.getCode();
 			break;
 		case Keys.RIGHT:
 			velocity.x = speed;
+			currentState = States.WALK_RIGHT.getCode();
 			break;
 		case Keys.UP:
 			if(canJump){
 				velocity.y = speed + Math.abs(velocity.x) * speed;
 				canJump = false;
+				currentState = States.JUMPING.getCode();
 			}
 			break;
 		default:
@@ -245,6 +397,7 @@ public class Player extends Sprite implements InputProcessor{
 		default:
 			break;
 		}
+		currentState = States.IDLE.getCode();
 		return true;
 	}
 

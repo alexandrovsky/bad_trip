@@ -12,5 +12,8 @@ public class Main {
 		cfg.height = 768;
 		
 		new LwjglApplication(new BadTripGame(), cfg);
+		
+		
+		
 	}
 }
