@@ -195,13 +195,22 @@ public class Player extends Sprite implements InputProcessor{
 		}
 		
 		//... the other states
+
+		if(currentState == States.WALK_LEFT.getCode())
+		{
+			stateTime += Gdx.graphics.getDeltaTime();                       // #15
+            currentFrame = walkAnimation.getKeyFrame(stateTime, true);      // #16
+            float[]  vertz = getVertices();
+            batch.draw(currentFrame,vertz[0],vertz[1],0,0,getWidth(),getHeight(),-1.0f,1,0);
+            return;
+		}
 		
 		if(currentState == States.WALK_RIGHT.getCode())
 		{
 			stateTime += Gdx.graphics.getDeltaTime();                       // #15
             currentFrame = walkAnimation.getKeyFrame(stateTime, true);      // #16
             float[]  vertz = getVertices();
-            batch.draw(currentFrame,vertz[0],vertz[1]);
+            batch.draw(currentFrame,vertz[0],vertz[1],0,0,getWidth(),getHeight(),1.0f,1,0);
             return;
 		}
 		
