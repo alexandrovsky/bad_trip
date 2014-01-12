@@ -192,23 +192,23 @@ public class Player extends Sprite implements InputProcessor{
 		
 		//update graphics
 		stateTime += Gdx.graphics.getDeltaTime();                 
-        currentFrame = walkAnimation.getKeyFrame(stateTime, true);
+        currentFrame = walkAnimation.getKeyFrame(0, false);
 		
 		if(currentState == States.IDLE_LEFT.getCode())
 		{
-			super.draw(batch);
-			//super.draw(batch);
+			batch.draw(currentFrame,vertz[0]+getWidth(),vertz[1],0,0,getWidth(),getHeight(),-1.0f,1,0);
 			return;
 		}
 		
 		
 		if(currentState == States.IDLE_RIGHT.getCode())
 		{
-			super.draw(batch);
+			batch.draw(currentFrame,vertz[0],vertz[1],0,0,getWidth(),getHeight(),1.0f,1,0);
 			return;
 		}
 		
-
+		currentFrame = walkAnimation.getKeyFrame(stateTime, true);
+		
 		if(currentState == States.WALK_LEFT.getCode())
 		{
             batch.draw(currentFrame,vertz[0]+getWidth(),vertz[1],0,0,getWidth(),getHeight(),-1.0f,1,0);
