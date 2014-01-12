@@ -73,7 +73,7 @@ public class Player extends Sprite implements InputProcessor{
 	 * 
 	 * The gravity force, working on the player.
 	 */
-	private float gravity = 60 * 4.8f;
+	private float gravity = 60 * 2.8f;
 	
 	public float getGravity() {
 		return gravity;
