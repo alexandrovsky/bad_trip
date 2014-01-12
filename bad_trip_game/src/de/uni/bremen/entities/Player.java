@@ -69,7 +69,6 @@ public class Player extends Sprite implements InputProcessor{
 		return velocity;
 	}
 
-
 	public void setVelocity(Vector2 velocity) {
 		this.velocity = velocity;
 	}
@@ -85,7 +84,6 @@ public class Player extends Sprite implements InputProcessor{
 	public float getSpeed() {
 		return speed;
 	}
-
 
 	public void setSpeed(float speed) {
 		this.speed = speed;
@@ -122,7 +120,6 @@ public class Player extends Sprite implements InputProcessor{
 		return collisionLayer;
 	}
 
-
 	public void setCollisionLayer(TiledMapTileLayer collisionLayer) {
 		this.collisionLayer = collisionLayer;
 	}
@@ -146,22 +143,25 @@ public class Player extends Sprite implements InputProcessor{
 	//
 	//===============================================================================//
 	
-	
-	
+	//5*6 frames = 30fps
 	private static final int FRAME_COLS = 6;
 	private static final int FRAME_ROWS = 5;
 	
 	
-	private Animation walkAnimation;
-	private Texture walkSheet;
-	private TextureRegion[] walkFrames;
-	private TextureRegion currentFrame;
+	private Texture animationSheet; 	//animationsheet for player
+	private TextureRegion currentFrame; //the region of the sheet to be drawn at the current frame
+	private float stateTime;			//length of displaying an animation frame
 	
-	private float stateTime;
+	private Animation walkAnimation;
+	private TextureRegion[] walkFrames; //the parts of the animation sheet which define the walk animation
+	
+	//private Animation actionAnimation; 
+	//private TextureRegion[] actionFrames;
+	
 	
 	public void initAnimation(){
-		walkSheet = new Texture("img/animation_sheet.png");
-        TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth() / FRAME_COLS, walkSheet.getHeight() / FRAME_ROWS);                                // #10
+		animationSheet = new Texture("img/animation_sheet.png");
+        TextureRegion[][] tmp = TextureRegion.split(animationSheet, animationSheet.getWidth() / FRAME_COLS, animationSheet.getHeight() / FRAME_ROWS);                                // #10
         walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
         int index = 0;
         for (int i = 0; i < FRAME_ROWS; i++) {
