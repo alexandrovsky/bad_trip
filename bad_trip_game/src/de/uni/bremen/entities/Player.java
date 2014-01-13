@@ -33,10 +33,10 @@ public class Player extends Sprite implements InputProcessor{
 	//
 	//===============================================================================//
 
-	private int currentState=0;
+	private int currentState=States.IDLE_RIGHT.getCode();
 	
 	private enum States{
-		IDLE(0),JUMPING(1),DUCKING(2),WALK_LEFT(3),WALK_RIGHT(4),ACTION(5);
+		IDLE_LEFT(0),IDLE_RIGHT(1),JUMPING(2),DUCKING(3),WALK_LEFT(4),WALK_RIGHT(5),ACTION(6);
 		
 		private int code;
 		
@@ -141,8 +141,8 @@ public class Player extends Sprite implements InputProcessor{
 	
 	//============================== PLAYER ANIMATION ==============================//
 	//
-	//	NOTE: just preparing animation yet, implementation will follow soon
-	//	STuff is done by: https://code.google.com/p/libgdx/wiki/SpriteAnimation
+	//	NOTE: just preparing animation yet, full implementation will follow soon
+	//	STuff is based on: https://code.google.com/p/libgdx/wiki/SpriteAnimation
 	//
 	//===============================================================================//
 	
@@ -187,29 +187,36 @@ public class Player extends Sprite implements InputProcessor{
 		//update frame delta
 		update(Gdx.graphics.getDeltaTime());
 		
-		//check current state
-		if(currentState == States.IDLE.getCode())
+		//get player coordinates
+		float[]  vertz = getVertices();
+		
+		//update graphics
+		stateTime += Gdx.graphics.getDeltaTime();                 
+        currentFrame = walkAnimation.getKeyFrame(stateTime, true);
+		
+		if(currentState == States.IDLE_LEFT.getCode())
+		{
+			super.draw(batch);
+			//super.draw(batch);
+			return;
+		}
+		
+		
+		if(currentState == States.IDLE_RIGHT.getCode())
 		{
 			super.draw(batch);
 			return;
 		}
 		
-		//... the other states
 
 		if(currentState == States.WALK_LEFT.getCode())
 		{
-			stateTime += Gdx.graphics.getDeltaTime();                       // #15
-            currentFrame = walkAnimation.getKeyFrame(stateTime, true);      // #16
-            float[]  vertz = getVertices();
-            batch.draw(currentFrame,vertz[0],vertz[1],0,0,getWidth(),getHeight(),-1.0f,1,0);
+            batch.draw(currentFrame,vertz[0]+getWidth(),vertz[1],0,0,getWidth(),getHeight(),-1.0f,1,0);
             return;
 		}
 		
 		if(currentState == States.WALK_RIGHT.getCode())
 		{
-			stateTime += Gdx.graphics.getDeltaTime();                       // #15
-            currentFrame = walkAnimation.getKeyFrame(stateTime, true);      // #16
-            float[]  vertz = getVertices();
             batch.draw(currentFrame,vertz[0],vertz[1],0,0,getWidth(),getHeight(),1.0f,1,0);
             return;
 		}
@@ -389,15 +396,19 @@ public class Player extends Sprite implements InputProcessor{
 	public boolean keyUp(int keycode) {
 		switch (keycode) {
 		case Keys.LEFT:
+			velocity.x = 0;
+			currentState = States.IDLE_LEFT.getCode();
+			break;
 		case Keys.RIGHT:
 			velocity.x = 0;
+			currentState = States.IDLE_RIGHT.getCode();
 			break;
 		case Keys.UP:
 			break;
 		default:
 			break;
 		}
-		currentState = States.IDLE.getCode();
+		
 		return true;
 	}
 
