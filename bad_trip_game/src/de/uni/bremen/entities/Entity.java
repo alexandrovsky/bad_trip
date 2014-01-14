@@ -28,8 +28,6 @@ public class Entity extends Sprite {
 		WALK_LEFT,
 		WALK_RIGHT,
 		ACTION;
-		
-		
 	};
 
 	

@@ -92,16 +92,13 @@ public class Character extends Entity{
 		//3) move on x:
 		setX(getX() + velocity.x * deltaTime);
 		
-		Cell cell = null;
-		
 		// moving left:
 		if(velocity.x < 0){
-			
 			collisionX = collidesLeft();
 		}
+		
 		// moving right:
-		else if(velocity.x > 0)
-		{
+		else if(velocity.x > 0){
 			collisionX = collidesRight();
 		}
 		// 5)
