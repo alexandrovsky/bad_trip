@@ -7,6 +7,11 @@
     <property name="blocked" value=""/>
    </properties>
   </tile>
+  <tile id="141">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
   <tile id="142">
    <properties>
     <property name="blocked" value=""/>

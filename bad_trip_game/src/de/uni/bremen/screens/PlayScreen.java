@@ -18,7 +18,7 @@ import de.uni.bremen.entities.Player;
 
 
 public class PlayScreen implements Screen {
-
+	
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer renderer;
 	private OrthographicCamera camera;
@@ -35,6 +35,8 @@ public class PlayScreen implements Screen {
 		camera.update();
 		
 		renderer.setView(camera);
+		
+
 		renderer.getSpriteBatch().begin();
 		
 		// render background
@@ -61,7 +63,7 @@ public class PlayScreen implements Screen {
 		
 		player = new Player(new Sprite(new Texture("img/player.png")), 
 						   (TiledMapTileLayer) map.getLayers().get(0));
-		player.initAnimation();
+		//player.initAnimation();
 		player.setPosition(27  * player.getCollisionLayer().getTileWidth(),
 						   (player.getCollisionLayer().getHeight()-29) * player.getCollisionLayer().getTileHeight());
 		Gdx.input.setInputProcessor(player);
