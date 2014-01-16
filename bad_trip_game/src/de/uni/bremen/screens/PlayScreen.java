@@ -35,8 +35,6 @@ public class PlayScreen implements Screen {
 		camera.update();
 		
 		renderer.setView(camera);
-		
-
 		renderer.getSpriteBatch().begin();
 		
 		// render background

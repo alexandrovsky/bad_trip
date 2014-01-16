@@ -150,6 +150,7 @@ public class Player extends Sprite implements InputProcessor{
 	
 	private Texture animationSheet; 	//animationsheet for player
 	private TextureRegion currentFrame; //the region of the sheet to be drawn at the current frame
+	
 	private float stateTime;			//length of displaying an animation frame
 	
 	private Animation walkAnimation;
@@ -194,6 +195,13 @@ public class Player extends Sprite implements InputProcessor{
 		stateTime += Gdx.graphics.getDeltaTime();                 
         currentFrame = walkAnimation.getKeyFrame(0, false);
 		
+        
+		if(currentState == States.JUMPING.getCode())
+		{
+			batch.draw(currentFrame,vertz[0],vertz[1],0,0,getWidth(),getHeight(),1.0f,1,0);
+			return;
+		}
+        
 		if(currentState == States.IDLE_LEFT.getCode())
 		{
 			batch.draw(currentFrame,vertz[0]+getWidth(),vertz[1],0,0,getWidth(),getHeight(),-1.0f,1,0);
@@ -221,6 +229,8 @@ public class Player extends Sprite implements InputProcessor{
             return;
 		}
 		
+		
+
 		//just for now since states are all implemented
 		super.draw(batch);
 	}
@@ -360,7 +370,7 @@ public class Player extends Sprite implements InputProcessor{
 			setY(oldY);
 			velocity.y = 0;
 		}
-		System.out.println(velocity);
+		//System.out.println(velocity);
 	}
 	
 	public void dispose(){
