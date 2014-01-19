@@ -43,14 +43,13 @@ public class Entity extends Sprite {
 	protected float stateTime;
 	protected float animationTime;
 	
-	public Entity(Sprite sprite, Texture animationSheet, float animationTime, int frameCols, int frameRows) {
+	public Entity(Sprite sprite, Texture animationSheet, float animationTime, int frameCols, int frameRows){
 		super(sprite);
 		this.animationSheet = animationSheet;
 		this.animationTime = animationTime;
 		this.animationFrameCols = frameCols;
 		this.animationFrameRows = frameRows;
 		this.animation = initAnimation();
-		
 	}
 	
 	protected Animation initAnimation(){
