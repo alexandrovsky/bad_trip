@@ -30,8 +30,7 @@ public class Player extends Character implements InputProcessor{
 		
 	@Override
 	public void draw(SpriteBatch batch){
-		
-		//update frame delta
+	
 		update(Gdx.graphics.getDeltaTime());
 		super.draw(batch);
 	}
