@@ -1,6 +1,5 @@
 package de.uni.bremen.entities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -11,24 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Entity extends Sprite {
 	
-	
-	//============================== INTERNAL STATES ==============================//
-	//
-	//	Note: we should make the player as a state machine
-	//
-	//===============================================================================//
 
-	protected States currentState = States.IDLE_RIGHT;
-	
-	protected enum States{
-		IDLE_LEFT,
-		IDLE_RIGHT,
-		JUMPING,
-		DUCKING,
-		WALK_LEFT,
-		WALK_RIGHT,
-		ACTION;
-	};
 
 	
 	
@@ -64,37 +46,15 @@ public class Entity extends Sprite {
         return new Animation(this.animationTime, animationFrames);
 	}
 	
+	//============================== OVERRIDES ======================================//
+	//
+	//	
+	//
+	//===============================================================================//
+	
 	@Override
 	public void draw(SpriteBatch batch){
-		//get entity coordinates
-		float[]  vertz = getVertices();
-		
-		//update graphics
-		stateTime += Gdx.graphics.getDeltaTime();                 
-        currentFrame = animation.getKeyFrame(stateTime, true);
-		
-        switch (currentState) 
-        {
-			case IDLE_LEFT:{
-				super.draw(batch);
-				break;
-			}
-			case IDLE_RIGHT:{
-				super.draw(batch);
-				break;
-			}
-			case WALK_LEFT:{
-				batch.draw(currentFrame,vertz[0]+getWidth(),vertz[1],0,0,getWidth(),getHeight(),-1.0f,1,0);
-				break;
-			}
-			case WALK_RIGHT:{
-				batch.draw(currentFrame,vertz[0],vertz[1],0,0,getWidth(),getHeight(),1.0f,1,0);
-				break;
-			}
-			default:
-				super.draw(batch);
-				break;
-		}	
+		super.draw(batch);
 	}
 	
 	public void dispose(){
