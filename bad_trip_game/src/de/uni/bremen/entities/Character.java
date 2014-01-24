@@ -174,8 +174,8 @@ public class Character extends Entity{
 	
 	public void update(float deltaTime) 
 	{
-		setX(this.body.getPosition().x);
-		setY(this.body.getPosition().y);
+		setX(this.body.getPosition().x-this.getWidth()/2);
+		setY(this.body.getPosition().y-this.getHeight()/2);
 		
 //		//1) apply gravity:
 //		velocity.y -= WorldPhysics.GRAVITY * deltaTime;

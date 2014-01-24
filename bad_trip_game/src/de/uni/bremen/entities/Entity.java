@@ -21,7 +21,7 @@ public class Entity extends Sprite {
 
 	public void setBody(Body body) {
 		this.body = body;
-		body.setUserData(this);
+		//body.setUserData(this);
 	}
 
 

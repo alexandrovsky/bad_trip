@@ -95,12 +95,15 @@ public class PlayScreen implements Screen {
 		BodyDef bodyDef = new BodyDef();
 		FixtureDef fixDef = new FixtureDef();
 		
-		//player definition
-		bodyDef.type = BodyType.DynamicBody;
-		bodyDef.position.set(startx,starty);
-		
 		PolygonShape playerShape = new PolygonShape();
 		playerShape.setAsBox(player.getWidth()/2,player.getHeight()/2);
+		
+		
+		//player definition
+		bodyDef.type = BodyType.DynamicBody;
+		bodyDef.position.set(startx-player.getWidth(),
+							 starty-player.getHeight());
+		
 		
 		
 		
@@ -110,10 +113,10 @@ public class PlayScreen implements Screen {
 		fixDef.density = 50;
 		
 		//world.createBody(bodyDef).createFixture(fixDef);
-		Body b =world.createBody(bodyDef);
-		b.createFixture(fixDef);
+		Body body = world.createBody(bodyDef);
+		body.createFixture(fixDef);
 		
-		player.setBody(b);
+		player.setBody(body);
 		playerShape.dispose();
 		
 		camera = new OrthographicCamera();
