@@ -26,6 +26,8 @@ public class WorldPhysics {
 	
 	public static World CreateWorldWithMap(TiledMap map){
 		
+		
+		
 		TiledMapTileLayer collisionLayer = (TiledMapTileLayer)map.getLayers().get(0);
 		
 		float tileWidth = collisionLayer.getTileWidth();

@@ -174,59 +174,62 @@ public class Character extends Entity{
 	
 	public void update(float deltaTime) 
 	{
-		//1) apply gravity:
-		velocity.y -= WorldPhysics.GRAVITY * deltaTime;
+		setX(this.body.getPosition().x);
+		setY(this.body.getPosition().y);
 		
-		//clam velocity:
-		if(velocity.y > maxSpeed){
-			velocity.y = maxSpeed;
-		}else if(velocity.y < -maxSpeed){
-			velocity.y = -maxSpeed;
-		}
-		
-		//2)
-		float oldX = getX();
-		float oldY = getY();
-		
-		collisionX = false;
-		collisionY = false;
-		
-		//3) move on x:
-		setX(getX() + velocity.x * deltaTime);
-		
-		// moving left:
-		if(velocity.x < 0){
-			collisionX = collidesLeft();
-		}
-		
-		// moving right:
-		else if(velocity.x > 0){
-			collisionX = collidesRight();
-		}
-		// 5)
-		if(collisionX){
-			setX(oldX);
-			velocity.x = 0;
-		}
-		
-		//3) move on y:
-		setY(getY() + velocity.y * deltaTime);
-		
-		// moving down:
-		if(velocity.y < 0){
-			collisionY = collidesBottom();
-			canJump = collisionY; // if the character stands on the ground, he can jump
-		}
-		// moving up:
-		else if(velocity.y > 0)
-		{	
-			collisionY = collidesTop();
-		}
-		// 5)
-		if(collisionY){
-			setY(oldY);
-			velocity.y = 0;
-		}
+//		//1) apply gravity:
+//		velocity.y -= WorldPhysics.GRAVITY * deltaTime;
+//		
+//		//clam velocity:
+//		if(velocity.y > maxSpeed){
+//			velocity.y = maxSpeed;
+//		}else if(velocity.y < -maxSpeed){
+//			velocity.y = -maxSpeed;
+//		}
+//		
+//		//2)
+//		float oldX = getX();
+//		float oldY = getY();
+//		
+//		collisionX = false;
+//		collisionY = false;
+//		
+//		//3) move on x:
+//		setX(getX() + velocity.x * deltaTime);
+//		
+//		// moving left:
+//		if(velocity.x < 0){
+//			collisionX = collidesLeft();
+//		}
+//		
+//		// moving right:
+//		else if(velocity.x > 0){
+//			collisionX = collidesRight();
+//		}
+//		// 5)
+//		if(collisionX){
+//			setX(oldX);
+//			velocity.x = 0;g
+//		}
+//		
+//		//3) move on y:
+//		setY(getY() + velocity.y * deltaTime);
+//		
+//		// moving down:
+//		if(velocity.y < 0){
+//			collisionY = collidesBottom();
+//			canJump = collisionY; // if the character stands on the ground, he can jump
+//		}
+//		// moving up:
+//		else if(velocity.y > 0)
+//		{	
+//			collisionY = collidesTop();
+//		}
+//		// 5)
+//		if(collisionY){
+//			setY(oldY);
+//			velocity.y = 0;
+//		}
 	}
 	
 	public boolean isCellBlocked(float x, float y){

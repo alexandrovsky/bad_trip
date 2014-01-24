@@ -6,12 +6,29 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 
 
 public class Entity extends Sprite {
 	
 	protected Body body;
+	
+	public Body getBody() {
+		return body;
+	}
+
+	public void setBody(Body body) {
+		this.body = body;
+		body.setUserData(this);
+	}
+
+
+	protected BodyDef bdef;
+	
+	protected FixtureDef fdef;
+	
 	
 	protected Texture animationSheet;
 	protected int animationFrameCols;
@@ -50,11 +67,6 @@ public class Entity extends Sprite {
 	public void update()
 	{
 		
-	}
-	
-	public Body getBody()
-	{
-		return body;
 	}
 	
 	//============================== OVERRIDES ======================================//

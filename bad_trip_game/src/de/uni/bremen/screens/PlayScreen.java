@@ -14,7 +14,12 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 import de.uni.bremen.entities.Player;
 import de.uni.bremen.physics.WorldPhysics;
@@ -25,6 +30,9 @@ public class PlayScreen implements Screen {
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer renderer;
 	private OrthographicCamera camera;
+	
+	private final float timeStep = 1 / 60f;
+	private final int velocityIterations=8, positionIterations =3;
 	
 	World world;
 	
@@ -56,6 +64,7 @@ public class PlayScreen implements Screen {
 		// debug rendering for box2d
 		WorldPhysics.getDebugRenderer().render(world, camera.combined);
 		
+		world.step(timeStep, velocityIterations, positionIterations);
 	}
 
 	@Override
@@ -70,8 +79,42 @@ public class PlayScreen implements Screen {
 		// load the level
 		map = new TmxMapLoader().load("maps/map.tmx");
 		
+		
 		// create the physics for level
 		world = WorldPhysics.CreateWorldWithMap(map);
+		
+		
+		player = new Player(new Sprite(new Texture("img/player.png")), 
+				   (TiledMapTileLayer) map.getLayers().get(0));
+		
+		float startx = 27  * player.getCollisionLayer().getTileWidth();
+		float starty = (player.getCollisionLayer().getHeight()-29) * player.getCollisionLayer().getTileHeight();
+		
+		
+		
+		BodyDef bodyDef = new BodyDef();
+		FixtureDef fixDef = new FixtureDef();
+		
+		//player definition
+		bodyDef.type = BodyType.DynamicBody;
+		bodyDef.position.set(startx,starty);
+		
+		PolygonShape playerShape = new PolygonShape();
+		playerShape.setAsBox(player.getWidth()/2,player.getHeight()/2);
+		
+		
+		
+		fixDef.shape = playerShape;
+		fixDef.friction = .75f;
+		fixDef.restitution = .1f;
+		fixDef.density = 50;
+		
+		//world.createBody(bodyDef).createFixture(fixDef);
+		Body b =world.createBody(bodyDef);
+		b.createFixture(fixDef);
+		
+		player.setBody(b);
+		playerShape.dispose();
 		
 		camera = new OrthographicCamera();
 		
@@ -80,11 +123,9 @@ public class PlayScreen implements Screen {
 		
 		
 		
-		player = new Player(new Sprite(new Texture("img/player.png")), 
-						   (TiledMapTileLayer) map.getLayers().get(0));
+
 		//player.initAnimation();
-		player.setPosition(27  * player.getCollisionLayer().getTileWidth(),
-						   (player.getCollisionLayer().getHeight()-29) * player.getCollisionLayer().getTileHeight());
+		player.setPosition(startx,starty);
 		Gdx.input.setInputProcessor(player);
 	}
 
