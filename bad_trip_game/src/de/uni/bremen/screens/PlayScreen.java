@@ -94,4 +94,11 @@ public class PlayScreen implements Screen {
 		//player.dispose();
 	}
 
+	
+	private final float pixelsToMeters=64;
+	
+	protected float pixels(float meters)
+	{
+		return meters / pixelsToMeters;
+	}
 }

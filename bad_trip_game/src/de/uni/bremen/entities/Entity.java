@@ -5,14 +5,13 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.physics.box2d.Body;
 
 
 
 public class Entity extends Sprite {
 	
-
-
-	
+	protected Body body;
 	
 	protected Texture animationSheet;
 	protected int animationFrameCols;
@@ -25,6 +24,7 @@ public class Entity extends Sprite {
 	
 	public Entity(Sprite sprite, Texture animationSheet, float animationTime, int frameCols, int frameRows){
 		super(sprite);
+		
 		this.animationSheet = animationSheet;
 		this.animationTime = animationTime;
 		this.animationFrameCols = frameCols;
@@ -46,6 +46,17 @@ public class Entity extends Sprite {
         return new Animation(this.animationTime, animationFrames);
 	}
 	
+	
+	public void update()
+	{
+		
+	}
+	
+	public Body getBody()
+	{
+		return body;
+	}
+	
 	//============================== OVERRIDES ======================================//
 	//
 	//	
@@ -60,4 +71,5 @@ public class Entity extends Sprite {
 	public void dispose(){
 		this.animationSheet.dispose();
 	}
+	
 }
