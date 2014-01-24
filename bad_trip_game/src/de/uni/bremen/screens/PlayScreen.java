@@ -14,7 +14,10 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 
+import com.badlogic.gdx.physics.box2d.World;
+
 import de.uni.bremen.entities.Player;
+import de.uni.bremen.physics.WorldPhysics;
 
 
 public class PlayScreen implements Screen {
@@ -22,6 +25,8 @@ public class PlayScreen implements Screen {
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer renderer;
 	private OrthographicCamera camera;
+	
+	World world;
 	
 	private Player player;
 	
@@ -33,6 +38,7 @@ public class PlayScreen implements Screen {
 		
 		camera.position.set(new Vector3(player.getX() + player.getWidth()/2, player.getY()+player.getHeight()/2, 0));
 		camera.update();
+		
 		
 		renderer.setView(camera);
 		
@@ -46,6 +52,10 @@ public class PlayScreen implements Screen {
 		// finally render the forground
 		renderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("foreground"));
 		renderer.getSpriteBatch().end();
+		
+		// debug rendering for box2d
+		WorldPhysics.getDebugRenderer().render(world, camera.combined);
+		
 	}
 
 	@Override
@@ -56,10 +66,19 @@ public class PlayScreen implements Screen {
 
 	@Override
 	public void show() {
+		
+		// load the level
 		map = new TmxMapLoader().load("maps/map.tmx");
-		renderer = new OrthogonalTiledMapRenderer(map);
+		
+		// create the physics for level
+		world = WorldPhysics.CreateWorldWithMap(map);
 		
 		camera = new OrthographicCamera();
+		
+		
+		renderer = new OrthogonalTiledMapRenderer(map);
+		
+		
 		
 		player = new Player(new Sprite(new Texture("img/player.png")), 
 						   (TiledMapTileLayer) map.getLayers().get(0));
