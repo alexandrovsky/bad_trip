@@ -1,18 +1,14 @@
 package de.uni.bremen.entities;
 
-import java.util.Dictionary;
+import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 
 import de.uni.bremen.utils.AnimationDictionary;
+import de.uni.bremen.utils.HealthStates;
 
 
 public class Player extends Character implements InputProcessor{
@@ -26,6 +22,10 @@ public class Player extends Character implements InputProcessor{
 	
 	private static final float ANIMATION_DURATION = 0.025f;
 	
+	
+	public ArrayList<Item> items;
+	public ArrayList<Character> enemies;
+	
 	//============================== CONSTRUCTOR ======================================//
 	//
 	//	
@@ -37,11 +37,18 @@ public class Player extends Character implements InputProcessor{
 	{
 		
 		super(position, animationDict, animationTime, width, height, collisionLayer, 360);
+		
+		currentHealth=100;
 	} 
 	
-		
 	
+	
+	
+	
+		
 
+	
+	public HealthStates currentHealthState = HealthStates.CLEAN;
 			
 	
 
@@ -49,7 +56,49 @@ public class Player extends Character implements InputProcessor{
 	@Override
 	public void update(float deltaTime){
 		
+		for (Item item : items) {
+			if(item.isDead)continue;
+			if(hit(item.postion.x,item.postion.y,item.width,item.height))
+			{
+				if(item instanceof Fruit)
+				{
+					System.out.println("Fruit Collected");
+					currentHealth+=1;
+				}
+				
+				if(item instanceof Drug)
+				{
+					Drug d = (Drug)item;
+					currentHealth-=5;
+					switch (d.current) {
+					case MUSHROOM:
+						currentHealthState = HealthStates.ON_MUSHRROM;
+						break;
+					case CANNABIS:
+						currentHealthState = HealthStates.ON_WEED;
+					case XTC:
+						currentHealthState = HealthStates.ON_XTC;
+					default:
+						break;
+					}
+				}
+				item.isDead = true;
+			}
+		}
+		for (Character character : enemies) {
+			if(character.isDead)continue;
+		}
+		
+		
 		super.update(deltaTime);
+	}
+	
+	private boolean hit(float x1, float y1, float w1, float h1)
+	{
+		if(x1 > postion.x+ width || x1+w1 < postion.x)return false;
+		if(y1 > postion.y+ height || y1+h1 < postion.y)return false;
+		
+		return true;
 	}
 	
 	
@@ -156,11 +205,8 @@ public class Player extends Character implements InputProcessor{
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-
-
-
-
+	
+	
 
 
 

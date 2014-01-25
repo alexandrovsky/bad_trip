@@ -32,6 +32,8 @@ public class Entity
 	
 	public Vector2 postion;
 	public float height, width; 
+
+	public boolean isDead;
 	
 	public Entity(Vector2 position, AnimationDictionary animationDict, float animationTime, float width, float height){
 		
@@ -69,4 +71,7 @@ public class Entity
 	public void update(float deltaTime){
 		
 	}
+	
+	
+	
 }

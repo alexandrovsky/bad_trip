@@ -27,6 +27,7 @@ import de.uni.bremen.entities.Fruit;
 import de.uni.bremen.entities.Item;
 import de.uni.bremen.entities.Player;
 import de.uni.bremen.utils.AnimationDictionary;
+import de.uni.bremen.utils.Kind;
 
 
 public class PlayScreen implements Screen {
@@ -64,17 +65,35 @@ public class PlayScreen implements Screen {
 		batch.begin();
 		
 		// render background
-		tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("background"));
+		
+		switch(player.currentHealthState)
+		{
+			case CLEAN:
+			tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("background"));
+			break;
+			case ON_MUSHRROM:
+				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("background"));
+				break;
+			case ON_WEED:
+				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("background"));
+				break;
+			case ON_XTC:
+				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("background"));
+				break;
+			default:
+				break;
+		}
 		// then render the player
 		
 		for (Item item : itemsList) {
-			item.draw(batch, deltaTime);
+			if(!item.isDead)item.draw(batch, deltaTime);
 		}
 		for (Character character : charactersList) {
-			character.draw(batch, deltaTime);
+			if(!character.isDead)character.draw(batch, deltaTime);
 		}
 		
 		player.draw(batch, deltaTime);
+		
 		// finally render the forground
 		tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("foreground"));
 		batch.end();
@@ -145,6 +164,10 @@ public class PlayScreen implements Screen {
 		Gdx.input.setInputProcessor(player);
 		
 		
+		player.items = itemsList;
+		player.enemies  = charactersList;
+		
+		
 		Vector2 debugpoint;
 		
 		//get spawnpoints
@@ -178,6 +201,7 @@ public class PlayScreen implements Screen {
 				
 				animDict = new AnimationDictionary("img/items/mushroom_A.png", 0.25f, 6 );
 				Drug d = new Drug(newpos, animDict, animDict.animationTime, animDict.width,animDict.height);
+				d.current = Kind.MUSHROOM; //cheap harcode for testing
 				itemsList.add(d);
 			}
 		}
