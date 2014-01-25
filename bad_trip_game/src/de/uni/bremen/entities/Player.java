@@ -36,7 +36,7 @@ public class Player extends Character implements InputProcessor{
 			float width, float height, TiledMapTileLayer collisionLayer)
 	{
 		
-		super(position, animationDict, animationTime, width, height, collisionLayer, 160);
+		super(position, animationDict, animationTime, width, height, collisionLayer, 360);
 	} 
 	
 		
@@ -81,7 +81,7 @@ public class Player extends Character implements InputProcessor{
 				break;
 			case Keys.UP:
 				if(canJump){
-					velocity.y = maxSpeed + Math.abs(velocity.x) * maxSpeed;
+					velocity.y = 4*maxSpeed + Math.abs(velocity.x) * maxSpeed;
 					canJump = false;
 					currentState = States.JUMP;
 				}

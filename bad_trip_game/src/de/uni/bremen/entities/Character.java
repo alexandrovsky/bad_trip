@@ -22,7 +22,7 @@ public class Character extends Entity{
 	
 	protected final float maxHealth = 100;
 	protected float currentHealth = 100;
-	public float maxSpeed = 160;
+	public float maxSpeed = 360;
 	public Vector2 velocity = new Vector2();
 	
 	
