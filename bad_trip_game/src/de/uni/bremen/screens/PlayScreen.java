@@ -76,7 +76,7 @@ public class PlayScreen implements Screen {
 		//TODO load all enemies
 		//put in enemies list
 		
-		AnimationDictionary playerAnimDict = new AnimationDictionary("img/animation_map_character.png", 0.25f, 4,4,3,5 );
+		AnimationDictionary playerAnimDict = new AnimationDictionary("img/animation_map_character.png", 0.25f, 4,4,8 );
 		TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get(0);
 		player = new Player(new Vector2(0, 779), 
 				playerAnimDict, playerAnimDict.animationTime, 

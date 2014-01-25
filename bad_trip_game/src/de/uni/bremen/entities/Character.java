@@ -77,9 +77,11 @@ public class Character extends Entity{
 	protected States currentState = States.IDLE;
 		
 		protected enum States{
-			IDLE(0),
+			WALK(0),
 			JUMP(1),
-			WALK(2);
+			IDLE(2);
+			
+			
 			
 			public int key;
 			private States(int key) {
@@ -138,6 +140,7 @@ public class Character extends Entity{
 	
 	public void update(float deltaTime) 
 	{
+		System.out.println( currentState.toString() );
 		//1) apply gravity:
 		velocity.y -= WorldPhysics.GRAVITY * deltaTime;
 		
