@@ -2,19 +2,16 @@ package de.uni.bremen.screens;
 
 
 
-import java.util.Dictionary;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -23,6 +20,11 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
+import de.uni.bremen.entities.Character;
+import de.uni.bremen.entities.Drug;
+import de.uni.bremen.entities.Enemy;
+import de.uni.bremen.entities.Fruit;
+import de.uni.bremen.entities.Item;
 import de.uni.bremen.entities.Player;
 import de.uni.bremen.utils.AnimationDictionary;
 
@@ -35,6 +37,14 @@ public class PlayScreen implements Screen {
 	private OrthographicCamera camera;
 	
 	private Player player;
+	
+	
+	ArrayList<Item> itemsList;
+	ArrayList<Character> charactersList;
+	
+	private static final String FRUIT_SPAWN ="SpawnpointFruit";
+	private static final String ENEMY_SPAWN ="SpawnpointEnemy";
+	private static final String DRUG_SPAWN ="SpawnpointDrug";
 	
 	@Override
 	public void render(float delta) {
@@ -50,15 +60,22 @@ public class PlayScreen implements Screen {
 		tileRenderer.setView(camera);
 		
 
-		tileRenderer.getSpriteBatch().begin();
+		SpriteBatch batch = tileRenderer.getSpriteBatch(); 
+		batch.begin();
 		
+		for (Item item : itemsList) {
+			item.draw(batch, deltaTime);
+		}
+		for (Character character : charactersList) {
+			character.draw(batch, deltaTime);
+		}
 		// render background
 		tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("background"));
 		// then render the player
-		player.draw(tileRenderer.getSpriteBatch(), deltaTime);
+		player.draw(batch, deltaTime);
 		// finally render the forground
 		tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("foreground"));
-		tileRenderer.getSpriteBatch().end();
+		batch.end();
 		
 		renderPlayerStatus();
 	}
@@ -109,17 +126,56 @@ public class PlayScreen implements Screen {
 	public void show() {
 		map = new TmxMapLoader().load("maps/test/maptest1.tmx");
 		tileRenderer = new OrthogonalTiledMapRenderer(map);
+		TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get(0);
+		
 		shapeRenderer = new ShapeRenderer();
 		camera = new OrthographicCamera();
 		
-		//TODO load all items
-		//put in items list
+		itemsList = new ArrayList<Item>();
+		charactersList = new ArrayList<Character>();
 		
-		//TODO load all enemies
-		//put in enemies list
+		
+		
+		//get spawnpoints
+		MapObjects objs = map.getLayers().get("Objects").getObjects();
+		for (MapObject mapObject : objs) {
+			String name=mapObject.getName();
+			if(name==null)break;
+			
+			//get spawnpoint
+			Integer newx = (Integer)mapObject.getProperties().get("x");
+			Integer newy = (Integer)mapObject.getProperties().get("x");
+			Vector2 newpos = new Vector2(
+					newx.floatValue(),newy.floatValue()
+							);
+			AnimationDictionary animDict;
+			if(name.equals(FRUIT_SPAWN))
+			{
+				System.out.println("Fruitspawn at "+newpos.x+""+newpos.x);
+				animDict = new AnimationDictionary("img/items/apple.png", 0.25f, 4,4,3,5 );
+				Fruit f = new Fruit(newpos, animDict, animDict.animationTime, animDict.width,animDict.height);
+				itemsList.add(f);
+			}
+			if(name.equals(ENEMY_SPAWN))
+			{
+				System.out.println("Enemy at "+newpos.x+" "+newpos.x);
+				animDict = new AnimationDictionary("img/items/apple.png", 0.25f, 4,4,3,5 );
+				Enemy e = new Enemy(newpos, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer,160);
+				charactersList.add(e);
+			}
+			if(name.equals(DRUG_SPAWN))
+			{
+				System.out.println("Drugspawn at "+newpos.x+""+newpos.x);
+				animDict = new AnimationDictionary("img/items/mushroom_A.png", 0.25f, 4,4,3,5 );
+				Drug d = new Drug(newpos, animDict, animDict.animationTime, animDict.width,animDict.height);
+				itemsList.add(d);
+			}
+		}
+		
+		
 		
 		AnimationDictionary playerAnimDict = new AnimationDictionary("img/characters/animation_map_character.png", 0.25f, 4,4,3,5 );
-		TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get(0);
+		
 		player = new Player(new Vector2(0, 779), 
 				playerAnimDict, playerAnimDict.animationTime, 
 				playerAnimDict.width, playerAnimDict.height, collisionLayer);
