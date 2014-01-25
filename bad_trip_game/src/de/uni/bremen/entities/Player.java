@@ -36,7 +36,7 @@ public class Player extends Character implements InputProcessor{
 			float width, float height, TiledMapTileLayer collisionLayer)
 	{
 		
-		super(position, animationDict, animationTime, width, height, collisionLayer, 160);
+		super(position, animationDict, animationTime, width, height, collisionLayer, 360);
 	} 
 	
 		
@@ -48,7 +48,7 @@ public class Player extends Character implements InputProcessor{
 
 	@Override
 	public void update(float deltaTime){
-		System.out.println(currentState);
+		
 		super.update(deltaTime);
 	}
 	
