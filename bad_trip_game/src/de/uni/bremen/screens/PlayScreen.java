@@ -168,9 +168,8 @@ public class PlayScreen implements Screen {
 				itemsList.add(f);
 			}
 			if(name.equals(ENEMY_SPAWN))
-			{
-				
-				animDict = new AnimationDictionary("img/characters/animation_map_doctor.png", 0.25f, 5 );
+			{	
+				animDict = new AnimationDictionary("img/characters/animation_map_doctor.png	", 0.25f, 5 );
 				Enemy e = new Enemy(newpos,player, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer,160);
 				charactersList.add(e);
 			}
