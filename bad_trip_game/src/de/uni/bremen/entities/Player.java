@@ -156,5 +156,16 @@ public class Player extends Character implements InputProcessor{
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+
+
+
+
+
+
+
+	public int getCurrentHealth() {
+		return currentHealth;
+	}
 	
 }
