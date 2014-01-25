@@ -139,7 +139,7 @@ public class PlayScreen implements Screen {
 		
 		AnimationDictionary playerAnimDict = new AnimationDictionary("img/characters/animation_map_character.png", 0.25f, 4,4,3,5 );
 		
-		player = new Player(new Vector2(300, 779), 
+		player = new Player(new Vector2(350, 779), 
 				playerAnimDict, playerAnimDict.animationTime, 
 				playerAnimDict.width, playerAnimDict.height, collisionLayer);
 		Gdx.input.setInputProcessor(player);
@@ -169,7 +169,7 @@ public class PlayScreen implements Screen {
 			}
 			if(name.equals(ENEMY_SPAWN))
 			{	
-				animDict = new AnimationDictionary("img/characters/animation_map_doctor.png	", 0.25f, 5 );
+				animDict = new AnimationDictionary("img/characters/animation_map_doctor.png", 0.25f, 5 );
 				Enemy e = new Enemy(newpos,player, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer,160);
 				charactersList.add(e);
 			}

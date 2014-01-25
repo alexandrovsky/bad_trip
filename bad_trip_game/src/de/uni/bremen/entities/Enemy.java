@@ -32,7 +32,7 @@ public class Enemy extends Character {
 		}else if (delta.len() > Gdx.graphics.getWidth() ) {
 			currentState = States.IDLE;
 		}else{
-			postion.add( delta.scl(this.maxSpeed*deltaTime) );
+			//postion.add( delta.scl(this.maxSpeed*deltaTime) );
 		}
 		
 		
