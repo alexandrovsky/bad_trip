@@ -28,7 +28,7 @@ public class Item extends Entity {
 		
 		currentFrame = ((Animation) animationDict.get( new Integer(0) )).getKeyFrame(stateTime, true);
 		
-		System.out.println(this.getClass().getName()+ " draw   "+postion.x+ " "+ postion.y+ " "+currentFrame.getRegionWidth()+ " "+currentFrame.getRegionHeight());
+		//System.out.println(this.getClass().getName()+ " draw   "+postion.x+ " "+ postion.y+ " "+currentFrame.getRegionWidth()+ " "+currentFrame.getRegionHeight());
 		batch.draw(currentFrame,postion.x,postion.y,0,0, width, height, 1.0f, 1,0f);
         //batch.draw(region, x, y, originX, originY, moirror_x, moirror_x, scaleX, scaleY, rotation);
 	}

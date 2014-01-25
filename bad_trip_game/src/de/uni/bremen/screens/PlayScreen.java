@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -26,6 +27,7 @@ import de.uni.bremen.entities.Enemy;
 import de.uni.bremen.entities.Fruit;
 import de.uni.bremen.entities.Item;
 import de.uni.bremen.entities.Player;
+import de.uni.bremen.physics.WorldPhysics;
 import de.uni.bremen.utils.AnimationDictionary;
 
 
@@ -45,6 +47,9 @@ public class PlayScreen implements Screen {
 	private static final String FRUIT_SPAWN ="SpawnpointFruit";
 	private static final String ENEMY_SPAWN ="SpawnpointEnemy";
 	private static final String DRUG_SPAWN ="SpawnpointDrug";
+	
+	
+	private Sound mainTheme;
 	
 	@Override
 	public void render(float delta) {
@@ -70,13 +75,14 @@ public class PlayScreen implements Screen {
 		for (Item item : itemsList) {
 			item.draw(batch, deltaTime);
 		}
-		for (Character character : charactersList) {
+		for ( Character character : charactersList) {
 			character.draw(batch, deltaTime);
 		}
 		
+		
 		player.draw(batch, deltaTime);
 		// finally render the forground
-		tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("foreground"));
+		//tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("foreground"));
 		batch.end();
 		
 		renderPlayerStatus();
@@ -139,7 +145,7 @@ public class PlayScreen implements Screen {
 		
 		AnimationDictionary playerAnimDict = new AnimationDictionary("img/characters/animation_map_character.png", 0.25f, 4,4,3,5 );
 		
-		player = new Player(new Vector2(350, 779), 
+		player = new Player(new Vector2(1200, 600), 
 				playerAnimDict, playerAnimDict.animationTime, 
 				playerAnimDict.width, playerAnimDict.height, collisionLayer);
 		Gdx.input.setInputProcessor(player);
@@ -170,7 +176,7 @@ public class PlayScreen implements Screen {
 			if(name.equals(ENEMY_SPAWN))
 			{	
 				animDict = new AnimationDictionary("img/characters/animation_map_doctor.png", 0.25f, 5 );
-				Enemy e = new Enemy(newpos,player, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer,160);
+				Enemy e = new Enemy(newpos, player, animDict, animDict.animationTime,animDict.width,animDict.height, collisionLayer);
 				charactersList.add(e);
 			}
 			if(name.equals(DRUG_SPAWN))
@@ -182,7 +188,9 @@ public class PlayScreen implements Screen {
 			}
 		}
 		
-		
+		// load audio:
+		mainTheme = Gdx.audio.newSound( Gdx.files.internal("audio/music/main_theme.wav") );
+		mainTheme.loop();
 		
 		
 		

@@ -6,17 +6,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 
+import de.uni.bremen.physics.WorldPhysics;
+import de.uni.bremen.utils.AnimationDictionary;
+
 public class Enemy extends Character {
 
 	
 	Player player;
 	public Enemy(Vector2 position, Player player,
-			de.uni.bremen.utils.AnimationDictionary animationDict,
+			AnimationDictionary animationDict,
 			float animationTime, float width, float height,
-			TiledMapTileLayer collisionLayer, float maxSpeed) 
+			TiledMapTileLayer collisionLayer) 
 	{
 		super(position, animationDict, animationTime, width, height, collisionLayer,
-				maxSpeed);
+				WorldPhysics.ENEMY_MAX_SPEED);
 		
 		this.player = player;
 		
@@ -25,21 +28,26 @@ public class Enemy extends Character {
 	@Override
 	public void update(float deltaTime) 
 	{
+		Vector2 playerPos = player.postion.cpy();
+		Vector2 enemyPos = postion.cpy(); 
+		Vector2 delta = playerPos.sub(enemyPos);
 		
-		Vector2 delta = postion.sub(player.postion);
-		if(delta.len() < this.width){
-			System.out.println("hit player");
-		}else if (delta.len() > Gdx.graphics.getWidth() ) {
-			currentState = States.IDLE;
+		if(delta.len() < Gdx.graphics.getWidth() ){
+			if(delta.x > 0.0){
+				postion.x += maxSpeed* deltaTime;
+				isOrientationLeft= false;
+			}else{
+				postion.x -= maxSpeed* deltaTime;
+				isOrientationLeft = true;
+			}
 		}else{
-			//postion.add( delta.scl(this.maxSpeed*deltaTime) );
+			//System.out.println("enemy out of range");
 		}
 		
 		
 		super.update(deltaTime);
-		
-		
 	}
+	
 
 
 	
