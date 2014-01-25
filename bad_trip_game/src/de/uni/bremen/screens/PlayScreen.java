@@ -63,15 +63,17 @@ public class PlayScreen implements Screen {
 		SpriteBatch batch = tileRenderer.getSpriteBatch(); 
 		batch.begin();
 		
+		// render background
+		tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("background"));
+		// then render the player
+		
 		for (Item item : itemsList) {
 			item.draw(batch, deltaTime);
 		}
 		for (Character character : charactersList) {
 			character.draw(batch, deltaTime);
 		}
-		// render background
-		tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("background"));
-		// then render the player
+		
 		player.draw(batch, deltaTime);
 		// finally render the forground
 		tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("foreground"));
@@ -134,6 +136,15 @@ public class PlayScreen implements Screen {
 		itemsList = new ArrayList<Item>();
 		charactersList = new ArrayList<Character>();
 		
+		
+		AnimationDictionary playerAnimDict = new AnimationDictionary("img/characters/animation_map_character.png", 0.25f, 4,4,3,5 );
+		
+		player = new Player(new Vector2(300, 779), 
+				playerAnimDict, playerAnimDict.animationTime, 
+				playerAnimDict.width, playerAnimDict.height, collisionLayer);
+		Gdx.input.setInputProcessor(player);
+		
+		
 		Vector2 debugpoint;
 		
 		//get spawnpoints
@@ -159,8 +170,8 @@ public class PlayScreen implements Screen {
 			if(name.equals(ENEMY_SPAWN))
 			{
 				
-				animDict = new AnimationDictionary("img/items/apple.png", 0.25f, 5 );
-				Enemy e = new Enemy(newpos, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer,160);
+				animDict = new AnimationDictionary("img/characters/animation_map_doctor.png", 0.25f, 5 );
+				Enemy e = new Enemy(newpos,player, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer,160);
 				charactersList.add(e);
 			}
 			if(name.equals(DRUG_SPAWN))
@@ -174,21 +185,8 @@ public class PlayScreen implements Screen {
 		
 		
 		
-		AnimationDictionary playerAnimDict = new AnimationDictionary("img/characters/animation_map_character.png", 0.25f, 4,4,3,5 );
 		
-		player = new Player(new Vector2(0, 779), 
-				playerAnimDict, playerAnimDict.animationTime, 
-				playerAnimDict.width, playerAnimDict.height, collisionLayer);
-		Gdx.input.setInputProcessor(player);
 		
-		/*
-		player = new Player(new Sprite(new Texture("img/main_character_stehend.png")), 
-						   (TiledMapTileLayer) map.getLayers().get(0));
-		//player.initAnimation();
-		player.setPosition(0  * player.getCollisionLayer().getTileWidth(),
-						   (player.getCollisionLayer().getHeight()-79) * player.getCollisionLayer().getTileHeight());
-		Gdx.input.setInputProcessor(player);
-		*/
 	}
 
 	@Override
