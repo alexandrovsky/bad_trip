@@ -117,7 +117,8 @@ public class Character extends Entity{
 		currentFrame = ((Animation) animationDict.get( new Integer(currentState.key) )).getKeyFrame(stateTime, true);
 		System.out.println(currentState.key+ " => ");
 		float moirror_x = isOrientationLeft ? -1 : 1;
-		batch.draw(currentFrame,postion.x,postion.y,0,0, width, height, moirror_x, 1,0);
+		float newx = isOrientationLeft ? postion.x + width : postion.x;
+		batch.draw(currentFrame,newx,postion.y,0,0, width, height, moirror_x, 1,0);
         //batch.draw(region, x, y, originX, originY, moirror_x, moirror_x, scaleX, scaleY, rotation);
 	}
 	
