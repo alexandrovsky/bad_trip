@@ -28,20 +28,22 @@ public class Enemy extends Character {
 	@Override
 	public void update(float deltaTime) 
 	{
-		Vector2 playerPos = player.postion.cpy();
-		Vector2 enemyPos = postion.cpy(); 
-		Vector2 delta = playerPos.sub(enemyPos);
-		
-		if(delta.len() < Gdx.graphics.getWidth() ){
-			if(delta.x > 0.0){
-				postion.x += maxSpeed* deltaTime;
-				isOrientationLeft= false;
+		if(player != null){
+			Vector2 playerPos = player.postion.cpy();
+			Vector2 enemyPos = postion.cpy(); 
+			Vector2 delta = playerPos.sub(enemyPos);
+			
+			if(delta.len() < Gdx.graphics.getWidth() ){
+				if(delta.x > 0.0){
+					postion.x += maxSpeed* deltaTime;
+					isOrientationLeft= false;
+				}else{
+					postion.x -= maxSpeed* deltaTime;
+					isOrientationLeft = true;
+				}
 			}else{
-				postion.x -= maxSpeed* deltaTime;
-				isOrientationLeft = true;
+				//System.out.println("enemy out of range");
 			}
-		}else{
-			//System.out.println("enemy out of range");
 		}
 		
 		

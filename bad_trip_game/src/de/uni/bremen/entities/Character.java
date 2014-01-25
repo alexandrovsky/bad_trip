@@ -28,6 +28,8 @@ public class Character extends Entity{
 		this.collisionLayer = collisionLayer;
 	}
 	
+	
+	
 	//================================
 	// collision
 	//================================

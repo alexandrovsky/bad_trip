@@ -2,6 +2,7 @@ package de.uni.bremen.entities;
 
 import com.badlogic.gdx.math.Vector2;
 import de.uni.bremen.utils.AnimationDictionary;
+import de.uni.bremen.utils.Kind;
 
 
 
@@ -21,17 +22,8 @@ public class Drug extends Item {
 		// TODO Auto-generated constructor stub
 	}
 
-	protected Kind  current = Kind.CANNABIS;
-	
-	public Kind getCurrent() {
-		return current;
-	}
+	public Kind  current = Kind.CANNABIS;
 
-	public void setCurrent(Kind current) {
-		this.current = current;
-	}
 
-	protected enum Kind{
-		FAKE,CANNABIS,XTC,MUSHROOM;
-	};
+
 }

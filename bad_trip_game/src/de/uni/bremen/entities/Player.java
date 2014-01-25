@@ -1,18 +1,14 @@
 package de.uni.bremen.entities;
 
-import java.util.Dictionary;
+import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 
 import de.uni.bremen.utils.AnimationDictionary;
+import de.uni.bremen.utils.HealthStates;
 
 
 public class Player extends Character implements InputProcessor{
@@ -24,7 +20,13 @@ public class Player extends Character implements InputProcessor{
 	//===============================================================================//
 	
 	
-	private static final float ANIMATION_DURATION = 0.025f;
+	protected final int normalSPeed=360;
+	protected final int multiplier=4;
+	
+	protected float oldy,oldw, oldh;
+	
+	public ArrayList<Item> items;
+	public ArrayList<Character> enemies;
 	
 	//============================== CONSTRUCTOR ======================================//
 	//
@@ -37,11 +39,18 @@ public class Player extends Character implements InputProcessor{
 	{
 		
 		super(position, animationDict, animationTime, width, height, collisionLayer, 360);
+		currentHealth=100;
+		
 	} 
 	
-		
 	
+	
+	
+	
+		
 
+	
+	public HealthStates currentHealthState = HealthStates.CLEAN;
 			
 	
 
@@ -49,7 +58,64 @@ public class Player extends Character implements InputProcessor{
 	@Override
 	public void update(float deltaTime){
 		
+		for (Item item : items) {
+			if(item.isDead)continue;
+			if(hit(item.postion.x,item.postion.y,item.width,item.height))
+			{
+				if(item instanceof Fruit)
+				{
+					System.out.println("Fruit Collected");
+					currentHealth+=1;
+				}
+				
+				if(item instanceof Drug)
+				{
+					Drug d = (Drug)item;
+					currentHealth-=5;
+					switch (d.current) {
+					case MUSHROOM:
+						currentHealthState = HealthStates.ON_MUSHRROM;
+						System.out.println("PLayer is on shrrom");
+						break;
+					case CANNABIS:
+						currentHealthState = HealthStates.ON_WEED;
+						System.out.println("PLayer is on weed");
+						//oldy = velocity.y;
+						//maxSpeed = normalSPeed;
+						//maxSpeed  /= multiplier;
+						oldw = width;
+						oldh= height;
+						width /= multiplier;
+						height /= multiplier;
+						break;
+					case XTC:
+						System.out.println("PLayer is on xtc");
+						currentHealthState = HealthStates.ON_XTC;
+						maxSpeed = normalSPeed;
+						maxSpeed *= multiplier;
+						break;
+					default:
+						break;
+					}
+					
+				}
+				item.isDead = true;
+			}
+		}
+		for (Character character : enemies) {
+			if(character.isDead)continue;
+		}
+		
+		
 		super.update(deltaTime);
+	}
+	
+	private boolean hit(float x1, float y1, float w1, float h1)
+	{
+		if(x1 > postion.x+ width || x1+w1 < postion.x)return false;
+		if(y1 > postion.y+ height || y1+h1 < postion.y)return false;
+		
+		return true;
 	}
 	
 	
@@ -85,6 +151,12 @@ public class Player extends Character implements InputProcessor{
 					canJump = false;
 					currentState = States.JUMP;
 				}
+				break;
+			case Keys.R:
+				width=oldw;
+				height=oldh;
+				maxSpeed=normalSPeed;
+				currentHealthState= HealthStates.CLEAN;
 				break;
 			default:
 				break;
@@ -156,11 +228,8 @@ public class Player extends Character implements InputProcessor{
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-
-
-
-
+	
+	
 
 
 
