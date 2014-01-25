@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -65,18 +66,17 @@ public class PlayScreen implements Screen {
 
 	@Override
 	public void show() {
-		map = new TmxMapLoader().load("maps/maptest.tmx");
+		map = new TmxMapLoader().load("maps/test/maptest1.tmx");
 		renderer = new OrthogonalTiledMapRenderer(map);
 		camera = new OrthographicCamera();
 		
 		//TODO load all items
 		//put in items list
 		
-		
 		//TODO load all enemies
 		//put in enemies list
 		
-		AnimationDictionary playerAnimDict = new AnimationDictionary("img/animation_map_character.png", 0.25f, 4,4,3,5 );
+		AnimationDictionary playerAnimDict = new AnimationDictionary("img/characters/animation_map_character.png", 0.25f, 4,4,3,5 );
 		TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get(0);
 		player = new Player(new Vector2(0, 779), 
 				playerAnimDict, playerAnimDict.animationTime, 
