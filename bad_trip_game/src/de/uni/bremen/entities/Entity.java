@@ -1,50 +1,50 @@
 package de.uni.bremen.entities;
 
+import java.util.Dictionary;
+
+import javax.swing.text.Position;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+
+import de.uni.bremen.utils.AnimationDictionary;
 
 
 
-public class Entity extends Sprite {
+public class Entity 
+{
 	
 
 
 	
 	
-	protected Texture animationSheet;
-	protected int animationFrameCols;
-	protected int animationFrameRows;
-	protected Animation animation;
-	protected TextureRegion[] animationFrames;
+	
+	
+	protected AnimationDictionary animationDict;
 	protected TextureRegion currentFrame;
 	protected float stateTime;
 	protected float animationTime;
 	
-	public Entity(Sprite sprite, Texture animationSheet, float animationTime, int frameCols, int frameRows){
-		super(sprite);
-		this.animationSheet = animationSheet;
+	public Vector2 postion;
+	public float height, width; 
+	
+	public Entity(Vector2 position, AnimationDictionary animationDict, float animationTime, float width, float height){
+		
+		this.animationDict = animationDict;
 		this.animationTime = animationTime;
-		this.animationFrameCols = frameCols;
-		this.animationFrameRows = frameRows;
-		this.animation = initAnimation();
+		this.postion = position;
+		this.width = width;
+		this.height = height;
 	}
 	
-	protected Animation initAnimation(){
-		TextureRegion[][] tmp = TextureRegion.split(animationSheet, animationSheet.getWidth() / animationFrameCols, animationSheet.getHeight() / animationFrameRows);                                // #10
-        animationFrames = new TextureRegion[animationFrameCols * animationFrameRows];
-        int index = 0;
-        for (int i = 0; i < animationFrameRows; i++) {
-                for (int j = 0; j < animationFrameCols; j++) {
-                        animationFrames[index++] = tmp[i][j];
-                }
-        }
-           
-        stateTime = 0f;
-        return new Animation(this.animationTime, animationFrames);
-	}
+	// overload constructor
+	
+	
 	
 	//============================== OVERRIDES ======================================//
 	//
@@ -52,12 +52,21 @@ public class Entity extends Sprite {
 	//
 	//===============================================================================//
 	
-	@Override
-	public void draw(SpriteBatch batch){
-		super.draw(batch);
+	
+	public void draw(SpriteBatch batch, float deltaTime){
+		update(deltaTime);
+		
+		
+		//update graphics
+		stateTime += deltaTime;
+		currentFrame = ((Animation) animationDict.get(new Integer(0))).getKeyFrame(stateTime, true);
+        batch.draw(currentFrame,this.postion.x+width,this.postion.y,0,0,width,height,-1.0f,1,0);
+				
 	}
 	
-	public void dispose(){
-		this.animationSheet.dispose();
+	
+	
+	public void update(float deltaTime){
+		
 	}
 }

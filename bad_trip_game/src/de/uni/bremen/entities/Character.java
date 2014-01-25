@@ -1,98 +1,31 @@
 package de.uni.bremen.entities;
 
+import java.util.Dictionary;
+
+import javax.swing.text.Position;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
 
+
 import de.uni.bremen.physics.WorldPhysics;
+import de.uni.bremen.utils.AnimationDictionary;
 
 public class Character extends Entity{
 
-	//============================== CONSTANTS ==============================//
-	//
-	//	VALUES WHICH WILL NOT BE CHANGED
-	//
-	//===============================================================================//
-
 	
-	/**
-	 * The maximum health of the chacter in percent
-	 */
 	protected final float maxHealth = 100;
-	
-
-	//============================== PUBLIC VARIABLES ==============================//
-	//
-	//	VARIABLES WITH PUBLIC GETTERS AND SETTERS
-	//
-	//===============================================================================//	
-	
-	//================================
-	// Current health
-	//================================
-	
-	/**
-	 * The actual health value of the character which can decrease
-	 */
 	protected float currentHealth = 100;
-	
-	public float getCurrentHealth() {
-		return currentHealth;
-	}
-
-	public void setCurrentHealth(float currentHealth) {
-		this.currentHealth = currentHealth;
-	}
-
-	//================================
-	// Max Speed
-	//================================
-	
-	/**
-	 * The maximum speed value of the character.
-	 */	
-	protected float maxSpeed = 160;
-	
-	/**
-	 * The maximum speed value of the player.
-	 */		
-	public float getSpeed() {
-		return maxSpeed;
-	}
-
-
-	public void setSpeed(float speed) {
-		this.maxSpeed = speed;
-	}	
-	
-	//================================
-	// velocity
-	//================================
-	
-	/**
-	 * The vector for adding velocity to the character.
-	 */
-	protected Vector2 velocity = new Vector2();
-	
-	public Vector2 getVelocity() {
-		return velocity;
-	}
-
-
-	public void setVelocity(Vector2 velocity) {
-		this.velocity = velocity;
-	}
+	public float maxSpeed = 160;
+	public Vector2 velocity = new Vector2();
 	
 	
-	//================================
-	// collision layer
-	//================================
-	
-	/**
-	 * Tile layer for the player.
-	 */
 	protected TiledMapTileLayer collisionLayer;
 	
 	public TiledMapTileLayer getCollisionLayer() {
@@ -139,17 +72,28 @@ public class Character extends Entity{
 	 */
 	protected float tileHeight;
 	
-	//============================== CONSTRUCTORS ==============================//
-	//
-	//
-	//===============================================================================//
+	protected boolean isOrientationLeft;
 	
-	public Character(Sprite sprite, Texture animationSheet, float animationTime, 
-			int frameCols, int frameRows,TiledMapTileLayer collisionLayer, float maxSpeed) 
-	{
-		super(sprite, animationSheet, animationTime, frameCols, frameRows);
-		this.maxSpeed = maxSpeed;
+	protected States currentState = States.IDLE;
 		
+		protected enum States{
+			IDLE(0),
+			JUMP(1),
+			WALK(2);
+			
+			public int key;
+			private States(int key) {
+				this.key = key;
+			}
+		};
+	
+	
+	public Character( Vector2 position,AnimationDictionary animationDict,  float animationTime, 
+			float width, float height, TiledMapTileLayer collisionLayer, float maxSpeed) 
+	{
+		super(position, animationDict, animationTime, width,height);
+		
+		this.maxSpeed = maxSpeed;
 		
 		this.collisionLayer = collisionLayer;
 		
@@ -157,6 +101,25 @@ public class Character extends Entity{
 		tileHeight = collisionLayer.getTileHeight();
 	}
 	
+	
+	
+	@Override
+	public void draw(SpriteBatch batch, float deltaTime){
+		
+		update(deltaTime);
+		
+		
+		//update graphics
+		stateTime += deltaTime;                 
+        
+		
+		
+		currentFrame = ((Animation) animationDict.get( new Integer(currentState.key) )).getKeyFrame(stateTime, true);
+		System.out.println(currentState.key+ " => ");
+		float moirror_x = isOrientationLeft ? -1 : 1;
+		batch.draw(currentFrame,postion.x,postion.y,0,0, width, height, moirror_x, 1,0);
+        //batch.draw(region, x, y, originX, originY, moirror_x, moirror_x, scaleX, scaleY, rotation);
+	}
 	
 	
 	/** This update function manages the general collision with the environment.
@@ -185,14 +148,14 @@ public class Character extends Entity{
 		}
 		
 		//2)
-		float oldX = getX();
-		float oldY = getY();
+		float oldX = postion.x;
+		float oldY = postion.y;
 		
 		collisionX = false;
 		collisionY = false;
 		
 		//3) move on x:
-		setX(getX() + velocity.x * deltaTime);
+		postion.x += velocity.x * deltaTime;
 		
 		// moving left:
 		if(velocity.x < 0){
@@ -205,12 +168,12 @@ public class Character extends Entity{
 		}
 		// 5)
 		if(collisionX){
-			setX(oldX);
+			postion.x = oldX;
 			velocity.x = 0;
 		}
 		
 		//3) move on y:
-		setY(getY() + velocity.y * deltaTime);
+		postion.y += velocity.y * deltaTime;
 		
 		// moving down:
 		if(velocity.y < 0){
@@ -224,7 +187,7 @@ public class Character extends Entity{
 		}
 		// 5)
 		if(collisionY){
-			setY(oldY);
+			postion.y = oldY;
 			velocity.y = 0;
 		}
 	}
@@ -235,8 +198,8 @@ public class Character extends Entity{
 	}
 
 	public boolean collidesLeft(){
-		for(float step = 0; step < getHeight(); step += tileHeight/2){
-			if( isCellBlocked(getX(), getY() + step ) ){
+		for(float step = 0; step < height; step += tileHeight/2){
+			if( isCellBlocked(postion.x, postion.y + step ) ){
 				return true;
 			}
 		}
@@ -244,8 +207,8 @@ public class Character extends Entity{
 	}
 	
 	public boolean collidesRight(){
-		for(float step = 0; step < getHeight(); step += tileHeight/2){
-			if( isCellBlocked(getX()+getWidth(), getY() + step ) ){
+		for(float step = 0; step < height; step += tileHeight/2){
+			if( isCellBlocked(postion.x + width, postion.y + step ) ){
 				return true;
 			}
 		}
@@ -253,8 +216,8 @@ public class Character extends Entity{
 	}
 	
 	public boolean collidesTop(){
-		for(float step = 0; step < getWidth(); step += tileWidth/2){
-			if( isCellBlocked(getX() + step, getY() + getHeight() ) ){
+		for(float step = 0; step < width; step += tileWidth/2){
+			if( isCellBlocked(postion.x + step, postion.x + height ) ){
 				return true;
 			}
 		}
@@ -262,19 +225,13 @@ public class Character extends Entity{
 	}
 	
 	public boolean collidesBottom(){
-		for(float step = 0; step < getWidth(); step += tileWidth/2){
-			if( isCellBlocked(getX() + step, getY()) ){
+		for(float step = 0; step < width; step += tileWidth/2){
+			if( isCellBlocked(postion.x + step, postion.y) ){
 				return true;
 			}
 		}
 		
 		return false;
-	}
-	
-	
-	public void dispose(){
-		getTexture().dispose();
-		super.dispose();
 	}
 
 }
