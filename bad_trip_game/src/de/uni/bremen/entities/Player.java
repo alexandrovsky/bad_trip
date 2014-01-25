@@ -37,6 +37,7 @@ public class Player extends Character implements InputProcessor{
 	{
 		
 		super(position, animationDict, animationTime, width, height, collisionLayer, 160);
+		Gdx.input.setInputProcessor(this);
 	} 
 	
 		
@@ -80,6 +81,7 @@ public class Player extends Character implements InputProcessor{
 				isOrientationLeft = false;
 				break;
 			case Keys.UP:
+			case Keys.SPACE:
 				if(canJump){
 					velocity.y = maxSpeed + Math.abs(velocity.x) * maxSpeed;
 					canJump = false;
