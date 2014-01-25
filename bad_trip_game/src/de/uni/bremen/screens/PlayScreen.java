@@ -15,7 +15,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -123,16 +122,9 @@ public class PlayScreen implements Screen {
 		player = new Player(new Vector2(0, 779), 
 				playerAnimDict, playerAnimDict.animationTime, 
 				playerAnimDict.width, playerAnimDict.height, collisionLayer);
-		Gdx.input.setInputProcessor(player);
 		
-		/*
-		player = new Player(new Sprite(new Texture("img/main_character_stehend.png")), 
-						   (TiledMapTileLayer) map.getLayers().get(0));
-		//player.initAnimation();
-		player.setPosition(0  * player.getCollisionLayer().getTileWidth(),
-						   (player.getCollisionLayer().getHeight()-79) * player.getCollisionLayer().getTileHeight());
-		Gdx.input.setInputProcessor(player);
-		*/
+		
+		
 	}
 
 	@Override

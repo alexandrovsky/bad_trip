@@ -1,12 +1,6 @@
 package de.uni.bremen.entities;
 
-import java.util.Dictionary;
 
-import javax.swing.text.Position;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -20,8 +14,8 @@ import de.uni.bremen.utils.AnimationDictionary;
 public class Character extends Entity{
 
 	
-	protected final float maxHealth = 100;
-	protected float currentHealth = 100;
+	protected int maxHealth = 100;
+	protected int currentHealth = 100;
 	public float maxSpeed = 160;
 	public Vector2 velocity = new Vector2();
 	
