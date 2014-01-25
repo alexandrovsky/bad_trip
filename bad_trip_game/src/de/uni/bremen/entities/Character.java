@@ -1,6 +1,12 @@
 package de.uni.bremen.entities;
 
+import java.util.Dictionary;
 
+import javax.swing.text.Position;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -14,7 +20,7 @@ import de.uni.bremen.utils.AnimationDictionary;
 public class Character extends Entity{
 
 	
-	protected int maxHealth = 100;
+	protected final int maxHealth = 100;
 	protected int currentHealth = 100;
 	public float maxSpeed = 160;
 	public Vector2 velocity = new Vector2();
@@ -71,11 +77,9 @@ public class Character extends Entity{
 	protected States currentState = States.IDLE;
 		
 		protected enum States{
-			WALK(0),
+			IDLE(0),
 			JUMP(1),
-			IDLE(2);
-			
-			
+			WALK(2);
 			
 			public int key;
 			private States(int key) {
@@ -134,7 +138,6 @@ public class Character extends Entity{
 	
 	public void update(float deltaTime) 
 	{
-		System.out.println( currentState.toString() );
 		//1) apply gravity:
 		velocity.y -= WorldPhysics.GRAVITY * deltaTime;
 		
