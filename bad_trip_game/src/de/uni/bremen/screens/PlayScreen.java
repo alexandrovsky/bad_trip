@@ -43,9 +43,9 @@ public class PlayScreen implements Screen {
 	ArrayList<Item> itemsList;
 	ArrayList<Character> charactersList;
 	
-	private static final String FRUIT_SPAWN ="SpawnpointFruit";
-	private static final String ENEMY_SPAWN ="SpawnpointEnemy";
-	private static final String DRUG_SPAWN ="SpawnpointDrug";
+	private static final String FRUIT_SPAWN ="fruit";
+	private static final String ENEMY_SPAWN ="enemy";
+	private static final String DRUG_SPAWN ="drug";
 	
 	@Override
 	public void render(float delta) {
@@ -69,16 +69,16 @@ public class PlayScreen implements Screen {
 		switch(player.currentHealthState)
 		{
 			case CLEAN:
-			tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("background"));
+				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("sober"));
 			break;
 			case ON_MUSHRROM:
-				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("background"));
+				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("xtc"));
 				break;
 			case ON_WEED:
-				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("background"));
+				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("weed"));
 				break;
 			case ON_XTC:
-				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("background"));
+				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("shrooms"));
 				break;
 			default:
 				break;
@@ -94,8 +94,25 @@ public class PlayScreen implements Screen {
 		
 		player.draw(batch, deltaTime);
 		
+		switch(player.currentHealthState)
+		{
+			case CLEAN:
+				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("soberforeground"));
+			break;
+			case ON_MUSHRROM:
+				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("shroomsforeground"));
+				break;
+			case ON_WEED:
+				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("weedforeground"));
+				break;
+			case ON_XTC:
+				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("xtcforeground"));
+				break;
+			default:
+				break;
+		}
 		// finally render the forground
-		tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("foreground"));
+		
 		batch.end();
 		
 		renderPlayerStatus();
@@ -145,9 +162,9 @@ public class PlayScreen implements Screen {
 
 	@Override
 	public void show() {
-		map = new TmxMapLoader().load("maps/test2/maptestv3.tmx");
+		map = new TmxMapLoader().load("maps/laysers/LevelLayerSwitch.tmx");
 		tileRenderer = new OrthogonalTiledMapRenderer(map);
-		TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get(0);
+		TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get("soberforeground");
 		
 		shapeRenderer = new ShapeRenderer();
 		camera = new OrthographicCamera();
@@ -156,22 +173,12 @@ public class PlayScreen implements Screen {
 		charactersList = new ArrayList<Character>();
 		
 		
-		AnimationDictionary playerAnimDict = new AnimationDictionary("img/characters/animation_map_character.png", 0.25f, 4,4,3,5 );
-		
-		player = new Player(new Vector2(350, 779), 
-				playerAnimDict, playerAnimDict.animationTime, 
-				playerAnimDict.width, playerAnimDict.height, collisionLayer);
-		Gdx.input.setInputProcessor(player);
 		
 		
-		player.items = itemsList;
-		player.enemies  = charactersList;
 		
-		
-		Vector2 debugpoint;
 		
 		//get spawnpoints
-		MapObjects objs = map.getLayers().get("Objects").getObjects();
+		MapObjects objs = map.getLayers().get("objects").getObjects();
 		for (MapObject mapObject : objs) {
 			String name=mapObject.getName();
 			if(name==null)continue;
@@ -183,6 +190,18 @@ public class PlayScreen implements Screen {
 					newx.floatValue(),newy.floatValue()
 							);
 			AnimationDictionary animDict;
+			if(name.equals("player"))
+			{
+				AnimationDictionary playerAnimDict = new AnimationDictionary("img/characters/animation_map_character.png", 0.25f, 4,4,3,5 );
+				player = new Player(newpos, 
+						playerAnimDict, playerAnimDict.animationTime, 
+						playerAnimDict.width, playerAnimDict.height, collisionLayer);
+				Gdx.input.setInputProcessor(player);
+				player.items = itemsList;
+				player.enemies  = charactersList;
+						
+			}
+			
 			if(name.equals(FRUIT_SPAWN))
 			{
 				
@@ -198,10 +217,30 @@ public class PlayScreen implements Screen {
 			}
 			if(name.equals(DRUG_SPAWN))
 			{
+				String type = (String)mapObject.getProperties().get("type");
+				String path="xtc.png";
+				Kind newkind=Kind.XTC;
+				if(type.equals("xtc"))
+				{
+					path="xtc.png";
+					newkind = Kind.XTC;
+				}
+				if(type.equals("weed"))
+				{
+					path="joint.png";
+					newkind = Kind.CANNABIS;
+				}
+				if(type.equals("mushroom"))
+				{
+					path="mushroom_A.png";
+					newkind = Kind.MUSHROOM;
+				}
 				
-				animDict = new AnimationDictionary("img/items/mushroom_A.png", 0.25f, 6 );
+				
+				
+				animDict = new AnimationDictionary("img/items/"+path, 0.25f, 6 );
 				Drug d = new Drug(newpos, animDict, animDict.animationTime, animDict.width,animDict.height);
-				d.current = Kind.MUSHROOM; //cheap harcode for testing
+				d.current = newkind; //cheap harcode for testing
 				itemsList.add(d);
 			}
 		}

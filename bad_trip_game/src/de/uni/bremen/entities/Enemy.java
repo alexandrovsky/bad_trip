@@ -25,15 +25,18 @@ public class Enemy extends Character {
 	@Override
 	public void update(float deltaTime) 
 	{
-		
-		Vector2 delta = postion.sub(player.postion);
-		if(delta.len() < this.width){
-			System.out.println("hit player");
-		}else if (delta.len() > Gdx.graphics.getWidth() ) {
-			currentState = States.IDLE;
-		}else{
-			//postion.add( delta.scl(this.maxSpeed*deltaTime) );
+		if(player!=null)
+		{
+			Vector2 delta = postion.sub(player.postion);
+			if(delta.len() < this.width){
+				System.out.println("hit player");
+			}else if (delta.len() > Gdx.graphics.getWidth() ) {
+				currentState = States.IDLE;
+			}else{
+				//postion.add( delta.scl(this.maxSpeed*deltaTime) );
+			}			
 		}
+
 		
 		
 		super.update(deltaTime);

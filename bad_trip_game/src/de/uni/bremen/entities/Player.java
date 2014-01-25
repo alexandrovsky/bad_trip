@@ -20,8 +20,10 @@ public class Player extends Character implements InputProcessor{
 	//===============================================================================//
 	
 	
-	private static final float ANIMATION_DURATION = 0.025f;
+	protected final int normalSPeed=360;
+	protected final int multiplier=4;
 	
+	protected float oldy,oldw, oldh;
 	
 	public ArrayList<Item> items;
 	public ArrayList<Character> enemies;
@@ -37,8 +39,8 @@ public class Player extends Character implements InputProcessor{
 	{
 		
 		super(position, animationDict, animationTime, width, height, collisionLayer, 360);
-		
 		currentHealth=100;
+		
 	} 
 	
 	
@@ -73,14 +75,29 @@ public class Player extends Character implements InputProcessor{
 					switch (d.current) {
 					case MUSHROOM:
 						currentHealthState = HealthStates.ON_MUSHRROM;
+						System.out.println("PLayer is on shrrom");
 						break;
 					case CANNABIS:
 						currentHealthState = HealthStates.ON_WEED;
+						System.out.println("PLayer is on weed");
+						//oldy = velocity.y;
+						//maxSpeed = normalSPeed;
+						//maxSpeed  /= multiplier;
+						oldw = width;
+						oldh= height;
+						width /= multiplier;
+						height /= multiplier;
+						break;
 					case XTC:
+						System.out.println("PLayer is on xtc");
 						currentHealthState = HealthStates.ON_XTC;
+						maxSpeed = normalSPeed;
+						maxSpeed *= multiplier;
+						break;
 					default:
 						break;
 					}
+					
 				}
 				item.isDead = true;
 			}
@@ -134,6 +151,12 @@ public class Player extends Character implements InputProcessor{
 					canJump = false;
 					currentState = States.JUMP;
 				}
+				break;
+			case Keys.R:
+				width=oldw;
+				height=oldh;
+				maxSpeed=normalSPeed;
+				currentHealthState= HealthStates.CLEAN;
 				break;
 			default:
 				break;
