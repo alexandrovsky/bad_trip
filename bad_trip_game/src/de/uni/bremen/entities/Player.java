@@ -1,8 +1,14 @@
 package de.uni.bremen.entities;
 
+import java.util.Dictionary;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 
@@ -30,8 +36,7 @@ public class Player extends Character implements InputProcessor{
 			float width, float height, TiledMapTileLayer collisionLayer)
 	{
 		
-		super(position, animationDict, animationTime, width, height, collisionLayer, 160);
-		Gdx.input.setInputProcessor(this);
+		super(position, animationDict, animationTime, width, height, collisionLayer, 360);
 	} 
 	
 		
@@ -43,7 +48,7 @@ public class Player extends Character implements InputProcessor{
 
 	@Override
 	public void update(float deltaTime){
-		System.out.println(currentState);
+		
 		super.update(deltaTime);
 	}
 	
@@ -75,7 +80,6 @@ public class Player extends Character implements InputProcessor{
 				isOrientationLeft = false;
 				break;
 			case Keys.UP:
-			case Keys.SPACE:
 				if(canJump){
 					velocity.y = maxSpeed + Math.abs(velocity.x) * maxSpeed;
 					canJump = false;

@@ -124,7 +124,7 @@ public class PlayScreen implements Screen {
 
 	@Override
 	public void show() {
-		map = new TmxMapLoader().load("maps/test/maptest1.tmx");
+		map = new TmxMapLoader().load("maps/test2/maptestv3.tmx");
 		tileRenderer = new OrthogonalTiledMapRenderer(map);
 		TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get(0);
 		
@@ -134,39 +134,39 @@ public class PlayScreen implements Screen {
 		itemsList = new ArrayList<Item>();
 		charactersList = new ArrayList<Character>();
 		
-		
+		Vector2 debugpoint;
 		
 		//get spawnpoints
 		MapObjects objs = map.getLayers().get("Objects").getObjects();
 		for (MapObject mapObject : objs) {
 			String name=mapObject.getName();
-			if(name==null)break;
-			
+			if(name==null)continue;
+			System.out.println(name);
 			//get spawnpoint
 			Integer newx = (Integer)mapObject.getProperties().get("x");
-			Integer newy = (Integer)mapObject.getProperties().get("x");
+			Integer newy = (Integer)mapObject.getProperties().get("y");
 			Vector2 newpos = new Vector2(
 					newx.floatValue(),newy.floatValue()
 							);
 			AnimationDictionary animDict;
 			if(name.equals(FRUIT_SPAWN))
 			{
-				System.out.println("Fruitspawn at "+newpos.x+""+newpos.x);
-				animDict = new AnimationDictionary("img/items/apple.png", 0.25f, 4,4,3,5 );
+				
+				animDict = new AnimationDictionary("img/items/apple.png", 0.25f, 1 );
 				Fruit f = new Fruit(newpos, animDict, animDict.animationTime, animDict.width,animDict.height);
 				itemsList.add(f);
 			}
 			if(name.equals(ENEMY_SPAWN))
 			{
-				System.out.println("Enemy at "+newpos.x+" "+newpos.x);
-				animDict = new AnimationDictionary("img/items/apple.png", 0.25f, 4,4,3,5 );
-				Enemy e = new Enemy(newpos,player, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer,160);
+				
+				animDict = new AnimationDictionary("img/items/apple.png", 0.25f, 5 );
+				Enemy e = new Enemy(newpos, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer,160);
 				charactersList.add(e);
 			}
 			if(name.equals(DRUG_SPAWN))
 			{
-				System.out.println("Drugspawn at "+newpos.x+""+newpos.x);
-				animDict = new AnimationDictionary("img/items/mushroom_A.png", 0.25f, 4,4,3,5 );
+				
+				animDict = new AnimationDictionary("img/items/mushroom_A.png", 0.25f, 6 );
 				Drug d = new Drug(newpos, animDict, animDict.animationTime, animDict.width,animDict.height);
 				itemsList.add(d);
 			}

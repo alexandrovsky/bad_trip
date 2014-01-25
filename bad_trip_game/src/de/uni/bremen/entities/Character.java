@@ -1,18 +1,10 @@
 package de.uni.bremen.entities;
 
-import java.util.Dictionary;
-
-import javax.swing.text.Position;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
-
 
 import de.uni.bremen.physics.WorldPhysics;
 import de.uni.bremen.utils.AnimationDictionary;
@@ -22,7 +14,7 @@ public class Character extends Entity{
 	
 	protected final int maxHealth = 100;
 	protected int currentHealth = 100;
-	public float maxSpeed = 160;
+	public float maxSpeed = 360;
 	public Vector2 velocity = new Vector2();
 	
 	
@@ -115,7 +107,7 @@ public class Character extends Entity{
 		
 		
 		currentFrame = ((Animation) animationDict.get( new Integer(currentState.key) )).getKeyFrame(stateTime, true);
-		System.out.println(currentState.key+ " => ");
+		
 		float moirror_x = isOrientationLeft ? -1 : 1;
 		float newx = isOrientationLeft ? postion.x + width : postion.x;
 		batch.draw(currentFrame,newx,postion.y,0,0, width, height, moirror_x, 1,0);
