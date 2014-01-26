@@ -5,12 +5,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 
 import de.uni.bremen.physics.WorldPhysics;
 import de.uni.bremen.utils.AnimationDictionary;
 
 public class Character extends Entity{
 
+	public String message;
 	
 	protected final int maxHealth = 100;
 	protected int currentHealth = 100;
@@ -30,7 +34,23 @@ public class Character extends Entity{
 		this.collisionLayer = collisionLayer;
 	}
 	
+	Timer messageTimerTimer = Timer.instance();
+	public long messageTimerActivationTime;
+	public float messageScale=0;
+	protected float messageDuration = WorldPhysics.MESSAGE_DURATION;
 	
+	public synchronized void message(){
+		messageScale=0;
+		
+		messageTimerActivationTime = TimeUtils.millis();
+		this.messageTimerTimer.scheduleTask(new Task(){
+		    @Override
+		    public void run() {
+		    	message="";
+		    	messageScale=0;
+		    }
+		},messageDuration );
+	}
 	
 	//================================
 	// collision

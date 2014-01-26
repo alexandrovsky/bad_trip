@@ -34,6 +34,7 @@ public class Enemy extends Character {
 			Vector2 delta = playerPos.sub(enemyPos);
 			
 			if(delta.len() < Gdx.graphics.getWidth() ){
+				
 				if(delta.x > 0.0){
 					postion.x += maxSpeed* deltaTime;
 					isOrientationLeft= false;

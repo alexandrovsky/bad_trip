@@ -37,7 +37,7 @@ public class Player extends Character implements InputProcessor{
 	
 	public HealthStates currentHealthState = HealthStates.CLEAN;
 	
-	public String message;
+	
 	
 	
 	//============================== CONSTRUCTOR ======================================//
@@ -84,22 +84,7 @@ public class Player extends Character implements InputProcessor{
 
 
 	
-	Timer messageTimerTimer = Timer.instance();
-	public long messageTimerActivationTime;
-	public float messageScale=0;
-	
-	public synchronized void message(){
-		messageScale=0;
-		
-		messageTimerActivationTime = TimeUtils.millis();
-		this.messageTimerTimer.scheduleTask(new Task(){
-		    @Override
-		    public void run() {
-		    	message="";
-		    	messageScale=0;
-		    }
-		}, WorldPhysics.MESSAGE_DURATION);
-	}
+
 	//============================== UPDATE ================================//
 	//
 	//	ALL UPDATE
@@ -187,6 +172,11 @@ public class Player extends Character implements InputProcessor{
 					currentHealth-=20;
 					score-=20;
 					character.isDead=true;
+				}
+				if(character instanceof Dealer)
+				{
+					Dealer d = (Dealer)character;
+					d.talk();
 				}
 			}
 		}

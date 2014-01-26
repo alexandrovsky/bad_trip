@@ -23,6 +23,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import de.uni.bremen.BadTripGame;
 import de.uni.bremen.entities.Character;
+import de.uni.bremen.entities.Dealer;
 import de.uni.bremen.entities.Drug;
 import de.uni.bremen.entities.Enemy;
 import de.uni.bremen.entities.Fruit;
@@ -116,14 +117,24 @@ public class PlayScreen implements Screen {
 		// then render the player
 		
 		for (Item item : itemsList) {
+			if(item == null)continue;
 			if(!item.isDead)item.draw(batch, deltaTime);
 		}
 		
 		int i = 0;
 		for (Character character : charactersList) {
+			if(character == null)continue;
 			if(!character.isDead)character.draw(batch, deltaTime);
 			System.out.println("enemy" + i + "loc:" +character.postion);
 			i++;
+			
+			if(character.message!=null && character.message.length()>0)
+			{
+				//messageFont.scale(character.messageScale);
+				messageFont.draw(batch,character.message, character.postion.x,player.postion.y+300);
+				 
+			}
+			
 		}
 		
 		
@@ -237,7 +248,7 @@ public class PlayScreen implements Screen {
 	Vector2 debug;
 	@Override
 	public void show() {
-		map = new TmxMapLoader().load("maps/laysers/LevelLayerSwitchDoctorRun.tmx");
+		map = new TmxMapLoader().load("maps/laysers/LevelLayerSwitch.tmx");
 		tileRenderer = new OrthogonalTiledMapRenderer(map);
 		TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get("soberforeground");
 		
@@ -287,10 +298,19 @@ public class PlayScreen implements Screen {
 			}
 			if(name.equals(ENEMY_SPAWN))
 			{	
-				debug=newpos;
+				//debug=newpos;
 				animDict = new AnimationDictionary("img/characters/animation_map_doctor.png", 0.25f, 5 );
 				Enemy e = new Enemy(newpos,player, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer);
 				charactersList.add(e);
+			}
+			if(name.equals("dealer"))
+			{	
+				//debug=newpos;
+				animDict = new AnimationDictionary("img/characters/Dealer.png", 0.25f, 5 );
+				Dealer deal = new Dealer(newpos,animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer);
+				//deal.message = (String)mapObject.getProperties().get("type");
+				deal.setMessage("blablabla");
+				charactersList.add(deal);
 			}
 			if(name.equals(DRUG_SPAWN))
 			{
