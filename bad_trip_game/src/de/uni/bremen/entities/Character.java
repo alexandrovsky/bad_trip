@@ -14,7 +14,9 @@ public class Character extends Entity{
 	
 	protected final int maxHealth = 100;
 	protected int currentHealth = 100;
-	public float maxSpeed = 360;
+	public float maxSpeed = WorldPhysics.PLAYER_MAX_SPEED;
+	public float maxJumpHeight = WorldPhysics.PLAYER_MAXJUMP_HEIGHT;
+	
 	public Vector2 velocity = new Vector2();
 	
 	

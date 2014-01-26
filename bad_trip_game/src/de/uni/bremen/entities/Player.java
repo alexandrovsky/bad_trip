@@ -2,6 +2,8 @@ package de.uni.bremen.entities;
 
 import java.util.ArrayList;
 
+import sun.org.mozilla.javascript.internal.ast.Jump;
+
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -24,8 +26,8 @@ public class Player extends Character implements InputProcessor{
 	//===============================================================================//
 	
 	
-	protected final int normalSPeed=360;
-	
+	protected final int normalSpeed=WorldPhysics.PLAYER_MAXSPEED;
+	protected final int normalJumpHeight = WorldPhysics.PLAYER_MAXJUMP_HEIGHT;
 	protected float oldy,oldw, oldh;
 	
 	public ArrayList<Item> items;
@@ -116,8 +118,9 @@ public class Player extends Character implements InputProcessor{
 					case XTC:
 						System.out.println("PLayer is on xtc");
 						currentHealthState = HealthStates.ON_XTC;
-						maxSpeed = normalSPeed;
+						maxSpeed = normalSpeed;
 						maxSpeed *= WorldPhysics.PLAYER_SPEED_MULTIPLIER;
+						maxJumpHeight *= WorldPhysics.PLAYER_JUMP_MULTIPLIER;
 						break;
 					default:
 						break;
@@ -195,7 +198,7 @@ public class Player extends Character implements InputProcessor{
 			case Keys.UP:
 			case Keys.SPACE:
 				if(canJump){
-					velocity.y = maxSpeed + Math.abs(velocity.x) * maxSpeed;
+					velocity.y = maxJumpHeight + Math.abs(velocity.x) * maxSpeed;
 					canJump = false;
 					currentState = States.JUMP;
 				}
@@ -214,7 +217,8 @@ public class Player extends Character implements InputProcessor{
 	{
 		width=oldw>width?oldw:width;
 		height=oldh>height?oldh:height;
-		maxSpeed=normalSPeed;
+		maxSpeed=normalSpeed;
+		maxJumpHeight = normalJumpHeight;
 		currentHealthState= HealthStates.CLEAN;
 	}
 
