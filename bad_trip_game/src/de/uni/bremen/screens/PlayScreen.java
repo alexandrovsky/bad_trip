@@ -73,7 +73,7 @@ public class PlayScreen implements Screen {
 	public void render(float delta) {
 		//if(gameRef.getScreen()!=this)return;
 		
-		if(player.isDead || player.postion.y <= 2400)//TODO fix this y by create a new tile layer
+		if(player.isDead)//TODO fix this y by create a new tile layer
 		{
 			gameRef.end.goodEnd=false;
 			gameRef.end.score = player.score;
@@ -169,7 +169,7 @@ public class PlayScreen implements Screen {
 
 		 if(player.message!=null && player.message.length()>0)
 		 {
-			 messageFont.scale(player.messageScale);
+			 //messageFont.scale(player.messageScale);
 			 messageFont.draw(batch,player.message, player.postion.x-player.messageScale*1000,player.postion.y+200);
 			 
 		 }
@@ -303,8 +303,21 @@ public class PlayScreen implements Screen {
 			
 			if(name.equals(FRUIT_SPAWN))
 			{
+				String path="img/items/apple.png";
+				int rand=(int)Math.random()*3;
+				switch (rand) {
+				case 0:
+					path="img/items/orange.png";
+					break;
+				case 1:
+					path="img/items/apple.png";
+					break;
+				case 2:
+					path="img/items/pear.png";
+					break;
+				}
 				
-				animDict = new AnimationDictionary("img/items/apple.png", 0.25f, 1 );
+				animDict = new AnimationDictionary(path, 0.25f, 1 );
 				Fruit f = new Fruit(newpos, animDict, animDict.animationTime, animDict.width,animDict.height);
 				itemsList.add(f);
 			}
@@ -313,7 +326,7 @@ public class PlayScreen implements Screen {
 			{	
 				//debug=newpos;
 				animDict = new AnimationDictionary("img/characters/animation_map_doctor.png", 0.25f, 5 );
-				Enemy enemy = new Enemy(newpos, player, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer);
+				Enemy enemy = new Enemy(newpos.add(0.0f,500.0f), player, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer);
 				charactersList.add(enemy);
 			}
 			
@@ -323,7 +336,7 @@ public class PlayScreen implements Screen {
 				animDict = new AnimationDictionary("img/characters/Dealer.png", 0.25f, 6 );
 				Dealer deal = new Dealer(newpos.add(0.0f,1500.0f),animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer);
 				//deal.message = (String)mapObject.getProperties().get("type");
-				deal.setMessage("blablabla");
+				deal.setMessage((String)mapObject.getProperties().get("type"));
 				charactersList.add(deal);
 			}
 			
