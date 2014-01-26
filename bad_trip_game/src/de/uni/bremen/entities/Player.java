@@ -2,8 +2,6 @@ package de.uni.bremen.entities;
 
 import java.util.ArrayList;
 
-import sun.org.mozilla.javascript.internal.ast.Jump;
-
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;

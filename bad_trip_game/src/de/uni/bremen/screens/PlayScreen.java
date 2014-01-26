@@ -151,15 +151,16 @@ public class PlayScreen implements Screen {
 		//GUI
 		 
 		 
-		 font.draw(batch,"Score: "+player.score, player.postion.x+width/3,player.postion.y+height/2);
+		 font.draw(batch,"Score: "+player.score, player.postion.x+100,player.postion.y+400);
 
 
 		 if(player.message!=null && player.message.length()>0)
 		 {
 			 messageFont.scale(player.messageScale);
-			 messageFont.draw(batch,player.message, player.postion.x,player.postion.y+200);
+			 messageFont.draw(batch,player.message, player.postion.x-player.messageScale*1000,player.postion.y+200);
 			 
 		 }
+		 
 		
 		batch.end();
 		
