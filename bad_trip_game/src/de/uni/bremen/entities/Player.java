@@ -6,6 +6,9 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 
 import de.uni.bremen.utils.AnimationDictionary;
 import de.uni.bremen.utils.HealthStates;
@@ -52,7 +55,21 @@ public class Player extends Character implements InputProcessor{
 	
 	public HealthStates currentHealthState = HealthStates.CLEAN;
 			
+	float delay = 1; // seconds
+	Timer drugTimer = Timer.instance();
+	public long drugTimerActivationTime;
 	
+	
+	public synchronized void activateDrugTimer(float activationTime){
+		
+		drugTimerActivationTime = TimeUtils.millis();
+		this.drugTimer.scheduleTask(new Task(){
+		    @Override
+		    public void run() {
+		    	currentHealthState = HealthStates.CLEAN;
+		    }
+		}, activationTime);
+	}
 
 
 	@Override
@@ -97,9 +114,15 @@ public class Player extends Character implements InputProcessor{
 					default:
 						break;
 					}
+					activateDrugTimer(5.0f);
 					
 				}
 				item.isDead = true;
+			}
+			
+			// check, if he hit the ground:
+			if(postion.y < 0.0f){
+				this.isDead = true;
 			}
 		}
 		for (Character character : enemies) {
@@ -116,7 +139,10 @@ public class Player extends Character implements InputProcessor{
 		
 		super.update(deltaTime);
 	}
-	
+	/**
+	 * box test
+	 * @return
+	 */
 	private boolean hit(float x1, float y1, float w1, float h1)
 	{
 		if(x1 > postion.x+ width || x1+w1 < postion.x)return false;
@@ -153,13 +179,14 @@ public class Player extends Character implements InputProcessor{
 				isOrientationLeft = false;
 				break;
 			case Keys.UP:
+			case Keys.SPACE:
 				if(canJump){
 					velocity.y = maxSpeed + Math.abs(velocity.x) * maxSpeed;
 					canJump = false;
 					currentState = States.JUMP;
 				}
 				break;
-			case Keys.R:
+			case Keys.R: // reset;
 				width=oldw;
 				height=oldh;
 				maxSpeed=normalSPeed;

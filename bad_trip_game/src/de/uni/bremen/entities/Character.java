@@ -70,10 +70,16 @@ public class Character extends Entity{
 	
 	protected States currentState = States.IDLE;
 		
-		protected enum States{
-			IDLE(0),
+	/*
+	 * IDLE(0),
 			JUMP(1),
 			WALK(2);
+	 */
+		protected enum States{
+			WALK(0),
+			IDLE(1),
+			JUMP(2),
+			ZERO(0);
 			
 			public int key;
 			private States(int key) {
@@ -107,8 +113,8 @@ public class Character extends Entity{
 		stateTime += deltaTime;                 
         
 		
-		
-		currentFrame = ((Animation) animationDict.get( new Integer(currentState.key) )).getKeyFrame(stateTime, true);
+		Animation currAnimation = ((Animation) animationDict.get( new Integer(currentState.key) )); 
+		currentFrame = currAnimation.getKeyFrame(stateTime, true);
 		
 		float moirror_x = isOrientationLeft ? -1 : 1;
 		float newx = isOrientationLeft ? postion.x + width : postion.x;

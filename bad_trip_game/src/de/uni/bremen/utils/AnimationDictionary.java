@@ -25,22 +25,24 @@ public class AnimationDictionary extends HashMap {
 		}
 		this.width = sheet.getWidth()/framesSum;
 		this.height = sheet.getHeight();
-		
+		framesSum = 1;
 		for(int i = 0; i < numAnimations.length; i++){
-			this.put(new Integer(i), getAnimation(sheet, numAnimations[i], animationTime));
+			Animation animation = getAnimation(sheet,framesSum-1, numAnimations[i], animationTime);
+			this.put(new Integer(i), animation);
+			framesSum += numAnimations[i]-1;
 		}
 		
 		
 	}
 
 		
-	protected Animation getAnimation(Texture animationSheet, int animationFrameCols, float animationTime)
+	protected Animation getAnimation(Texture animationSheet,int offset, int animationFrameCols, float animationTime)
 	{
 		TextureRegion[][] tmp = TextureRegion.split(animationSheet, this.width, this.height ); // rows is always 1                                // #10
 		TextureRegion[] animationFrames = new TextureRegion[animationFrameCols];
-        int index = 0;
+        int index = 0;//offset;
         
-        for (int j = 0; j < animationFrameCols; j++) {
+        for (int j = offset; j < offset+animationFrameCols; j++) {
                 animationFrames[index++] = tmp[0][j];
         }
         
