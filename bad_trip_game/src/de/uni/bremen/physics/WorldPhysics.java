@@ -27,6 +27,7 @@ public class WorldPhysics {
 	
 	public static final float DRUG_TIME_ACTIVATION_DURATION = 5.0f;
 	
+	public static final float MESSAGE_DURATION = 0.8f;
 	
 	
 	public static final float GRAVITY = 60 * 10.8f;

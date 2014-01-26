@@ -44,7 +44,7 @@ public class PlayScreen implements Screen {
 	
 	private Player player;
 	
-	BitmapFont font;
+	BitmapFont font,messageFont;
 	
 	BadTripGame gameRef;
 	
@@ -62,9 +62,12 @@ public class PlayScreen implements Screen {
 		// TODO Auto-generated constructor stub
 		gameRef = gameref;
 		font = new BitmapFont();
-		font.scale(1.6f); 
-		 width=Gdx.graphics.getWidth();
-		 height=Gdx.graphics.getHeight();
+		messageFont=new BitmapFont();
+		messageFont.setColor(1.0f, .7f, 0.0f, 1.0f);
+		font.scale(1.6f);
+		font.setColor(1.0f, .7f, 0.0f, 1.0f);
+		width=Gdx.graphics.getWidth();
+		height=Gdx.graphics.getHeight();
 	}
 	
 	@Override
@@ -147,10 +150,16 @@ public class PlayScreen implements Screen {
 		
 		//GUI
 		 
-		 font.setColor(1.0f, .7f, 0.0f, 1.0f);
+		 
 		 font.draw(batch,"Score: "+player.score, player.postion.x+width/3,player.postion.y+height/2);
 
-		
+
+		 if(player.message!=null && player.message.length()>0)
+		 {
+			 messageFont.scale(player.messageScale);
+			 messageFont.draw(batch,player.message, player.postion.x,player.postion.y+200);
+			 
+		 }
 		
 		batch.end();
 		

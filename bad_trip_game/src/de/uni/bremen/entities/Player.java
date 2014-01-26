@@ -35,6 +35,10 @@ public class Player extends Character implements InputProcessor{
 	
 	public float drugTime;
 	
+	public HealthStates currentHealthState = HealthStates.CLEAN;
+	
+	public String message;
+	
 	
 	//============================== CONSTRUCTOR ======================================//
 	//
@@ -48,11 +52,17 @@ public class Player extends Character implements InputProcessor{
 		
 		super(position, animationDict, animationTime, width, height, collisionLayer, WorldPhysics.PLAYER_MAX_SPEED);
 		currentHealth=100;
-		
+		message="";
 	} 
 	
 	
-	public HealthStates currentHealthState = HealthStates.CLEAN;
+	//============================== TIMERS ======================================//
+	//
+	//	
+	//
+	//===============================================================================//	
+	
+	
 			
 	float delay = 1; // seconds
 	Timer drugTimer = Timer.instance();
@@ -73,8 +83,36 @@ public class Player extends Character implements InputProcessor{
 	}
 
 
+	
+	Timer messageTimerTimer = Timer.instance();
+	public long messageTimerActivationTime;
+	public float messageScale=0;
+	
+	public synchronized void message(){
+		messageScale=0;
+		
+		messageTimerActivationTime = TimeUtils.millis();
+		this.messageTimerTimer.scheduleTask(new Task(){
+		    @Override
+		    public void run() {
+		    	message="";
+		    	messageScale=0;
+		    }
+		}, WorldPhysics.MESSAGE_DURATION);
+	}
+	//============================== UPDATE ================================//
+	//
+	//	ALL UPDATE
+	//
+	//===============================================================================//
+
 	@Override
 	public void update(float deltaTime){
+		
+		if(message.length()>0)
+		{
+			messageScale+=0.001;
+		}
 		
 		if(drugTime>0 && currentHealthState != HealthStates.CLEAN)
 		{
@@ -90,7 +128,8 @@ public class Player extends Character implements InputProcessor{
 				if(item instanceof Fruit)
 				{
 					score++;
-					System.out.println("Fruit Collected");
+					message="YUMMY!";
+					message();
 					currentHealth+=1;
 				}
 				
@@ -102,19 +141,21 @@ public class Player extends Character implements InputProcessor{
 					switch (d.current) {
 					case MUSHROOM:
 						currentHealthState = HealthStates.ON_MUSHRROM;
-						System.out.println("PLayer is on shrrom");
+						message="MushroOoOom!";
+						message();
 						break;
 					case CANNABIS:
 						currentHealthState = HealthStates.ON_WEED;
-						System.out.println("PLayer is on weed");
-
+						message="Dopehead";
+						message();
 						oldw = width;
 						oldh= height;
 						width /= WorldPhysics.PLAYER_SCALE_MULTIPLIER;
 						height /= WorldPhysics.PLAYER_SCALE_MULTIPLIER;
 						break;
 					case XTC:
-						System.out.println("PLayer is on xtc");
+						message="Partytime";
+						message();
 						currentHealthState = HealthStates.ON_XTC;
 						maxSpeed = normalSPeed;
 						maxSpeed *= WorldPhysics.PLAYER_SPEED_MULTIPLIER;
@@ -139,6 +180,8 @@ public class Player extends Character implements InputProcessor{
 			{
 				if(character instanceof Enemy)
 				{
+					message="OUCH! -20";
+					message();
 					currentHealth-=20;
 					score-=20;
 					character.isDead=true;
@@ -150,6 +193,7 @@ public class Player extends Character implements InputProcessor{
 		
 		if(score<0)score=0;
 		score++;
+		
 		
 		super.update(deltaTime);
 	}
