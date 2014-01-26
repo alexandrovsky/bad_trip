@@ -1,7 +1,10 @@
 package de.uni.bremen;
 
+
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+
+import de.uni.bremen.BadTripGame;
 
 public class Main {
 	public static void main(String[] args) {

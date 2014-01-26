@@ -3,11 +3,9 @@ package de.uni.bremen.screens;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -29,6 +27,7 @@ import de.uni.bremen.entities.Dealer;
 import de.uni.bremen.entities.Drug;
 import de.uni.bremen.entities.Enemy;
 import de.uni.bremen.entities.Fruit;
+import de.uni.bremen.entities.Goal;
 import de.uni.bremen.entities.Item;
 import de.uni.bremen.entities.Player;
 import de.uni.bremen.utils.AnimationDictionary;
@@ -52,8 +51,6 @@ public class PlayScreen implements Screen {
 	ArrayList<Item> itemsList;
 	ArrayList<Character> charactersList;
 	
-	HashMap<HealthStates, Sound> musicDict;
-	
 	private static final String FRUIT_SPAWN ="fruit";
 	private static final String ENEMY_SPAWN ="enemy";
 	private static final String DRUG_SPAWN ="drug";
@@ -76,6 +73,14 @@ public class PlayScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		//if(gameRef.getScreen()!=this)return;
+		
+		if(player.win)
+		{
+			gameRef.end.goodEnd= player.currentHealth<25?false:true;
+			gameRef.end.score = player.score;
+			gameRef.setScreen(gameRef.end);
+			return;	
+		}
 		
 		if(player.isDead)//TODO fix this y by create a new tile layer
 		{
@@ -130,7 +135,7 @@ public class PlayScreen implements Screen {
 		for (Character character : charactersList) {
 			if(character == null)continue;
 			if(!character.isDead)character.draw(batch, deltaTime);
-			System.out.println("enemy" + i + "loc:" +character.postion);
+			//System.out.println("enemy" + i + "loc:" +character.postion);
 			i++;
 			
 			if(character.message!=null && character.message.length()>0)
@@ -278,6 +283,7 @@ public class PlayScreen implements Screen {
 			Vector2 newpos = new Vector2( newx.floatValue(),
 									      newy.floatValue() );
 			
+			AnimationDictionary animDict;
 			if(name.equals("player"))
 			{
 				AnimationDictionary playerAnimDict = new AnimationDictionary("img/characters/animation_map_character.png", 0.125f, 4,4,3,5 );
@@ -303,6 +309,13 @@ public class PlayScreen implements Screen {
 			
 			AnimationDictionary animDict;
 			
+			if(name.equals("goal"))
+			{
+				String path="img/items/apple.png";
+				animDict = new AnimationDictionary(path, 0.25f, 1 );
+				Goal g = new Goal(newpos, animDict, animDict.animationTime, animDict.width,animDict.height);
+				itemsList.add(g);
+			}
 			
 			if(name.equals(FRUIT_SPAWN))
 			{
@@ -377,11 +390,6 @@ public class PlayScreen implements Screen {
 			}
 		}
 		
-		musicDict = new HashMap<HealthStates, Sound>();
-		musicDict.put(HealthStates.CLEAN, Gdx.audio.newSound(Gdx.files.internal("audio/music/main_theme.wav")));
-		
-		musicDict.get(HealthStates.CLEAN).loop(0.7f);
-		
 		
 		//player.postion = debug;
 		
@@ -390,11 +398,6 @@ public class PlayScreen implements Screen {
 
 	@Override
 	public void hide() {
-		
-		for(Sound sound : musicDict.values() ){
-			sound.stop();
-		}
-		
 		dispose();
 
 	}
