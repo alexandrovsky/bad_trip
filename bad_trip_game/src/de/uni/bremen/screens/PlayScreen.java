@@ -121,6 +121,7 @@ public class PlayScreen implements Screen {
 			if(!item.isDead)item.draw(batch, deltaTime);
 		}
 		
+
 		int i = 0;
 		for (Character character : charactersList) {
 			if(character == null)continue;
@@ -134,6 +135,7 @@ public class PlayScreen implements Screen {
 				messageFont.draw(batch,character.message, character.postion.x,player.postion.y+300);
 				 
 			}
+
 			
 		}
 		
@@ -260,10 +262,7 @@ public class PlayScreen implements Screen {
 		
 		
 		
-		
-		
-		
-		//get spawnpoints
+		// spawnpoint for player
 		MapObjects objs = map.getLayers().get("objects").getObjects();
 		for (MapObject mapObject : objs) {
 			String name=mapObject.getName();
@@ -272,9 +271,8 @@ public class PlayScreen implements Screen {
 			//get spawnpoint
 			Integer newx = (Integer)mapObject.getProperties().get("x");
 			Integer newy = (Integer)mapObject.getProperties().get("y");
-			Vector2 newpos = new Vector2(
-					newx.floatValue(),newy.floatValue()
-							);
+			Vector2 newpos = new Vector2( newx.floatValue(),
+									      newy.floatValue() );
 			
 			AnimationDictionary animDict;
 			if(name.equals("player"))
@@ -288,6 +286,21 @@ public class PlayScreen implements Screen {
 				player.enemies  = charactersList;
 						
 			}
+		}
+		
+		// spawnpoints get for other objects
+		for (MapObject mapObject : objs) {
+			String name=mapObject.getName();
+			if(name==null)continue;
+			System.out.println(name);
+			//get spawnpoint
+			Integer newx = (Integer)mapObject.getProperties().get("x");
+			Integer newy = (Integer)mapObject.getProperties().get("y");
+			Vector2 newpos = new Vector2( newx.floatValue(),
+									      newy.floatValue() );
+			
+			AnimationDictionary animDict;
+			
 			
 			if(name.equals(FRUIT_SPAWN))
 			{
@@ -300,8 +313,8 @@ public class PlayScreen implements Screen {
 			{	
 				//debug=newpos;
 				animDict = new AnimationDictionary("img/characters/animation_map_doctor.png", 0.25f, 5 );
-				Enemy e = new Enemy(newpos,player, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer);
-				charactersList.add(e);
+				Enemy enemy = new Enemy(newpos, player, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer);
+				charactersList.add(enemy);
 			}
 			if(name.equals("dealer"))
 			{	

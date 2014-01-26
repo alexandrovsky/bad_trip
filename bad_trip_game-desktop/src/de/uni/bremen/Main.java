@@ -15,6 +15,5 @@ public class Main {
 		new LwjglApplication(new BadTripGame(), cfg);
 		
 		
-		
 	}
 }
