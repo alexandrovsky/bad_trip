@@ -22,7 +22,7 @@ public class Enemy extends Character {
 				WorldPhysics.ENEMY_MAX_SPEED);
 		currentState = States.ZERO;
 		this.player = player;
-		
+		this.maxSpeed = WorldPhysics.ENEMY_MAXSPEED;
 	}
 	
 	@Override

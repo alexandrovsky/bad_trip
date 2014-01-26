@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
+import de.uni.bremen.physics.WorldPhysics;
 import de.uni.bremen.utils.AnimationDictionary;
 import de.uni.bremen.utils.HealthStates;
 
@@ -24,7 +25,7 @@ public class Player extends Character implements InputProcessor{
 	
 	
 	protected final int normalSPeed=360;
-	protected final int multiplier=4;
+	
 	protected float oldy,oldw, oldh;
 	
 	public ArrayList<Item> items;
@@ -42,7 +43,7 @@ public class Player extends Character implements InputProcessor{
 			float width, float height, TiledMapTileLayer collisionLayer)
 	{
 		
-		super(position, animationDict, animationTime, width, height, collisionLayer, 360);
+		super(position, animationDict, animationTime, width, height, collisionLayer, WorldPhysics.PLAYER_MAX_SPEED);
 		currentHealth=100;
 		
 	} 
@@ -97,14 +98,14 @@ public class Player extends Character implements InputProcessor{
 
 						oldw = width;
 						oldh= height;
-						width /= multiplier;
-						height /= multiplier;
+						width /= WorldPhysics.PLAYER_SCALE_MULTIPLIER;
+						height /= WorldPhysics.PLAYER_SCALE_MULTIPLIER;
 						break;
 					case XTC:
 						System.out.println("PLayer is on xtc");
 						currentHealthState = HealthStates.ON_XTC;
 						maxSpeed = normalSPeed;
-						maxSpeed *= multiplier;
+						maxSpeed *= WorldPhysics.PLAYER_SPEED_MULTIPLIER;
 						break;
 					default:
 						break;
