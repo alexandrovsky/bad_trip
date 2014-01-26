@@ -199,10 +199,10 @@ public class PlayScreen implements Screen {
 		
 		// healthbar:
 		shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 1.0f);
-		shapeRenderer.rect(60, y, 100, h); // health-bar outer shape
+		shapeRenderer.rect(60, y, 200, h); // health-bar outer shape
+		
 		shapeRenderer.setColor(0.15f, 0.55f, 0.12f, 1.0f);
-		shapeRenderer.rect(60+offset, y+offset,
-		player.getCurrentHealth()*2-2*offset, h-2*offset); // health-bar inner shape
+		shapeRenderer.rect(60+offset, y+offset,player.getCurrentHealth()*2-2*offset, h-2*offset); // health-bar inner shape
 		
 		
 		
@@ -214,7 +214,7 @@ public class PlayScreen implements Screen {
 			System.out.println(player.drugTime);
 			// healthbar:
 			shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 1.0f);
-			shapeRenderer.rect(260, y, 100, h); // drug-bar outer shape
+			shapeRenderer.rect(260, y, 200, h); // drug-bar outer shape
 			shapeRenderer.setColor(1f, 0.05f, 0.12f, 1.0f);
 			shapeRenderer.rect(260+offset, y+offset,
 			player.drugTime*2-2*offset, h-2*offset); // drug-bar inner shape

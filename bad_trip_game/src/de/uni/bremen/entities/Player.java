@@ -67,6 +67,7 @@ public class Player extends Character implements InputProcessor{
 		    @Override
 		    public void run() {
 		    	currentHealthState = HealthStates.CLEAN;
+		    	resetStatus();
 		    }
 		}, activationTime);
 	}
@@ -75,10 +76,10 @@ public class Player extends Character implements InputProcessor{
 	@Override
 	public void update(float deltaTime){
 		
-		if(drugTime>0)
+		if(drugTime>0 && currentHealthState != HealthStates.CLEAN)
 		{
-			double deltaT =   TimeUtils.millis() - drugTimerActivationTime ;
-			System.out.println(drugTime+ " "+deltaT);
+			long deltaT=   (int)TimeUtils.millis() - (int)drugTimerActivationTime ;
+			drugTime = 100 - deltaT / (WorldPhysics.DRUG_TIME_ACTIVATION_DURATION*1000) * 100;
 			//drugTime = 100 - deltaT;
 		}
 		
@@ -145,6 +146,7 @@ public class Player extends Character implements InputProcessor{
 			}
 		}
 		if(currentHealth<=0)isDead=true;
+		
 		
 		if(score<0)score=0;
 		score++;
