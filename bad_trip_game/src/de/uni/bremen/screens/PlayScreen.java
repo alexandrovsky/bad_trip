@@ -277,7 +277,7 @@ public class PlayScreen implements Screen {
 			AnimationDictionary animDict;
 			if(name.equals("player"))
 			{
-				AnimationDictionary playerAnimDict = new AnimationDictionary("img/characters/animation_map_character.png", 0.25f, 4,4,3,5 );
+				AnimationDictionary playerAnimDict = new AnimationDictionary("img/characters/animation_map_character.png", 0.125f, 4,4,3,5 );
 				player = new Player(newpos, 
 						playerAnimDict, playerAnimDict.animationTime, 
 						playerAnimDict.width, playerAnimDict.height, collisionLayer);
@@ -296,8 +296,7 @@ public class PlayScreen implements Screen {
 			//get spawnpoint
 			Integer newx = (Integer)mapObject.getProperties().get("x");
 			Integer newy = (Integer)mapObject.getProperties().get("y");
-			Vector2 newpos = new Vector2( newx.floatValue(),
-									      newy.floatValue() );
+			Vector2 newpos = new Vector2( newx.floatValue(),newy.floatValue() );
 			
 			AnimationDictionary animDict;
 			
@@ -309,6 +308,7 @@ public class PlayScreen implements Screen {
 				Fruit f = new Fruit(newpos, animDict, animDict.animationTime, animDict.width,animDict.height);
 				itemsList.add(f);
 			}
+			
 			if(name.equals(ENEMY_SPAWN))
 			{	
 				//debug=newpos;
@@ -316,6 +316,7 @@ public class PlayScreen implements Screen {
 				Enemy enemy = new Enemy(newpos, player, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer);
 				charactersList.add(enemy);
 			}
+			
 			if(name.equals("dealer"))
 			{	
 				//debug=newpos;
@@ -325,30 +326,35 @@ public class PlayScreen implements Screen {
 				deal.setMessage("blablabla");
 				charactersList.add(deal);
 			}
+			
 			if(name.equals(DRUG_SPAWN))
 			{
 				String type = (String)mapObject.getProperties().get("type");
 				String path="xtc.png";
+				int num=1;
 				Kind newkind=Kind.XTC;
 				if(type.equals("xtc"))
 				{
+					num=6;
 					path="xtc.png";
 					newkind = Kind.XTC;
 				}
 				if(type.equals("weed"))
 				{
+					num=8;
 					path="joint.png";
 					newkind = Kind.CANNABIS;
 				}
 				if(type.equals("mushroom"))
 				{
+					num=6;
 					path="mushroom_A.png";
 					newkind = Kind.MUSHROOM;
 				}
 				
 				
 				
-				animDict = new AnimationDictionary("img/items/"+path, 0.25f, 6 );
+				animDict = new AnimationDictionary("img/items/"+path, 0.25f, num );
 				Drug d = new Drug(newpos, animDict, animDict.animationTime, animDict.width,animDict.height);
 				d.current = newkind; //cheap harcode for testing
 				itemsList.add(d);
