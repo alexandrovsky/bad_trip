@@ -7,7 +7,7 @@ public class WorldPhysics {
 	public static final int 	PLAYER_MAXSPEED = 360;
 	public static final float 	PLAYER_SPEED_MULTIPLIER = 4.0f;
 	
-	public static final int		PLAYER_MAXJUMP_HEIGHT = 360;
+	public static final int		PLAYER_MAXJUMP_HEIGHT = 500;
 	public static final float	PLAYER_JUMP_MULTIPLIER = 4.0f;
 	
 	public static final float	PLAYER_SCALE_MULTIPLIER = 4.0f;

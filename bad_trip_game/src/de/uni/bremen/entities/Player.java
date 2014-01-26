@@ -2,8 +2,6 @@ package de.uni.bremen.entities;
 
 import java.util.ArrayList;
 
-import sun.org.mozilla.javascript.internal.ast.Jump;
-
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -129,8 +127,8 @@ public class Player extends Character implements InputProcessor{
 			{
 				if(item instanceof Fruit)
 				{
-					score++;
-					message="YUMMY!";
+					score+=25;
+					message="yummy fruits!";
 					message();
 					currentHealth+=1;
 				}
@@ -161,6 +159,7 @@ public class Player extends Character implements InputProcessor{
 						currentHealthState = HealthStates.ON_XTC;
 						maxSpeed = normalSpeed;
 						maxSpeed *= WorldPhysics.PLAYER_SPEED_MULTIPLIER;
+						
 						maxJumpHeight *= WorldPhysics.PLAYER_JUMP_MULTIPLIER;
 						break;
 					default:
@@ -195,11 +194,12 @@ public class Player extends Character implements InputProcessor{
 		
 		
 		if(score<0)score=0;
-		score++;
+		
 		
 		
 		super.update(deltaTime);
 	}
+	
 	/**
 	 * box test
 	 * @return
