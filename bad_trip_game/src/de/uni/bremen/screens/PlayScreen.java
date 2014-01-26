@@ -20,8 +20,6 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.TimeUtils;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Single;
 
 import de.uni.bremen.BadTripGame;
 import de.uni.bremen.entities.Character;
@@ -121,9 +119,11 @@ public class PlayScreen implements Screen {
 			if(!item.isDead)item.draw(batch, deltaTime);
 		}
 		
-		
+		int i = 0;
 		for (Character character : charactersList) {
 			if(!character.isDead)character.draw(batch, deltaTime);
+			System.out.println("enemy" + i + "loc:" +character.postion);
+			i++;
 		}
 		
 		
@@ -237,7 +237,7 @@ public class PlayScreen implements Screen {
 	Vector2 debug;
 	@Override
 	public void show() {
-		map = new TmxMapLoader().load("maps/laysers/LevelLayerSwitch.tmx");
+		map = new TmxMapLoader().load("maps/laysers/LevelLayerSwitchDoctorRun.tmx");
 		tileRenderer = new OrthogonalTiledMapRenderer(map);
 		TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get("soberforeground");
 		
