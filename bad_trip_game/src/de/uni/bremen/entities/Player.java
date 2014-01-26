@@ -157,10 +157,7 @@ public class Player extends Character implements InputProcessor{
 				item.isDead = true;
 			}
 			
-			// check, if he hit the ground:
-			if(postion.y < 0.0f){
-				this.isDead = true;
-			}
+
 		}
 		for (Character character : enemies) {
 			if(character.isDead)continue;

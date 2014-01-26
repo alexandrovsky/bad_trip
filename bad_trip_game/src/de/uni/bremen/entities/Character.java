@@ -232,6 +232,11 @@ public class Character extends Entity{
 		Cell cell = collisionLayer.getCell((int)(x/tileWidth), (int)(y/tileHeight));
 		return cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey(WorldPhysics.BLOCKED_CELL_KEY);
 	}
+	
+	public boolean isKill(float x, float y)
+	{
+		return collisionLayer.getCell((int)(x/tileWidth), (int)(y/tileHeight)).getTile().getProperties().containsKey("kill");
+	}
 
 	public boolean collidesLeft(){
 		for(float step = 0; step < height; step += tileHeight/2){
@@ -262,7 +267,11 @@ public class Character extends Entity{
 	
 	public boolean collidesBottom(){
 		for(float step = 0; step < width; step += tileWidth/2){
+			
+			
 			if( isCellBlocked(postion.x + step, postion.y) ){
+				if(isKill(postion.x + step, postion.y))isDead=true;
+				
 				return true;
 			}
 		}
