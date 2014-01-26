@@ -104,6 +104,13 @@ public class Player extends Character implements InputProcessor{
 		}
 		for (Character character : enemies) {
 			if(character.isDead)continue;
+			if(hit(character.postion.x, character.postion.y, character.width ,character.height))
+			{
+				if(character instanceof Enemy)
+				{
+					this.isDead=true;
+				}
+			}
 		}
 		
 		

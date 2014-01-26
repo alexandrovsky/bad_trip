@@ -20,6 +20,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
+import de.uni.bremen.BadTripGame;
 import de.uni.bremen.entities.Character;
 import de.uni.bremen.entities.Drug;
 import de.uni.bremen.entities.Enemy;
@@ -39,6 +40,7 @@ public class PlayScreen implements Screen {
 	
 	private Player player;
 	
+	BadTripGame gameRef;
 	
 	ArrayList<Item> itemsList;
 	ArrayList<Character> charactersList;
@@ -47,8 +49,21 @@ public class PlayScreen implements Screen {
 	private static final String ENEMY_SPAWN ="enemy";
 	private static final String DRUG_SPAWN ="drug";
 	
+	
+	public PlayScreen(BadTripGame gameref) {
+		// TODO Auto-generated constructor stub
+		gameRef = gameref;
+	}
+	
 	@Override
 	public void render(float delta) {
+		//if(gameRef.getScreen()!=this)return;
+		System.out.println(player.postion.y);
+		if(player.isDead || player.postion.y <= 2400)//TODO fix this y by create a new tile layer
+		{
+			gameRef.setScreen(gameRef.end);
+			return;
+		}
 		
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -160,6 +175,7 @@ public class PlayScreen implements Screen {
 		//TODO Render image for current drug state here
 		}
 
+	Vector2 debug;
 	@Override
 	public void show() {
 		map = new TmxMapLoader().load("maps/laysers/LevelLayerSwitch.tmx");
@@ -189,6 +205,7 @@ public class PlayScreen implements Screen {
 			Vector2 newpos = new Vector2(
 					newx.floatValue(),newy.floatValue()
 							);
+			
 			AnimationDictionary animDict;
 			if(name.equals("player"))
 			{
@@ -211,6 +228,7 @@ public class PlayScreen implements Screen {
 			}
 			if(name.equals(ENEMY_SPAWN))
 			{	
+				debug=newpos;
 				animDict = new AnimationDictionary("img/characters/animation_map_doctor.png", 0.25f, 5 );
 				Enemy e = new Enemy(newpos,player, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer,160);
 				charactersList.add(e);
@@ -246,7 +264,7 @@ public class PlayScreen implements Screen {
 		}
 		
 		
-		
+		//player.postion = debug;
 		
 		
 	}
