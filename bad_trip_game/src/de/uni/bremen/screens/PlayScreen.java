@@ -320,8 +320,8 @@ public class PlayScreen implements Screen {
 			if(name.equals("dealer"))
 			{	
 				//debug=newpos;
-				animDict = new AnimationDictionary("img/characters/Dealer.png", 0.25f, 5 );
-				Dealer deal = new Dealer(newpos,animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer);
+				animDict = new AnimationDictionary("img/characters/Dealer.png", 0.25f, 6 );
+				Dealer deal = new Dealer(newpos.add(0.0f,1500.0f),animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer);
 				//deal.message = (String)mapObject.getProperties().get("type");
 				deal.setMessage("blablabla");
 				charactersList.add(deal);
