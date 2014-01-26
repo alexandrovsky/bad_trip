@@ -19,6 +19,8 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.TimeUtils;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Single;
 
 import de.uni.bremen.entities.Character;
 import de.uni.bremen.entities.Drug;
@@ -27,6 +29,7 @@ import de.uni.bremen.entities.Fruit;
 import de.uni.bremen.entities.Item;
 import de.uni.bremen.entities.Player;
 import de.uni.bremen.utils.AnimationDictionary;
+import de.uni.bremen.utils.HealthStates;
 import de.uni.bremen.utils.Kind;
 
 
@@ -125,13 +128,20 @@ public class PlayScreen implements Screen {
 	}
 	
 	void renderPlayerStatus(){
+		
+		shapeRenderer.identity();
+		
+		shapeRenderer.begin(ShapeType.Filled);
+		
+		// health bar:
 		float x, y, w, h;
 		w = 22;
 		h = 40;
 		x = 50;
 		y = camera.viewportHeight - 2*h;
 		float offset = 5;
-		shapeRenderer.begin(ShapeType.Filled);
+		
+		
 		// health cross
 		shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 1.0f);
 		shapeRenderer.rect(x-h, y, h, h); // health-cross outer shape
@@ -153,11 +163,32 @@ public class PlayScreen implements Screen {
 		shapeRenderer.setColor(0.15f, 0.55f, 0.12f, 1.0f);
 		shapeRenderer.rect(60+offset, y+offset,
 		player.getCurrentHealth()*2-2*offset, h-2*offset); // health-bar inner shape
-		//shapeRenderer.identity();
-		//shapeRenderer.translate(20, 12, 2);
-		//shapeRenderer.rotate(0, 0, 1, 90);
-		shapeRenderer.end();
+		
+		
+		
 		//TODO Render image for current drug state here
+		
+		//----- drug timer
+		if(player.currentHealthState != HealthStates.CLEAN)
+		{
+			//outer circle:
+		
+			shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 1.0f);
+			x = camera.viewportWidth/2;
+			y = camera.viewportHeight - camera.viewportHeight/8;
+			float radius = 40.0f;
+			shapeRenderer.circle(x, y, radius);
+		
+		
+			//inner circle:
+			shapeRenderer.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+			radius = 35.0f;
+			shapeRenderer.circle(x, y, radius);
+			// arrow: ...
+			
+		}
+		
+		shapeRenderer.end();
 		}
 
 	@Override
@@ -212,7 +243,7 @@ public class PlayScreen implements Screen {
 			if(name.equals(ENEMY_SPAWN))
 			{	
 				animDict = new AnimationDictionary("img/characters/animation_map_doctor.png", 0.25f, 5 );
-				Enemy e = new Enemy(newpos,player, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer,160);
+				Enemy e = new Enemy(newpos,player, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer);
 				charactersList.add(e);
 			}
 			if(name.equals(DRUG_SPAWN))

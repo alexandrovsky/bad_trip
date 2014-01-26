@@ -4,11 +4,13 @@ package de.uni.bremen.entities;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 import de.uni.bremen.utils.AnimationDictionary;
 
 public class Item extends Entity {
 
+	
 	public Item(Vector2 position, AnimationDictionary animationDict,
 			float animationTime, float width, float height) {
 		super(position, animationDict, animationTime, width, height);
