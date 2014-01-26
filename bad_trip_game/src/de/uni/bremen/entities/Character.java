@@ -144,10 +144,10 @@ public class Character extends Entity{
 		velocity.y -= WorldPhysics.GRAVITY * deltaTime;
 		
 		//clam velocity:
-		if(velocity.y > maxSpeed){
-			velocity.y = maxSpeed;
-		}else if(velocity.y < -maxSpeed){
-			velocity.y = -maxSpeed;
+		if(velocity.y > maxJumpHeight){
+			velocity.y = maxJumpHeight;
+		}else if(velocity.y < -maxJumpHeight){
+			velocity.y = -maxJumpHeight;
 		}
 		
 		//2)
