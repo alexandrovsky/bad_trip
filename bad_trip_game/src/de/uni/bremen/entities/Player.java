@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -172,11 +173,22 @@ public class Player extends Character implements InputProcessor{
 					score-=20;
 					character.isDead=true;
 				}
+<<<<<<< .merge_file_VjrjUV
 				if(character instanceof Dealer)
 				{
 					Dealer d = (Dealer)character;
 					d.talk();
 				}
+=======
+				final Sound sound = musicDict.get(States.ZERO.key);
+				final long soundId = sound.play();
+				Timer.schedule(new Task(){
+				   @Override
+				   public void run(){
+				      sound.stop(soundId);
+				    }
+				}, 0.8f);
+>>>>>>> .merge_file_nITZSN
 			}
 		}
 		if(currentHealth<=0)isDead=true;
@@ -234,6 +246,15 @@ public class Player extends Character implements InputProcessor{
 					velocity.y = maxJumpHeight + Math.abs(velocity.x) * maxSpeed;
 					canJump = false;
 					currentState = States.JUMP;
+					final Sound sound = musicDict.get(States.JUMP.key);
+					final long soundId = sound.play();
+					Timer.schedule(new Task(){
+					   @Override
+					   public void run(){
+					      sound.stop(soundId);
+					    }
+					}, 0.8f);
+					
 				}
 				break;
 			case Keys.R: // reset;
