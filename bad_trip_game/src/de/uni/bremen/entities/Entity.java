@@ -1,10 +1,12 @@
 package de.uni.bremen.entities;
 
 import java.util.Dictionary;
+import java.util.HashMap;
 
 import javax.swing.text.Position;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -13,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import de.uni.bremen.utils.AnimationDictionary;
+import de.uni.bremen.utils.HealthStates;
 
 
 
@@ -34,6 +37,8 @@ public class Entity
 	public float height, width; 
 
 	public boolean isDead;
+	
+	
 	
 	public Entity(Vector2 position, AnimationDictionary animationDict, float animationTime, float width, float height){
 		

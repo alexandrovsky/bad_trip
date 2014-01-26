@@ -1,5 +1,9 @@
 package de.uni.bremen.entities;
 
+import java.util.HashMap;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -8,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import de.uni.bremen.physics.WorldPhysics;
 import de.uni.bremen.utils.AnimationDictionary;
+import de.uni.bremen.utils.HealthStates;
 
 public class Character extends Entity{
 
@@ -71,6 +76,8 @@ public class Character extends Entity{
 	protected boolean isOrientationLeft;
 	
 	protected States currentState = States.IDLE;
+	
+	HashMap<Integer, Sound> musicDict;
 		
 	/*
 	 * IDLE(0),
@@ -93,7 +100,7 @@ public class Character extends Entity{
 	public Character( Vector2 position,AnimationDictionary animationDict,  float animationTime, 
 			float width, float height, TiledMapTileLayer collisionLayer, float maxSpeed) 
 	{
-		super(position, animationDict, animationTime, width,height);
+		super(position.add(new Vector2(0.0f, 600.0f)), animationDict, animationTime, width,height);
 		
 		this.maxSpeed = maxSpeed;
 		
@@ -101,6 +108,12 @@ public class Character extends Entity{
 		
 		tileWidth = collisionLayer.getTileWidth();
 		tileHeight = collisionLayer.getTileHeight();
+		
+		musicDict = new HashMap<Integer, Sound>();
+		Sound sound = Gdx.audio.newSound(Gdx.files.internal("audio/sound/Jump-SoundBible.com-1007297584.mp3"));
+		musicDict.put(States.JUMP.key, sound);
+		sound = Gdx.audio.newSound(Gdx.files.internal("audio/sound/Jab-SoundBible.com-1806727891.mp3"));
+		musicDict.put(States.ZERO.key, sound);
 	}
 	
 	
