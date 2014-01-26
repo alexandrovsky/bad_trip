@@ -20,7 +20,7 @@ public class Enemy extends Character {
 	{
 		super(position, animationDict, animationTime, width, height, collisionLayer,
 				WorldPhysics.ENEMY_MAX_SPEED);
-		
+		currentState = States.ZERO;
 		this.player = player;
 		
 	}

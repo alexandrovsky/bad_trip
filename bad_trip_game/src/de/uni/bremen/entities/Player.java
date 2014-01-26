@@ -172,13 +172,14 @@ public class Player extends Character implements InputProcessor{
 				isOrientationLeft = false;
 				break;
 			case Keys.UP:
+			case Keys.SPACE:
 				if(canJump){
 					velocity.y = maxSpeed + Math.abs(velocity.x) * maxSpeed;
 					canJump = false;
 					currentState = States.JUMP;
 				}
 				break;
-			case Keys.R:
+			case Keys.R: // reset;
 				width=oldw;
 				height=oldh;
 				maxSpeed=normalSPeed;
