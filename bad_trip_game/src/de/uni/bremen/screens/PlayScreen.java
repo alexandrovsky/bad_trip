@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -43,6 +44,8 @@ public class PlayScreen implements Screen {
 	
 	private Player player;
 	
+	BitmapFont font;
+	
 	BadTripGame gameRef;
 	
 	ArrayList<Item> itemsList;
@@ -53,9 +56,15 @@ public class PlayScreen implements Screen {
 	private static final String DRUG_SPAWN ="drug";
 	
 	
+	int width,height;
+	
 	public PlayScreen(BadTripGame gameref) {
 		// TODO Auto-generated constructor stub
 		gameRef = gameref;
+		font = new BitmapFont();
+		font.scale(1.6f); 
+		 width=Gdx.graphics.getWidth();
+		 height=Gdx.graphics.getHeight();
 	}
 	
 	@Override
@@ -64,6 +73,8 @@ public class PlayScreen implements Screen {
 		System.out.println(player.postion.y);
 		if(player.isDead || player.postion.y <= 2400)//TODO fix this y by create a new tile layer
 		{
+			gameRef.end.goodEnd=false;
+			gameRef.end.score = player.score;
 			gameRef.setScreen(gameRef.end);
 			return;
 		}
@@ -89,13 +100,13 @@ public class PlayScreen implements Screen {
 			case CLEAN:
 				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("sober"));
 			break;
-			case ON_MUSHRROM:
+			case ON_XTC:
 				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("xtc"));
 				break;
 			case ON_WEED:
 				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("weed"));
 				break;
-			case ON_XTC:
+			case ON_MUSHRROM:
 				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("shrooms"));
 				break;
 			default:
@@ -106,9 +117,12 @@ public class PlayScreen implements Screen {
 		for (Item item : itemsList) {
 			if(!item.isDead)item.draw(batch, deltaTime);
 		}
+		
+		
 		for (Character character : charactersList) {
 			if(!character.isDead)character.draw(batch, deltaTime);
 		}
+		
 		
 		player.draw(batch, deltaTime);
 		
@@ -130,6 +144,13 @@ public class PlayScreen implements Screen {
 				break;
 		}
 		// finally render the forground
+		
+		//GUI
+		 
+		 font.setColor(1.0f, .7f, 0.0f, 1.0f);
+		 font.draw(batch,"Score: "+player.score, player.postion.x+width/3,player.postion.y+height/2);
+
+		
 		
 		batch.end();
 		
@@ -159,6 +180,7 @@ public class PlayScreen implements Screen {
 		
 		// health cross
 		shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 1.0f);
+		
 		shapeRenderer.rect(x-h, y, h, h); // health-cross outer shape
 		shapeRenderer.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 		shapeRenderer.rect(x-h+offset, y+offset, h-2*offset, h-2*offset); //health-cross inner shape
@@ -167,11 +189,14 @@ public class PlayScreen implements Screen {
 		float cross_h = h-2*offset-(2*cross_w/3);
 		float cross_x = x-h+offset;
 		float cross_y = y+offset+cross_w/3;
+		
+		
 		shapeRenderer.rect(cross_x, cross_y, cross_w-3, cross_h); // cross horizontal part
 		cross_x = x-h+offset+cross_w/3;
 		cross_y = y+offset;
 		cross_h = h-2*offset-(2*cross_w/3);
 		shapeRenderer.rect(cross_x, cross_y, cross_h, cross_w-3);// cross vertical part
+		
 		// healthbar:
 		shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 1.0f);
 		shapeRenderer.rect(60, y, 100, h); // health-bar outer shape
@@ -186,21 +211,7 @@ public class PlayScreen implements Screen {
 		//----- drug timer
 		if(player.currentHealthState != HealthStates.CLEAN)
 		{
-			//outer circle:
-		
-			shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 1.0f);
-			x = camera.viewportWidth/2;
-			y = camera.viewportHeight - camera.viewportHeight/8;
-			float radius = 40.0f;
-			shapeRenderer.circle(x, y, radius);
-		
-		
-			//inner circle:
-			shapeRenderer.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-			radius = 35.0f;
-			shapeRenderer.circle(x, y, radius);
-			// arrow: ...
-			
+
 		}
 		
 		shapeRenderer.end();

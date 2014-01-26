@@ -25,11 +25,12 @@ public class Player extends Character implements InputProcessor{
 	
 	protected final int normalSPeed=360;
 	protected final int multiplier=4;
-	
 	protected float oldy,oldw, oldh;
 	
 	public ArrayList<Item> items;
 	public ArrayList<Character> enemies;
+	
+	public long score=0;
 	
 	//============================== CONSTRUCTOR ======================================//
 	//
@@ -75,12 +76,14 @@ public class Player extends Character implements InputProcessor{
 			{
 				if(item instanceof Fruit)
 				{
+					score++;
 					System.out.println("Fruit Collected");
 					currentHealth+=1;
 				}
 				
 				if(item instanceof Drug)
 				{
+					score-=100;
 					Drug d = (Drug)item;
 					currentHealth-=5;
 					switch (d.current) {
@@ -123,11 +126,16 @@ public class Player extends Character implements InputProcessor{
 			{
 				if(character instanceof Enemy)
 				{
-					this.isDead=true;
+					currentHealth-=20;
+					score-=20;
+					character.isDead=true;
 				}
 			}
 		}
+		if(currentHealth<=0)isDead=true;
 		
+		if(score<0)score=0;
+		score++;
 		
 		super.update(deltaTime);
 	}
@@ -179,10 +187,7 @@ public class Player extends Character implements InputProcessor{
 				}
 				break;
 			case Keys.R: // reset;
-				width=oldw;
-				height=oldh;
-				maxSpeed=normalSPeed;
-				currentHealthState= HealthStates.CLEAN;
+				resetStatus();
 				break;
 			default:
 				break;
@@ -193,7 +198,10 @@ public class Player extends Character implements InputProcessor{
 	
 	void resetStatus()
 	{
-		
+		width=oldw;
+		height=oldh;
+		maxSpeed=normalSPeed;
+		currentHealthState= HealthStates.CLEAN;
 	}
 
 	@Override

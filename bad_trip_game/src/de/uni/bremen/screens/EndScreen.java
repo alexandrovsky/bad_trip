@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -16,9 +17,12 @@ import de.uni.bremen.utils.AnimationDictionary;
 public class EndScreen implements Screen {
 
 	BadTripGame gameRef;
+	private BitmapFont font;
 	public EndScreen(BadTripGame gameref) {
 		// TODO Auto-generated constructor stub
 		gameRef =gameref;
+		font = new BitmapFont();
+		font.scale(3.6f); 
 	}
 	
 	
@@ -28,7 +32,11 @@ public class EndScreen implements Screen {
 	
 	public Vector2 postion;
 	public float height, width; 
-
+	
+	public boolean goodEnd;
+	public long score;
+	
+	
 	
 	@Override
 	public void render(float delta) {
@@ -38,7 +46,7 @@ public class EndScreen implements Screen {
 		}
 		
 		// TODO Auto-generated method stub
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		batch.begin();
@@ -51,6 +59,9 @@ public class EndScreen implements Screen {
 	
 		batch.draw(currentFrame,0,0,0,0, width, height, 1.0f, 1,0f);
     
+		font.setColor(1.0f, .7f, 0.0f, 1.0f);
+		font.draw(batch, "your score is "+score, 0, 100);
+		
 		batch.end();
 	}
 
