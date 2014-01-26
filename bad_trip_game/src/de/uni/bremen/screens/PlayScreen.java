@@ -3,9 +3,11 @@ package de.uni.bremen.screens;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -49,6 +51,8 @@ public class PlayScreen implements Screen {
 	
 	ArrayList<Item> itemsList;
 	ArrayList<Character> charactersList;
+	
+	HashMap<HealthStates, Sound> musicDict;
 	
 	private static final String FRUIT_SPAWN ="fruit";
 	private static final String ENEMY_SPAWN ="enemy";
@@ -274,7 +278,6 @@ public class PlayScreen implements Screen {
 			Vector2 newpos = new Vector2( newx.floatValue(),
 									      newy.floatValue() );
 			
-			AnimationDictionary animDict;
 			if(name.equals("player"))
 			{
 				AnimationDictionary playerAnimDict = new AnimationDictionary("img/characters/animation_map_character.png", 0.125f, 4,4,3,5 );
@@ -361,6 +364,11 @@ public class PlayScreen implements Screen {
 			}
 		}
 		
+		musicDict = new HashMap<HealthStates, Sound>();
+		musicDict.put(HealthStates.CLEAN, Gdx.audio.newSound(Gdx.files.internal("audio/music/main_theme.wav")));
+		
+		musicDict.get(HealthStates.CLEAN).loop(0.7f);
+		
 		
 		//player.postion = debug;
 		
@@ -369,6 +377,11 @@ public class PlayScreen implements Screen {
 
 	@Override
 	public void hide() {
+		
+		for(Sound sound : musicDict.values() ){
+			sound.stop();
+		}
+		
 		dispose();
 
 	}
