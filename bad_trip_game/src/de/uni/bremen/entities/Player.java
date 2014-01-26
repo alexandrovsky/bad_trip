@@ -33,6 +33,9 @@ public class Player extends Character implements InputProcessor{
 	
 	public long score=0;
 	
+	public float drugTime;
+	
+	
 	//============================== CONSTRUCTOR ======================================//
 	//
 	//	
@@ -57,6 +60,7 @@ public class Player extends Character implements InputProcessor{
 	
 	
 	public synchronized void activateDrugTimer(float activationTime){
+		drugTime = 100.0f;
 		
 		drugTimerActivationTime = TimeUtils.millis();
 		this.drugTimer.scheduleTask(new Task(){
@@ -70,6 +74,12 @@ public class Player extends Character implements InputProcessor{
 
 	@Override
 	public void update(float deltaTime){
+		
+		if(drugTime>0)
+		{
+			long deltaT = TimeUtils.millis() - drugTimerActivationTime;
+			drugTime = deltaT *100 / WorldPhysics.DRUG_TIME_ACTIVATION_DURATION;
+		}
 		
 		for (Item item : items) {
 			if(item.isDead)continue;
@@ -110,7 +120,7 @@ public class Player extends Character implements InputProcessor{
 					default:
 						break;
 					}
-					activateDrugTimer(5.0f);
+					activateDrugTimer(WorldPhysics.DRUG_TIME_ACTIVATION_DURATION);
 					
 				}
 				item.isDead = true;

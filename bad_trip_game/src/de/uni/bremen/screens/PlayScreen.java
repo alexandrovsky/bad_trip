@@ -211,7 +211,14 @@ public class PlayScreen implements Screen {
 		//----- drug timer
 		if(player.currentHealthState != HealthStates.CLEAN)
 		{
-
+			System.out.println(player.drugTime);
+			// healthbar:
+			shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 1.0f);
+			shapeRenderer.rect(260, y, 100, h); // drug-bar outer shape
+			shapeRenderer.setColor(1f, 0.05f, 0.12f, 1.0f);
+			shapeRenderer.rect(260+offset, y+offset,
+			player.drugTime*2-2*offset, h-2*offset); // drug-bar inner shape
+			
 		}
 		
 		shapeRenderer.end();

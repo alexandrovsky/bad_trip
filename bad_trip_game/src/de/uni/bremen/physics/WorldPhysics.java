@@ -23,6 +23,10 @@ public class WorldPhysics {
 	public static final float	ENEMY_SCALE_MULTIPLIER = 4.0f;
 	
 	
+	//MISC
+	
+	public static final float DRUG_TIME_ACTIVATION_DURATION = 5.0f;
+	
 	
 	
 	public static final float GRAVITY = 60 * 10.8f;
