@@ -2,7 +2,6 @@ package de.uni.bremen.entities;
 
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 
@@ -18,7 +17,7 @@ public class Enemy extends Character {
 			float animationTime, float width, float height,
 			TiledMapTileLayer collisionLayer) 
 	{
-		super(position, animationDict, animationTime, width, height, collisionLayer,
+		super(position.add(new Vector2(0.0f, 300.0f)), animationDict, animationTime, width, height, collisionLayer,
 				WorldPhysics.ENEMY_MAX_SPEED);
 		currentState = States.ZERO;
 		this.player = player;
@@ -33,17 +32,15 @@ public class Enemy extends Character {
 			Vector2 enemyPos = postion.cpy(); 
 			Vector2 delta = playerPos.sub(enemyPos);
 			
-			if(delta.len() < Gdx.graphics.getWidth() ){
-				if(delta.x > 0.0){
-					postion.x += maxSpeed* deltaTime;
-					isOrientationLeft= false;
-				}else{
-					postion.x -= maxSpeed* deltaTime;
-					isOrientationLeft = true;
-				}
+			//if(delta.len() < Gdx.graphics.getWidth() ){
+			if(delta.x > 0.0){
+				velocity.x = maxSpeed;
+				isOrientationLeft= false;
 			}else{
-				
+				velocity.x = -maxSpeed;
+				isOrientationLeft = true;
 			}
+			
 		}
 		
 		

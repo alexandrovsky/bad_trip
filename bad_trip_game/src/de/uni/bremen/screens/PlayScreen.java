@@ -119,11 +119,12 @@ public class PlayScreen implements Screen {
 			if(!item.isDead)item.draw(batch, deltaTime);
 		}
 		
-		int i = 0;
-		for (Character character : charactersList) {
-			if(!character.isDead)character.draw(batch, deltaTime);
-			System.out.println("enemy dead:"+ character.isDead + i + "loc:" +character.postion);
-			i++;
+		
+		for(int i = 0; i < charactersList.size(); i++){
+			Character charecter = charactersList.get(i);
+			if(!charecter.isDead)charecter.draw(batch, deltaTime);
+			System.out.println("enemy dead:"+ charecter.isDead + i + "loc:" +charecter.postion);
+			
 		}
 		
 		
@@ -249,10 +250,7 @@ public class PlayScreen implements Screen {
 		
 		
 		
-		
-		
-		
-		//get spawnpoints
+		// spawnpoint for player
 		MapObjects objs = map.getLayers().get("objects").getObjects();
 		for (MapObject mapObject : objs) {
 			String name=mapObject.getName();
@@ -261,9 +259,8 @@ public class PlayScreen implements Screen {
 			//get spawnpoint
 			Integer newx = (Integer)mapObject.getProperties().get("x");
 			Integer newy = (Integer)mapObject.getProperties().get("y");
-			Vector2 newpos = new Vector2(
-					newx.floatValue(),newy.floatValue()
-							);
+			Vector2 newpos = new Vector2( newx.floatValue(),
+									      newy.floatValue() );
 			
 			AnimationDictionary animDict;
 			if(name.equals("player"))
@@ -277,6 +274,21 @@ public class PlayScreen implements Screen {
 				player.enemies  = charactersList;
 						
 			}
+		}
+		
+		// spawnpoints get for other objects
+		for (MapObject mapObject : objs) {
+			String name=mapObject.getName();
+			if(name==null)continue;
+			System.out.println(name);
+			//get spawnpoint
+			Integer newx = (Integer)mapObject.getProperties().get("x");
+			Integer newy = (Integer)mapObject.getProperties().get("y");
+			Vector2 newpos = new Vector2( newx.floatValue(),
+									      newy.floatValue() );
+			
+			AnimationDictionary animDict;
+			
 			
 			if(name.equals(FRUIT_SPAWN))
 			{
@@ -289,8 +301,8 @@ public class PlayScreen implements Screen {
 			{	
 				debug=newpos;
 				animDict = new AnimationDictionary("img/characters/animation_map_doctor.png", 0.25f, 5 );
-				Enemy e = new Enemy(newpos, player, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer);
-				charactersList.add(e);
+				Enemy enemy = new Enemy(newpos, player, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer);
+				charactersList.add(enemy);
 			}
 			if(name.equals(DRUG_SPAWN))
 			{
