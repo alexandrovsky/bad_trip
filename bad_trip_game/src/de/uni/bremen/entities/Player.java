@@ -47,12 +47,6 @@ public class Player extends Character implements InputProcessor{
 	} 
 	
 	
-	
-	
-	
-		
-
-	
 	public HealthStates currentHealthState = HealthStates.CLEAN;
 			
 	float delay = 1; // seconds
@@ -97,9 +91,7 @@ public class Player extends Character implements InputProcessor{
 					case CANNABIS:
 						currentHealthState = HealthStates.ON_WEED;
 						System.out.println("PLayer is on weed");
-						//oldy = velocity.y;
-						//maxSpeed = normalSPeed;
-						//maxSpeed  /= multiplier;
+
 						oldw = width;
 						oldh= height;
 						width /= multiplier;
@@ -198,6 +190,11 @@ public class Player extends Character implements InputProcessor{
 		return true;
 	}
 
+	
+	void resetStatus()
+	{
+		
+	}
 
 	@Override
 	public boolean keyUp(int keycode) {
