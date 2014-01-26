@@ -16,6 +16,8 @@ import de.uni.bremen.utils.HealthStates;
 
 
 public class Player extends Character implements InputProcessor{
+	
+	
 
 	//============================== CONSTANTS ======================================//
 	//
