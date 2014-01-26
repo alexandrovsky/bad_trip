@@ -122,7 +122,7 @@ public class PlayScreen implements Screen {
 		int i = 0;
 		for (Character character : charactersList) {
 			if(!character.isDead)character.draw(batch, deltaTime);
-			System.out.println("enemy" + i + "loc:" +character.postion);
+			System.out.println("enemy dead:"+ character.isDead + i + "loc:" +character.postion);
 			i++;
 		}
 		
@@ -288,7 +288,7 @@ public class PlayScreen implements Screen {
 			{	
 				debug=newpos;
 				animDict = new AnimationDictionary("img/characters/animation_map_doctor.png", 0.25f, 5 );
-				Enemy e = new Enemy(newpos,player, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer);
+				Enemy e = new Enemy(newpos, player, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer);
 				charactersList.add(e);
 			}
 			if(name.equals(DRUG_SPAWN))
