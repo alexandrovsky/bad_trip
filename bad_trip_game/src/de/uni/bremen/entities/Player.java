@@ -77,8 +77,9 @@ public class Player extends Character implements InputProcessor{
 		
 		if(drugTime>0)
 		{
-			long deltaT = TimeUtils.millis() - drugTimerActivationTime;
-			drugTime = deltaT *100 / WorldPhysics.DRUG_TIME_ACTIVATION_DURATION;
+			double deltaT =   TimeUtils.millis() - drugTimerActivationTime ;
+			System.out.println(drugTime+ " "+deltaT);
+			//drugTime = 100 - deltaT;
 		}
 		
 		for (Item item : items) {
@@ -209,8 +210,8 @@ public class Player extends Character implements InputProcessor{
 	
 	void resetStatus()
 	{
-		width=oldw;
-		height=oldh;
+		width=oldw>width?oldw:width;
+		height=oldh>height?oldh:height;
 		maxSpeed=normalSPeed;
 		currentHealthState= HealthStates.CLEAN;
 	}

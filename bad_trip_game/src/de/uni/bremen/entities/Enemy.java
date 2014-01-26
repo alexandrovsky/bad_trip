@@ -42,7 +42,7 @@ public class Enemy extends Character {
 					isOrientationLeft = true;
 				}
 			}else{
-				//System.out.println("enemy out of range");
+				
 			}
 		}
 		

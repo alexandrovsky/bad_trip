@@ -70,7 +70,7 @@ public class PlayScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		//if(gameRef.getScreen()!=this)return;
-		System.out.println(player.postion.y);
+		
 		if(player.isDead || player.postion.y <= 2400)//TODO fix this y by create a new tile layer
 		{
 			gameRef.end.goodEnd=false;
