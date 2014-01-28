@@ -2,8 +2,10 @@ package de.uni.bremen.entities;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -27,6 +29,9 @@ public class Player extends Character implements InputProcessor{
 	protected final int normalSpeed=WorldPhysics.PLAYER_MAXSPEED;
 	protected final int normalJumpHeight = WorldPhysics.PLAYER_MAXJUMP_HEIGHT;
 	protected float oldy,oldw, oldh;
+	
+	public Sound jumpSound = Gdx.audio.newSound(Gdx.files.internal("audio/Jump-SoundBible.com-1007297584.mp3"));
+	public Sound hitSound = Gdx.audio.newSound(Gdx.files.internal("audio/Jab-SoundBible.com-1806727891.mp3"));
 	
 	public ArrayList<Item> items;
 	public ArrayList<Character> enemies;
@@ -174,11 +179,21 @@ public class Player extends Character implements InputProcessor{
 					currentHealth-=20;
 					score-=20;
 					character.isDead=true;
+					
+					final long id = hitSound.loop();
+					Timer.schedule(new Task(){
+					   @Override
+					   public void run(){
+						   hitSound.stop(id);
+					      }
+					   }, 0.8f);
 				}
 				if(character instanceof Dealer)
 				{
 					Dealer d = (Dealer)character;
 					d.talk();
+					
+					
 				}
 			}
 		}
@@ -237,6 +252,14 @@ public class Player extends Character implements InputProcessor{
 					velocity.y = maxJumpHeight + Math.abs(velocity.x) * maxSpeed;
 					canJump = false;
 					currentState = States.JUMP;
+					
+					final long id = jumpSound.loop();
+					Timer.schedule(new Task(){
+					   @Override
+					   public void run(){
+						   jumpSound.stop(id);
+					      }
+					   }, 0.8f);
 				}
 				break;
 			case Keys.R: // reset;

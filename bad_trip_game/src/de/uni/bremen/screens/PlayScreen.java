@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -42,6 +43,8 @@ public class PlayScreen implements Screen {
 	ShapeRenderer shapeRenderer;
 	private OrthographicCamera camera;
 	
+	public Sound mainTheme = Gdx.audio.newSound(Gdx.files.internal("audio/main_theme.mp3"));
+	long mainThemeId;
 	private Player player;
 	
 	BitmapFont font,messageFont;
@@ -260,6 +263,9 @@ public class PlayScreen implements Screen {
 	Vector2 debug;
 	@Override
 	public void show() {
+		
+		mainTheme.stop(mainThemeId);
+		mainThemeId = mainTheme.loop(0.6f);
 		map = new TmxMapLoader().load("maps/laysers/LevelLayerSwitch.tmx");
 		tileRenderer = new OrthogonalTiledMapRenderer(map);
 		TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get("soberforeground");
