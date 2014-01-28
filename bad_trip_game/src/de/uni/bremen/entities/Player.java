@@ -154,6 +154,7 @@ public class Player extends Character implements InputProcessor{
 					default:
 						break;
 					}
+					item.respawn();
 					activateDrugTimer(WorldPhysics.DRUG_TIME_ACTIVATION_DURATION);
 					
 				}

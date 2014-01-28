@@ -243,6 +243,7 @@ public class PlayScreen implements Screen {
 		//----- drug timer
 		if(player.currentHealthState != HealthStates.CLEAN)
 		{
+			
 			System.out.println(player.drugTime);
 			// healthbar:
 			shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 1.0f);
