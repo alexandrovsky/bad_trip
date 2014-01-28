@@ -13,10 +13,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -57,7 +57,7 @@ public class PlayScreen implements Screen {
 	private static final String FRUIT_SPAWN ="fruit";
 	private static final String ENEMY_SPAWN ="enemy";
 	private static final String DRUG_SPAWN ="drug";
-	
+	private static final String GOAL ="goal";
 	
 	int width,height;
 	
@@ -262,11 +262,12 @@ public class PlayScreen implements Screen {
 
 	Vector2 debug;
 	@Override
-	public void show() {
+	public void show() 
+	{
 		
 		mainTheme.stop(mainThemeId);
 		mainThemeId = mainTheme.loop(0.6f);
-		map = new TmxMapLoader().load("maps/laysers/LevelLayerSwitch.tmx");
+		map = new TmxMapLoader().load("maps/laysers/LevelLayerSwitchconstructed.tmx");
 		tileRenderer = new OrthogonalTiledMapRenderer(map);
 		TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get("soberforeground");
 		
@@ -279,129 +280,140 @@ public class PlayScreen implements Screen {
 		
 		
 		// spawnpoint for player
-		MapObjects objs = map.getLayers().get("objects").getObjects();
-		for (MapObject mapObject : objs) {
-			String name=mapObject.getName();
-			if(name==null)continue;
-			System.out.println(name);
-			//get spawnpoint
-			Integer newx = (Integer)mapObject.getProperties().get("x");
-			Integer newy = (Integer)mapObject.getProperties().get("y");
-			Vector2 newpos = new Vector2( newx.floatValue(),
-									      newy.floatValue() );
-			
-			
-			if(name.equals("player"))
+		
+		TiledMapTileLayer objectLayer = (TiledMapTileLayer)map.getLayers().get("objects");
+		
+		for(int x = 0; x < objectLayer.getWidth(); x++)
+		{
+			for(int y = 0; y < objectLayer.getHeight(); y++)
 			{
-				AnimationDictionary playerAnimDict = new AnimationDictionary("img/characters/animation_map_character.png", 0.125f, 4,4,3,5 );
-				player = new Player(newpos, 
-						playerAnimDict, playerAnimDict.animationTime, 
-						playerAnimDict.width, playerAnimDict.height, collisionLayer);
-				Gdx.input.setInputProcessor(player);
-				player.items = itemsList;
-				player.enemies  = charactersList;
-						
+				Cell cell = objectLayer.getCell(x, y);
+				if(cell == null){
+					continue;
+				}
+				TiledMapTile tile = objectLayer.getCell(x, y).getTile();
+				if( tile != null  && tile.getProperties().containsKey("player") ){
+					Vector2 newpos = new Vector2( (float)x*objectLayer.getTileWidth(),
+											      (float)y*objectLayer.getHeight() );
+					
+					
+					
+					AnimationDictionary playerAnimDict = new AnimationDictionary("img/characters/animation_map_character.png", 0.125f, 4,4,3,5 );
+					player = new Player(newpos, 
+							playerAnimDict, playerAnimDict.animationTime, 
+							playerAnimDict.width, playerAnimDict.height, collisionLayer);
+					Gdx.input.setInputProcessor(player);
+					player.items = itemsList;
+					player.enemies  = charactersList;
+				}
 			}
 		}
-		
-		// spawnpoints get for other objects
-		for (MapObject mapObject : objs) {
-			String name=mapObject.getName();
-			if(name==null)continue;
-			System.out.println(name);
-			//get spawnpoint
-			Integer newx = (Integer)mapObject.getProperties().get("x");
-			Integer newy = (Integer)mapObject.getProperties().get("y");
-			Vector2 newpos = new Vector2( newx.floatValue(),newy.floatValue() );
 			
-			AnimationDictionary animDict;
 			
-			if(name.equals("goal"))
+		///spawn the objects:
+		for(int x = 0; x < objectLayer.getWidth(); x++)
+		{
+			for(int y = 0; y < objectLayer.getHeight(); y++)
 			{
-				String path="img/items/apple.png";
-				animDict = new AnimationDictionary(path, 0.25f, 1 );
-				Goal g = new Goal(newpos, animDict, animDict.animationTime, animDict.width,animDict.height);
-				itemsList.add(g);
-			}
-			
-			if(name.equals(FRUIT_SPAWN))
-			{
-				String path="img/items/apple.png";
-				int rand=(int)Math.random()*3;
-				switch (rand) {
-				case 0:
-					path="img/items/orange.png";
-					break;
-				case 1:
-					path="img/items/apple.png";
-					break;
-				case 2:
-					path="img/items/pear.png";
-					break;
+				Cell cell = objectLayer.getCell(x, y);
+				if(cell == null){
+					continue;
+				}
+				TiledMapTile tile = objectLayer.getCell(x, y).getTile();
+				if(tile == null){
+					continue;
 				}
 				
-				animDict = new AnimationDictionary(path, 0.25f, 1 );
-				Fruit f = new Fruit(newpos, animDict, animDict.animationTime, animDict.width,animDict.height);
-				itemsList.add(f);
-			}
-			
-			if(name.equals(ENEMY_SPAWN))
-			{	
-				//debug=newpos;
-				animDict = new AnimationDictionary("img/characters/animation_map_doctor-2.png", 0.25f, 5 );
-				Enemy enemy = new Enemy(newpos.add(0.0f,500.0f), player, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer);
-				charactersList.add(enemy);
-			}
-			
-			if(name.equals("dealer"))
-			{	
-				//debug=newpos;
-				animDict = new AnimationDictionary("img/characters/Dealer.png", 0.25f, 6 );
-				Dealer deal = new Dealer(newpos.add(0.0f,1500.0f),animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer);
-				//deal.message = (String)mapObject.getProperties().get("type");
-				deal.setMessage((String)mapObject.getProperties().get("type"));
-				charactersList.add(deal);
-			}
-			
-			if(name.equals(DRUG_SPAWN))
-			{
-				String type = (String)mapObject.getProperties().get("type");
-				String path="xtc.png";
-				int num=1;
-				Kind newkind=Kind.XTC;
-				if(type.equals("xtc"))
+				Vector2 newpos = new Vector2( (float)x*objectLayer.getTileWidth(),
+					      (float)y*objectLayer.getHeight() );
+				
+				
+				if( tile.getProperties().containsKey(GOAL) )
 				{
-					num=6;
-					path="xtc.png";
-					newkind = Kind.XTC;
+						String path="img/items/apple.png";
+						AnimationDictionary animDict = new AnimationDictionary(path, 0.25f, 1 );
+						Goal g = new Goal(newpos, animDict, animDict.animationTime, animDict.width,animDict.height);
+						itemsList.add(g);
 				}
-				if(type.equals("weed"))
+				
+					
+					
+							
+				if( tile.getProperties().containsKey(FRUIT_SPAWN) )
 				{
-					num=6;
-					path="joint-01.png";
-					newkind = Kind.CANNABIS;
+					String path="img/items/apple.png";
+					int rand=(int)Math.random()*3;
+					switch (rand) {
+					case 0:
+						path="img/items/orange.png";
+						break;
+					case 1:
+						path="img/items/apple.png";
+						break;
+					case 2:
+						path="img/items/pear.png";
+						break;
+					}
+					
+					AnimationDictionary animDict = new AnimationDictionary(path, 0.25f, 1 );
+					Fruit f = new Fruit(newpos, animDict, animDict.animationTime, animDict.width,animDict.height);
+					itemsList.add(f);
 				}
-				if(type.equals("mushroom"))
+				
+				if( tile.getProperties().containsKey(ENEMY_SPAWN) )
+				{	
+					//debug=newpos;
+					AnimationDictionary animDict = new AnimationDictionary("img/characters/animation_map_doctor-2.png", 0.25f, 5 );
+					Enemy enemy = new Enemy(newpos.add(0.0f,500.0f), player, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer);
+					charactersList.add(enemy);
+				}
+				
+				if(tile.getProperties().containsKey("dealer"))
+				{	
+					//debug=newpos;
+					AnimationDictionary animDict = new AnimationDictionary("img/characters/Dealer.png", 0.25f, 6 );
+					Dealer deal = new Dealer(newpos.add(0.0f,1500.0f),animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer);
+					//deal.message = (String)mapObject.getProperties().get("type");
+					deal.setMessage((String)tile.getProperties().get("type"));
+					charactersList.add(deal);
+				}
+				
+				if(tile.getProperties().containsKey(DRUG_SPAWN))
 				{
-					num=6;
-					path="mushroom.png";
-					newkind = Kind.MUSHROOM;
+					String type = (String)tile.getProperties().get("type");
+					String path="xtc.png";
+					int num=1;
+					Kind newkind=Kind.XTC;
+					if(type.equals("xtc"))
+					{
+						num=6;
+						path="xtc.png";
+						newkind = Kind.XTC;
+					}
+					if(type.equals("weed"))
+					{
+						num=6;
+						path="joint-01.png";
+						newkind = Kind.CANNABIS;
+					}
+					if(type.equals("mushroom"))
+					{
+						num=6;
+						path="mushroom.png";
+						newkind = Kind.MUSHROOM;
+					}
+					AnimationDictionary animDict = new AnimationDictionary("img/items/"+path, 0.25f, num );
+					Drug d = new Drug(newpos, animDict, animDict.animationTime, animDict.width,animDict.height);
+					d.current = newkind; //cheap harcode for testing
+					itemsList.add(d);
 				}
-				
-				
-				
-				animDict = new AnimationDictionary("img/items/"+path, 0.25f, num );
-				Drug d = new Drug(newpos, animDict, animDict.animationTime, animDict.width,animDict.height);
-				d.current = newkind; //cheap harcode for testing
-				itemsList.add(d);
 			}
 		}
-		
-		
-		//player.postion = debug;
-		
-		
 	}
+
+		
+		
+	
 
 	@Override
 	public void hide() {
