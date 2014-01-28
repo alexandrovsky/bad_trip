@@ -3,6 +3,7 @@ package de.uni.bremen.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -43,7 +44,7 @@ public class EndScreen implements Screen {
 	public boolean goodEnd;
 	public long score;
 	
-	
+	Color bg = new Color(0x86C4FD);
 	
 	@Override
 	public void render(float delta) {
@@ -53,7 +54,7 @@ public class EndScreen implements Screen {
 		}
 		
 		// TODO Auto-generated method stub
-		Gdx.gl.glClearColor(1, 1, 1, 1);
+		Gdx.gl.glClearColor(bg.r,bg.g,bg.b,1.0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		batch.begin();
@@ -66,6 +67,7 @@ public class EndScreen implements Screen {
 	
 		batch.draw(currentFrame,0,0,0,0, width, height, 1.0f, 1,0f);
     
+		enterFont.draw(batch, "You took too many drugs!", 10, height-30);
 		
 		font.draw(batch, "your score is "+score, 10, 120);
 		enterFont.draw(batch, "PRESS ENTER AND PLAY AGAIN!", 10, 60);
@@ -81,11 +83,12 @@ public class EndScreen implements Screen {
 
 	AnimationDictionary playerAnimDict;
 	SpriteBatch batch;
+	
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
 		batch=new SpriteBatch();
-		if(goodEnd)
+		if(!goodEnd)
 		{
 			playerAnimDict = new AnimationDictionary("img/screens/end.png", 0.25f, 5);
 		}else{

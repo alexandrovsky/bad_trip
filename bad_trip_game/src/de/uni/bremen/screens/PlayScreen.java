@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -230,17 +231,7 @@ public class PlayScreen implements Screen {
 		cross_y = y+offset;
 		cross_h = h-2*offset-(2*cross_w/3);
 		shapeRenderer.rect(cross_x, cross_y, cross_h, cross_w);// cross vertical part
-		
-		// healthbar:
-		shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 1.0f);
-		shapeRenderer.rect(60, y, 200, h); // health-bar outer shape
-		
-		shapeRenderer.setColor(0.15f, 0.55f, 0.12f, 1.0f);
-		shapeRenderer.rect(60+offset, y+offset,player.getCurrentHealth()*2-2*offset, h-2*offset); // health-bar inner shape
-		
-		
-		
-		//TODO Render image for current drug state here
+
 		
 		//----- drug timer
 		if(player.currentHealthState != HealthStates.CLEAN)
@@ -252,13 +243,30 @@ public class PlayScreen implements Screen {
 			shapeRenderer.rect(260, y, 200, h); // drug-bar outer shape
 			shapeRenderer.setColor(1f, 0.05f, 0.12f, 1.0f);
 			shapeRenderer.rect(260+offset, y+offset,
-			player.drugTime*2-2*offset, h-2*offset); // drug-bar inner shape
+			player.drugTime*2-2*offset, h-2*offset,rect_red_dark,rect_red,rect_red,rect_red_dark); // drug-bar inner shape
 			
 		}
+		
+		// healthbar:
+		shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 1.0f);
+		shapeRenderer.rect(60, y, 200, h); // health-bar outer shape
+		
+		//shapeRenderer.setColor();
+		shapeRenderer.rect(60+offset, y+offset,player.getCurrentHealth()*2-2*offset, h-2*offset,rect_red, rect_green, rect_green,rect_red); // health-bar inner shape
+		
+		
+		
+		//TODO Render image for current drug state here
+		
+
 		
 		shapeRenderer.end();
 		}
 
+	Color rect_red_dark = new Color(0.15f, 0.15f, 0.32f, 1.0f);
+	Color rect_red = new Color(0.85f, 0.15f, 0.12f, 1.0f);
+	Color rect_green = new Color(0.45f, 0.85f, 0.12f, 1.0f);
+	
 	Vector2 debug;
 	@Override
 	public void show() {
