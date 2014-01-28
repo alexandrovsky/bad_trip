@@ -258,7 +258,11 @@ public class Character extends Entity{
 			
 			
 			if( isCellBlocked(postion.x + step, postion.y) ){
-				if(isKill(postion.x + step, postion.y))isDead=true;
+				if(isKill(postion.x + step, postion.y))
+					{
+					System.out.println("killed");
+						isDead=true;
+					}
 				
 				return true;
 			}

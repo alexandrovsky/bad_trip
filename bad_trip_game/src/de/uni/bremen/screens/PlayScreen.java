@@ -1,16 +1,16 @@
 package de.uni.bremen.screens;
 
-
-
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -35,160 +35,163 @@ import de.uni.bremen.utils.AnimationDictionary;
 import de.uni.bremen.utils.HealthStates;
 import de.uni.bremen.utils.Kind;
 
-
 public class PlayScreen implements Screen {
-	
+
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer tileRenderer;
 	ShapeRenderer shapeRenderer;
 	private OrthographicCamera camera;
-	
-	public Sound mainTheme = Gdx.audio.newSound(Gdx.files.internal("audio/main_theme.mp3"));
+
+	public Sound mainTheme = Gdx.audio.newSound(Gdx.files
+			.internal("audio/main_theme.mp3"));
 	long mainThemeId;
 	private Player player;
-	
-	BitmapFont font,messageFont;
-	
+
+	BitmapFont font, messageFont;
+
 	BadTripGame gameRef;
-	
+
 	ArrayList<Item> itemsList;
 	ArrayList<Character> charactersList;
-	
-	private static final String FRUIT_SPAWN ="fruit";
-	private static final String ENEMY_SPAWN ="enemy";
-	private static final String DRUG_SPAWN ="drug";
-	private static final String GOAL ="goal";
-	
-	int width,height;
-	
+
+	private static final String FRUIT_SPAWN = "fruit";
+	private static final String ENEMY_SPAWN = "enemy";
+	private static final String DRUG_SPAWN = "drug";
+	private static final String GOAL = "goal";
+
+	int width, height;
+
 	public PlayScreen(BadTripGame gameref) {
 		// TODO Auto-generated constructor stub
 		gameRef = gameref;
 		font = new BitmapFont();
-		messageFont=new BitmapFont();
+		messageFont = new BitmapFont();
 		messageFont.setColor(1.0f, .7f, 0.0f, 1.0f);
 		font.scale(1.6f);
 		font.setColor(1.0f, .7f, 0.0f, 1.0f);
-		width=Gdx.graphics.getWidth();
-		height=Gdx.graphics.getHeight();
+		width = Gdx.graphics.getWidth();
+		height = Gdx.graphics.getHeight();
 	}
-	
+
 	@Override
 	public void render(float delta) {
-		//if(gameRef.getScreen()!=this)return;
-		
-		if(player.win)
-		{
-			gameRef.end.goodEnd= player.currentHealth<25?false:true;
-			gameRef.end.score = player.score;
-			gameRef.setScreen(gameRef.end);
-			return;	
-		}
-		
-		if(player.isDead)//TODO fix this y by create a new tile layer
-		{
-			gameRef.end.goodEnd=false;
+		// if(gameRef.getScreen()!=this)return;
+
+		if (player.win) {
+			gameRef.end.goodEnd = player.currentHealth < 25 ? false : true;
 			gameRef.end.score = player.score;
 			gameRef.setScreen(gameRef.end);
 			return;
 		}
-		
+
+		if (player.isDead)// TODO fix this y by create a new tile layer
+		{
+			gameRef.end.goodEnd = false;
+			gameRef.end.score = player.score;
+			gameRef.setScreen(gameRef.end);
+			return;
+		}
+
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
-		float deltaTime = Gdx.graphics.getDeltaTime();
-		
-		camera.position.set(new Vector3(player.postion.x + player.width/2, player.postion.y+player.height/2, 0));
-		camera.update();
-		
-		tileRenderer.setView(camera);
-		
 
-		SpriteBatch batch = tileRenderer.getSpriteBatch(); 
+		float deltaTime = Gdx.graphics.getDeltaTime();
+
+		camera.position.set(new Vector3(player.postion.x + player.width / 2,
+				player.postion.y + player.height / 2, 0));
+		camera.update();
+
+		tileRenderer.setView(camera);
+
+		SpriteBatch batch = tileRenderer.getSpriteBatch();
 		batch.begin();
-		
+
 		// render background
-		
-		switch(player.currentHealthState)
-		{
-			case CLEAN:
-				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("sober"));
+
+		switch (player.currentHealthState) {
+		case CLEAN:
+			tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers()
+					.get("sober"));
 			break;
-			case ON_XTC:
-				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("xtc"));
-				break;
-			case ON_WEED:
-				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("weed"));
-				break;
-			case ON_MUSHRROM:
-				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("shrooms"));
-				break;
-			default:
-				break;
+		case ON_XTC:
+			tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers()
+					.get("xtc"));
+			break;
+		case ON_WEED:
+			tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers()
+					.get("weed"));
+			break;
+		case ON_MUSHRROM:
+			tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers()
+					.get("shrooms"));
+			break;
+		default:
+			break;
 		}
 		// then render the player
-		
+
 		for (Item item : itemsList) {
-			if(item == null)continue;
-			if(!item.isDead)item.draw(batch, deltaTime);
+			if (item == null)
+				continue;
+			if (!item.isDead)
+				item.draw(batch, deltaTime);
 		}
-		
 
-		
 		for (Character character : charactersList) {
-			if(character == null)continue;
-			if(!character.isDead)character.draw(batch, deltaTime);
-			//System.out.println("enemy" + i + "loc:" +character.postion);
-			
-			
-			if(character.message!=null && character.message.length()>0)
-			{
-				//messageFont.scale(character.messageScale);
-				messageFont.draw(batch,character.message, character.postion.x,player.postion.y+300);
-				 
-			}
+			if (character == null)
+				continue;
+			if (!character.isDead)
+				character.draw(batch, deltaTime);
+			// System.out.println("enemy" + i + "loc:" +character.postion);
 
-			
+			if (character.message != null && character.message.length() > 0) {
+				// messageFont.scale(character.messageScale);
+				// messageFont.draw(batch,character.message,
+				// character.postion.x-50,character.postion.y+120);
+				messageFont.drawMultiLine(batch, character.message,
+						character.postion.x - 50, character.postion.y + 170,
+						character.message.length() / 2, HAlignment.LEFT);
+			}
 		}
-		
-		
+
 		player.draw(batch, deltaTime);
-		
-		switch(player.currentHealthState)
-		{
-			case CLEAN:
-				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("soberforeground"));
+
+		switch (player.currentHealthState) {
+		case CLEAN:
+			tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers()
+					.get("soberforeground"));
 			break;
-			case ON_MUSHRROM:
-				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("shroomsforeground"));
-				break;
-			case ON_WEED:
-				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("weedforeground"));
-				break;
-			case ON_XTC:
-				tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("xtcforeground"));
-				break;
-			default:
-				break;
+		case ON_MUSHRROM:
+			tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers()
+					.get("shroomsforeground"));
+			break;
+		case ON_WEED:
+			tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers()
+					.get("weedforeground"));
+			break;
+		case ON_XTC:
+			tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers()
+					.get("xtcforeground"));
+			break;
+		default:
+			break;
 		}
 		// finally render the forground
-		
-		//GUI
-		 
-		 
-		 font.draw(batch,"Score: "+player.score, player.postion.x+100,player.postion.y+400);
 
+		// GUI
 
-		 if(player.message!=null && player.message.length()>0)
-		 {
-			 //messageFont.scale(player.messageScale);
-			 messageFont.draw(batch,player.message, player.postion.x-player.messageScale*1000,player.postion.y+200);
-			 
-		 }
-		 
-		
+		font.draw(batch, "Score: " + player.score, player.postion.x + 100,
+				player.postion.y + 400);
+
+		if (player.message != null && player.message.length() > 0) {
+			// messageFont.scale(player.messageScale);
+			messageFont.draw(batch, player.message, player.postion.x
+					- player.messageScale * 1000, player.postion.y + 200);
+
+		}
+
 		batch.end();
-		
+
 		renderPlayerStatus();
 	}
 
@@ -197,223 +200,226 @@ public class PlayScreen implements Screen {
 		camera.viewportWidth = width;
 		camera.viewportHeight = height;
 	}
-	
-	void renderPlayerStatus(){
-		
+
+	void renderPlayerStatus() {
+
 		shapeRenderer.identity();
-		
+
 		shapeRenderer.begin(ShapeType.Filled);
-		
+
 		// health bar:
 		float x, y, w, h;
 		w = 22;
 		h = 40;
 		x = 50;
-		y = camera.viewportHeight - 2*h;
+		y = camera.viewportHeight - 2 * h;
 		float offset = 5;
-		
-		
+
 		// health cross
 		shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 1.0f);
-		
-		shapeRenderer.rect(x-h, y, h, h); // health-cross outer shape
+
+		shapeRenderer.rect(x - h, y, h, h); // health-cross outer shape
 		shapeRenderer.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-		shapeRenderer.rect(x-h+offset, y+offset, h-2*offset, h-2*offset); //health-cross inner shape
+		shapeRenderer.rect(x - h + offset, y + offset, h - 2 * offset, h - 2
+				* offset); // health-cross inner shape
 		shapeRenderer.setColor(1.0f, 0.0f, 0.0f, 1.0f);
-		float cross_w = h-2*offset;
-		float cross_h = h-2*offset-(2*cross_w/3);
-		float cross_x = x-h+offset;
-		float cross_y = y+offset+cross_w/3;
-		
-		
-		shapeRenderer.rect(cross_x, cross_y, cross_w, cross_h); // cross horizontal part
-		cross_x = x-h+offset+cross_w/3;
-		cross_y = y+offset;
-		cross_h = h-2*offset-(2*cross_w/3);
-		shapeRenderer.rect(cross_x, cross_y, cross_h, cross_w);// cross vertical part
-		
-		// healthbar:
-		shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 1.0f);
-		shapeRenderer.rect(60, y, 200, h); // health-bar outer shape
-		
-		shapeRenderer.setColor(0.15f, 0.55f, 0.12f, 1.0f);
-		shapeRenderer.rect(60+offset, y+offset,player.getCurrentHealth()*2-2*offset, h-2*offset); // health-bar inner shape
-		
-		
-		
-		//TODO Render image for current drug state here
-		
-		//----- drug timer
-		if(player.currentHealthState != HealthStates.CLEAN)
-		{
-			
+		float cross_w = h - 2 * offset;
+		float cross_h = h - 2 * offset - (2 * cross_w / 3);
+		float cross_x = x - h + offset;
+		float cross_y = y + offset + cross_w / 3;
+
+		shapeRenderer.rect(cross_x, cross_y, cross_w, cross_h); // cross
+																// horizontal
+																// part
+		cross_x = x - h + offset + cross_w / 3;
+		cross_y = y + offset;
+		cross_h = h - 2 * offset - (2 * cross_w / 3);
+		shapeRenderer.rect(cross_x, cross_y, cross_h, cross_w);// cross vertical
+																// part
+
+		// ----- drug timer
+		if (player.currentHealthState != HealthStates.CLEAN) {
+
 			System.out.println(player.drugTime);
 			// healthbar:
 			shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 1.0f);
 			shapeRenderer.rect(260, y, 200, h); // drug-bar outer shape
 			shapeRenderer.setColor(1f, 0.05f, 0.12f, 1.0f);
-			shapeRenderer.rect(260+offset, y+offset,
-			player.drugTime*2-2*offset, h-2*offset); // drug-bar inner shape
-			
-		}
-		
-		shapeRenderer.end();
+			shapeRenderer.rect(260 + offset, y + offset, player.drugTime * 2
+					- 2 * offset, h - 2 * offset, rect_red_dark, rect_red,
+					rect_red, rect_red_dark); // drug-bar inner shape
+
 		}
 
+		// healthbar:
+		shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 1.0f);
+		shapeRenderer.rect(60, y, 200, h); // health-bar outer shape
+
+		// shapeRenderer.setColor();
+		shapeRenderer.rect(60 + offset, y + offset, player.getCurrentHealth()
+				* 2 - 2 * offset, h - 2 * offset, rect_red, rect_green,
+				rect_green, rect_red); // health-bar inner shape
+
+		// TODO Render image for current drug state here
+
+		shapeRenderer.end();
+	}
+
+	Color rect_red_dark = new Color(0.15f, 0.15f, 0.32f, 1.0f);
+	Color rect_red = new Color(0.85f, 0.15f, 0.12f, 1.0f);
+	Color rect_green = new Color(0.45f, 0.85f, 0.12f, 1.0f);
+
 	Vector2 debug;
+
 	@Override
-	public void show() 
-	{
-		
+	public void show() {
+
 		mainTheme.stop(mainThemeId);
 		mainThemeId = mainTheme.loop(0.6f);
-		map = new TmxMapLoader().load("maps/laysers/LevelLayerSwitchconstructed.tmx");
+		map = new TmxMapLoader()
+				.load("maps/laysers/LevelLayerSwitchconstructed.tmx");
 		tileRenderer = new OrthogonalTiledMapRenderer(map);
-		TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get("soberforeground");
-		
+		TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers()
+				.get("soberforeground");
+
 		shapeRenderer = new ShapeRenderer();
 		camera = new OrthographicCamera();
-		
+
 		itemsList = new ArrayList<Item>();
 		charactersList = new ArrayList<Character>();
-		
-		
-		
+
 		// spawnpoint for player
-		
-		TiledMapTileLayer objectLayer = (TiledMapTileLayer)map.getLayers().get("objects");
-		
-		for(int x = 0; x < objectLayer.getWidth(); x++)
-		{
-			for(int y = 0; y < objectLayer.getHeight(); y++)
-			{
+
+		TiledMapTileLayer objectLayer = (TiledMapTileLayer) map.getLayers()
+				.get("objects");
+
+		for (int x = 0; x < objectLayer.getWidth(); x++) {
+			for (int y = 0; y < objectLayer.getHeight(); y++) {
 				Cell cell = objectLayer.getCell(x, y);
-				if(cell == null){
+				if (cell == null) {
 					continue;
 				}
 				TiledMapTile tile = objectLayer.getCell(x, y).getTile();
-				if( tile != null  && tile.getProperties().containsKey("player") ){
-					Vector2 newpos = new Vector2( (float)x*objectLayer.getTileWidth(),
-											      (float)y*objectLayer.getHeight() );
-					
-					
-					
-					AnimationDictionary playerAnimDict = new AnimationDictionary("img/characters/animation_map_character.png", 0.125f, 4,4,3,5 );
-					player = new Player(newpos, 
-							playerAnimDict, playerAnimDict.animationTime, 
-							playerAnimDict.width, playerAnimDict.height, collisionLayer);
+				if (tile != null && tile.getProperties().containsKey("player")) {
+					Vector2 newpos = new Vector2((float) x
+							* objectLayer.getTileWidth(), (float) y
+							* objectLayer.getTileHeight());
+
+					AnimationDictionary playerAnimDict = new AnimationDictionary(
+							"img/characters/animation_map_character.png",
+							0.125f, 4, 4, 3, 5);
+					player = new Player(newpos, playerAnimDict,
+							playerAnimDict.animationTime, playerAnimDict.width,
+							playerAnimDict.height, collisionLayer);
 					Gdx.input.setInputProcessor(player);
 					player.items = itemsList;
-					player.enemies  = charactersList;
+					player.enemies = charactersList;
 				}
 			}
 		}
-			
-			
-		///spawn the objects:
-		for(int x = 0; x < objectLayer.getWidth(); x++)
-		{
-			for(int y = 0; y < objectLayer.getHeight(); y++)
-			{
+
+		// /spawn the objects:
+		for (int x = 0; x < objectLayer.getWidth(); x++) {
+			for (int y = 0; y < objectLayer.getHeight(); y++) {
 				Cell cell = objectLayer.getCell(x, y);
-				if(cell == null){
+				if (cell == null) {
 					continue;
 				}
 				TiledMapTile tile = objectLayer.getCell(x, y).getTile();
-				if(tile == null){
+				if (tile == null) {
 					continue;
 				}
-				
-				Vector2 newpos = new Vector2( (float)x*objectLayer.getTileWidth(),
-					      (float)y*objectLayer.getHeight() );
-				
-				
-				if( tile.getProperties().containsKey(GOAL) )
-				{
-						String path="img/items/apple.png";
-						AnimationDictionary animDict = new AnimationDictionary(path, 0.25f, 1 );
-						Goal g = new Goal(newpos, animDict, animDict.animationTime, animDict.width,animDict.height);
-						itemsList.add(g);
+
+				Vector2 newpos = new Vector2((float) x
+						* objectLayer.getTileWidth(), (float) y
+						* objectLayer.getTileHeight());
+
+				if (tile.getProperties().containsKey(GOAL)) {
+					String path = "img/items/apple.png";
+					AnimationDictionary animDict = new AnimationDictionary(
+							path, 0.25f, 1);
+					Goal g = new Goal(newpos, animDict, animDict.animationTime,
+							animDict.width, animDict.height);
+					itemsList.add(g);
 				}
-				
-					
-					
-							
-				if( tile.getProperties().containsKey(FRUIT_SPAWN) )
-				{
-					String path="img/items/apple.png";
-					int rand=(int)Math.random()*3;
+
+				if (tile.getProperties().containsKey(FRUIT_SPAWN)) {
+					String path = "img/items/apple.png";
+					int rand = (int) Math.random() * 3;
 					switch (rand) {
 					case 0:
-						path="img/items/orange.png";
+						path = "img/items/orange.png";
 						break;
 					case 1:
-						path="img/items/apple.png";
+						path = "img/items/apple.png";
 						break;
 					case 2:
-						path="img/items/pear.png";
+						path = "img/items/pear.png";
 						break;
 					}
-					
-					AnimationDictionary animDict = new AnimationDictionary(path, 0.25f, 1 );
-					Fruit f = new Fruit(newpos, animDict, animDict.animationTime, animDict.width,animDict.height);
+
+					AnimationDictionary animDict = new AnimationDictionary(
+							path, 0.25f, 1);
+					Fruit f = new Fruit(newpos, animDict,
+							animDict.animationTime, animDict.width,
+							animDict.height);
 					itemsList.add(f);
 				}
-				
-				if( tile.getProperties().containsKey(ENEMY_SPAWN) )
-				{	
-					//debug=newpos;
-					AnimationDictionary animDict = new AnimationDictionary("img/characters/animation_map_doctor-2.png", 0.25f, 5 );
-					Enemy enemy = new Enemy(newpos.add(0.0f,500.0f), player, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer);
+
+				if (tile.getProperties().containsKey(ENEMY_SPAWN)) {
+					// debug=newpos;
+					AnimationDictionary animDict = new AnimationDictionary(
+							"img/characters/animation_map_doctor-2.png", 0.25f,
+							5);
+					Enemy enemy = new Enemy(newpos.add(0.0f, 500.0f), player,
+							animDict, animDict.animationTime, animDict.width,
+							animDict.height, collisionLayer);
 					charactersList.add(enemy);
 				}
-				
-				if(tile.getProperties().containsKey("dealer"))
-				{	
-					//debug=newpos;
-					AnimationDictionary animDict = new AnimationDictionary("img/characters/Dealer.png", 0.25f, 6 );
-					Dealer deal = new Dealer(newpos.add(0.0f,1500.0f),animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer);
-					//deal.message = (String)mapObject.getProperties().get("type");
-					deal.setMessage((String)tile.getProperties().get("type"));
+
+				if (tile.getProperties().containsKey("dealer")) {
+					// debug=newpos;
+					AnimationDictionary animDict = new AnimationDictionary(
+							"img/characters/Dealer.png", 0.25f, 6);
+					Dealer deal = new Dealer(newpos.add(0.0f, 1500.0f),
+							animDict, animDict.animationTime, animDict.width,
+							animDict.height, collisionLayer);
+					// deal.message =
+					// (String)mapObject.getProperties().get("type");
+					deal.setMessage((String) tile.getProperties().get("type"));
 					charactersList.add(deal);
 				}
-				
-				if(tile.getProperties().containsKey(DRUG_SPAWN))
-				{
-					String type = (String)tile.getProperties().get("type");
-					String path="xtc.png";
-					int num=1;
-					Kind newkind=Kind.XTC;
-					if(type.equals("xtc"))
-					{
-						num=6;
-						path="xtc.png";
+
+				if (tile.getProperties().containsKey(DRUG_SPAWN)) {
+					String type = (String) tile.getProperties().get("type");
+					String path = "xtc.png";
+					int num = 1;
+					Kind newkind = Kind.XTC;
+					if (type.equals("xtc")) {
+						num = 6;
+						path = "xtc.png";
 						newkind = Kind.XTC;
 					}
-					if(type.equals("weed"))
-					{
-						num=6;
-						path="joint-01.png";
+					if (type.equals("weed")) {
+						num = 6;
+						path = "joint-01.png";
 						newkind = Kind.CANNABIS;
 					}
-					if(type.equals("mushroom"))
-					{
-						num=6;
-						path="mushroom.png";
+					if (type.equals("mushroom")) {
+						num = 6;
+						path = "mushroom.png";
 						newkind = Kind.MUSHROOM;
 					}
-					AnimationDictionary animDict = new AnimationDictionary("img/items/"+path, 0.25f, num );
-					Drug d = new Drug(newpos, animDict, animDict.animationTime, animDict.width,animDict.height);
-					d.current = newkind; //cheap harcode for testing
+					AnimationDictionary animDict = new AnimationDictionary(
+							"img/items/" + path, 0.25f, num);
+					Drug d = new Drug(newpos, animDict, animDict.animationTime,
+							animDict.width, animDict.height);
+					d.current = newkind; // cheap harcode for testing
 					itemsList.add(d);
 				}
 			}
 		}
 	}
-
-		
-		
-	
 
 	@Override
 	public void hide() {
@@ -441,6 +447,5 @@ public class PlayScreen implements Screen {
 		mainTheme.dispose();
 		player.dispose();
 	}
-	
 
 }
