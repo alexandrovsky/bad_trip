@@ -16,7 +16,7 @@ public class Dealer extends Character {
 		super(position, animationDict, animationTime, width, height,
 				collisionLayer, 1);
 		// TODO Auto-generated constructor stub
-		messageDuration = -1;
+		messageDuration = 3.0f;
 		currentState = States.ZERO;
 		message = message_holder;
 	}
@@ -32,7 +32,8 @@ public class Dealer extends Character {
 	public void talk()
 	{
 		message=message_holder;
-		//message();
+		
+		message();
 	}
 
 	public void stopTalk()

@@ -44,7 +44,7 @@ public class PlayScreen implements Screen {
 	private OrthographicCamera camera;
 	
 	public Sound mainTheme = Gdx.audio.newSound(Gdx.files.internal("audio/main_theme.mp3"));
-	long mainThemeId;
+	 long mainThemeId;
 	private Player player;
 	
 	BitmapFont font,messageFont;
@@ -135,20 +135,18 @@ public class PlayScreen implements Screen {
 		
 
 		
-		for (Character character : charactersList) {
+		for (Character character : charactersList) 
+		{
 			if(character == null)continue;
 			if(!character.isDead)character.draw(batch, deltaTime);
 			//System.out.println("enemy" + i + "loc:" +character.postion);
 			
-			
 			if(character.message!=null && character.message.length()>0)
 			{
 				//messageFont.scale(character.messageScale);
-				messageFont.draw(batch,character.message, character.postion.x,player.postion.y+300);
+				messageFont.draw(batch,character.message, character.postion.x-50,character.postion.y+120);
 				 
-			}
-
-			
+			}	
 		}
 		
 		
@@ -288,7 +286,7 @@ public class PlayScreen implements Screen {
 			Integer newx = (Integer)mapObject.getProperties().get("x");
 			Integer newy = (Integer)mapObject.getProperties().get("y");
 			Vector2 newpos = new Vector2( newx.floatValue(),
-									      newy.floatValue() );
+									      newy.floatValue() +1000);
 			
 			
 			if(name.equals("player"))
@@ -426,7 +424,7 @@ public class PlayScreen implements Screen {
 		map.dispose();
 		tileRenderer.dispose();
 		shapeRenderer.dispose();
-		mainTheme.dispose();
+		//mainTheme.dispose();
 		player.dispose();
 	}
 	

@@ -77,7 +77,7 @@ public class EndScreen implements Screen {
 	public void show() {
 		// TODO Auto-generated method stub
 		batch=new SpriteBatch();
-		if(!goodEnd)
+		if(goodEnd)
 		{
 			playerAnimDict = new AnimationDictionary("img/screens/end.png", 0.25f, 5);
 		}else{
