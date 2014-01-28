@@ -300,7 +300,7 @@ public class PlayScreen implements Screen {
 			
 			if(name.equals("player"))
 			{
-				AnimationDictionary playerAnimDict = new AnimationDictionary("img/characters/animation_map_character.png", 0.125f, 4,4,3,5 );
+				AnimationDictionary playerAnimDict = new AnimationDictionary("img/characters/animation_map_character.png", 0.075f, 4,4,3,5 );
 				player = new Player(newpos, 
 						playerAnimDict, playerAnimDict.animationTime, 
 						playerAnimDict.width, playerAnimDict.height, collisionLayer);

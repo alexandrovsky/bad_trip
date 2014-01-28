@@ -90,9 +90,9 @@ public class EndScreen implements Screen {
 		batch=new SpriteBatch();
 		if(!goodEnd)
 		{
-			playerAnimDict = new AnimationDictionary("img/screens/end.png", 0.25f, 5);
+			playerAnimDict = new AnimationDictionary("img/screens/end.png", 0.125f, 5);
 		}else{
-			playerAnimDict = new AnimationDictionary("img/screens/sadend2.png", 0.25f, 6);
+			playerAnimDict = new AnimationDictionary("img/screens/sadend2.png", 0.125f, 6);
 		}
 
 		width = Gdx.graphics.getWidth();
