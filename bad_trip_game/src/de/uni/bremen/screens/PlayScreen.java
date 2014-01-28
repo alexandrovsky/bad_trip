@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -42,6 +43,8 @@ public class PlayScreen implements Screen {
 	ShapeRenderer shapeRenderer;
 	private OrthographicCamera camera;
 	
+	public Sound mainTheme = Gdx.audio.newSound(Gdx.files.internal("audio/main_theme.mp3"));
+	long mainThemeId;
 	private Player player;
 	
 	BitmapFont font,messageFont;
@@ -223,11 +226,11 @@ public class PlayScreen implements Screen {
 		float cross_y = y+offset+cross_w/3;
 		
 		
-		shapeRenderer.rect(cross_x, cross_y, cross_w-3, cross_h); // cross horizontal part
+		shapeRenderer.rect(cross_x, cross_y, cross_w, cross_h); // cross horizontal part
 		cross_x = x-h+offset+cross_w/3;
 		cross_y = y+offset;
 		cross_h = h-2*offset-(2*cross_w/3);
-		shapeRenderer.rect(cross_x, cross_y, cross_h, cross_w-3);// cross vertical part
+		shapeRenderer.rect(cross_x, cross_y, cross_h, cross_w);// cross vertical part
 		
 		// healthbar:
 		shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -260,6 +263,9 @@ public class PlayScreen implements Screen {
 	Vector2 debug;
 	@Override
 	public void show() {
+		
+		mainTheme.stop(mainThemeId);
+		mainThemeId = mainTheme.loop(0.6f);
 		map = new TmxMapLoader().load("maps/laysers/LevelLayerSwitch.tmx");
 		tileRenderer = new OrthogonalTiledMapRenderer(map);
 		TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get("soberforeground");
