@@ -18,11 +18,18 @@ public class EndScreen implements Screen {
 
 	BadTripGame gameRef;
 	private BitmapFont font;
+	private BitmapFont enterFont;
+	
 	public EndScreen(BadTripGame gameref) {
 		// TODO Auto-generated constructor stub
 		gameRef =gameref;
 		font = new BitmapFont();
-		font.scale(3.6f); 
+		font.setColor(1.0f, .7f, 0.0f, 1.0f);
+		font.scale(2.6f);
+		enterFont = new BitmapFont();
+		enterFont.setColor(.89f,.41f,.26f,1f);
+		enterFont.scale(1.6f);
+		
 	}
 	
 	
@@ -59,8 +66,9 @@ public class EndScreen implements Screen {
 	
 		batch.draw(currentFrame,0,0,0,0, width, height, 1.0f, 1,0f);
     
-		font.setColor(1.0f, .7f, 0.0f, 1.0f);
-		font.draw(batch, "your score is "+score, 0, 100);
+		
+		font.draw(batch, "your score is "+score, 10, 120);
+		enterFont.draw(batch, "PRESS ENTER AND PLAY AGAIN!", 10, 60);
 		
 		batch.end();
 	}

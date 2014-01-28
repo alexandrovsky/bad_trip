@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.MapObject;
@@ -144,8 +145,8 @@ public class PlayScreen implements Screen {
 			if(character.message!=null && character.message.length()>0)
 			{
 				//messageFont.scale(character.messageScale);
-				messageFont.draw(batch,character.message, character.postion.x-50,character.postion.y+120);
-				 
+				//messageFont.draw(batch,character.message, character.postion.x-50,character.postion.y+120);
+				messageFont.drawMultiLine(batch,character.message, character.postion.x-50,character.postion.y+170,character.message.length()/2,HAlignment.LEFT);
 			}	
 		}
 		
