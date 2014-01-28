@@ -14,6 +14,7 @@ import de.uni.bremen.utils.AnimationDictionary;
 
 public class Character extends Entity{
 
+	
 	public String message;
 	
 	protected final int maxHealth = 100;

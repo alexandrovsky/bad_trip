@@ -14,7 +14,6 @@ public class BadTripGame extends Game {
 	
 	@Override
 	public void create() {		
-		
 		end = new EndScreen(this);
 		setScreen(new TitleScreen(this));
 	}

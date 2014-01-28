@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -42,6 +43,8 @@ public class PlayScreen implements Screen {
 	ShapeRenderer shapeRenderer;
 	private OrthographicCamera camera;
 	
+	public Sound mainTheme = Gdx.audio.newSound(Gdx.files.internal("audio/main_theme.mp3"));
+	long mainThemeId;
 	private Player player;
 	
 	BitmapFont font,messageFont;
@@ -131,12 +134,12 @@ public class PlayScreen implements Screen {
 		}
 		
 
-		int i = 0;
+		
 		for (Character character : charactersList) {
 			if(character == null)continue;
 			if(!character.isDead)character.draw(batch, deltaTime);
 			//System.out.println("enemy" + i + "loc:" +character.postion);
-			i++;
+			
 			
 			if(character.message!=null && character.message.length()>0)
 			{
@@ -223,11 +226,11 @@ public class PlayScreen implements Screen {
 		float cross_y = y+offset+cross_w/3;
 		
 		
-		shapeRenderer.rect(cross_x, cross_y, cross_w-3, cross_h); // cross horizontal part
+		shapeRenderer.rect(cross_x, cross_y, cross_w, cross_h); // cross horizontal part
 		cross_x = x-h+offset+cross_w/3;
 		cross_y = y+offset;
 		cross_h = h-2*offset-(2*cross_w/3);
-		shapeRenderer.rect(cross_x, cross_y, cross_h, cross_w-3);// cross vertical part
+		shapeRenderer.rect(cross_x, cross_y, cross_h, cross_w);// cross vertical part
 		
 		// healthbar:
 		shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -260,6 +263,9 @@ public class PlayScreen implements Screen {
 	Vector2 debug;
 	@Override
 	public void show() {
+		
+		mainTheme.stop(mainThemeId);
+		mainThemeId = mainTheme.loop(0.6f);
 		map = new TmxMapLoader().load("maps/laysers/LevelLayerSwitch.tmx");
 		tileRenderer = new OrthogonalTiledMapRenderer(map);
 		TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get("soberforeground");
@@ -284,7 +290,7 @@ public class PlayScreen implements Screen {
 			Vector2 newpos = new Vector2( newx.floatValue(),
 									      newy.floatValue() );
 			
-			AnimationDictionary animDict;
+			
 			if(name.equals("player"))
 			{
 				AnimationDictionary playerAnimDict = new AnimationDictionary("img/characters/animation_map_character.png", 0.125f, 4,4,3,5 );
@@ -342,7 +348,7 @@ public class PlayScreen implements Screen {
 			if(name.equals(ENEMY_SPAWN))
 			{	
 				//debug=newpos;
-				animDict = new AnimationDictionary("img/characters/animation_map_doctor.png", 0.25f, 5 );
+				animDict = new AnimationDictionary("img/characters/animation_map_doctor-2.png", 0.25f, 5 );
 				Enemy enemy = new Enemy(newpos.add(0.0f,500.0f), player, animDict, animDict.animationTime,animDict.width,animDict.height,collisionLayer);
 				charactersList.add(enemy);
 			}
@@ -371,14 +377,14 @@ public class PlayScreen implements Screen {
 				}
 				if(type.equals("weed"))
 				{
-					num=8;
-					path="joint.png";
+					num=6;
+					path="joint-01.png";
 					newkind = Kind.CANNABIS;
 				}
 				if(type.equals("mushroom"))
 				{
 					num=6;
-					path="mushroom_A.png";
+					path="mushroom.png";
 					newkind = Kind.MUSHROOM;
 				}
 				
@@ -420,7 +426,8 @@ public class PlayScreen implements Screen {
 		map.dispose();
 		tileRenderer.dispose();
 		shapeRenderer.dispose();
-		//player.dispose();
+		mainTheme.dispose();
+		player.dispose();
 	}
 	
 

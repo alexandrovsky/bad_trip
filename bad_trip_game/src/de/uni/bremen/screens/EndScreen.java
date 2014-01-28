@@ -81,7 +81,7 @@ public class EndScreen implements Screen {
 		{
 			playerAnimDict = new AnimationDictionary("img/screens/end.png", 0.25f, 5);
 		}else{
-			playerAnimDict = new AnimationDictionary("img/screens/sadend.png", 0.25f, 4);
+			playerAnimDict = new AnimationDictionary("img/screens/sadend2.png", 0.25f, 6);
 		}
 
 		width = Gdx.graphics.getWidth();
