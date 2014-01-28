@@ -72,6 +72,7 @@ public class PlayScreen implements Screen {
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
 	}
+	Color bg = new Color(0x86C4FD);
 
 	@Override
 	public void render(float delta) {
@@ -92,7 +93,8 @@ public class PlayScreen implements Screen {
 			return;
 		}
 
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+		
+		Gdx.gl.glClearColor(bg.r,bg.g,bg.b,1.0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		float deltaTime = Gdx.graphics.getDeltaTime();
@@ -290,6 +292,7 @@ public class PlayScreen implements Screen {
 
 		// spawnpoint for player
 
+
 		TiledMapTileLayer objectLayer = (TiledMapTileLayer) map.getLayers()
 				.get("objects");
 
@@ -315,6 +318,7 @@ public class PlayScreen implements Screen {
 					player.items = itemsList;
 					player.enemies = charactersList;
 				}
+
 			}
 		}
 
