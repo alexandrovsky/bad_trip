@@ -371,14 +371,14 @@ public class PlayScreen implements Screen {
 				}
 				if(type.equals("weed"))
 				{
-					num=8;
-					path="joint.png";
+					num=6;
+					path="joint-01.png";
 					newkind = Kind.CANNABIS;
 				}
 				if(type.equals("mushroom"))
 				{
 					num=6;
-					path="mushroom_A.png";
+					path="mushroom.png";
 					newkind = Kind.MUSHROOM;
 				}
 				
