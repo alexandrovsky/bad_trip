@@ -8,6 +8,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
@@ -17,7 +18,7 @@ import de.uni.bremen.utils.AnimationDictionary;
 import de.uni.bremen.utils.HealthStates;
 
 
-public class Player extends Character implements InputProcessor{
+public class Player extends Character implements InputProcessor, Disposable{
 
 	//============================== CONSTANTS ======================================//
 	//
@@ -353,4 +354,9 @@ public class Player extends Character implements InputProcessor{
 		return currentHealth;
 	}
 	
+	
+	public void dispose(){
+		jumpSound.dispose();
+		hitSound.dispose();
+	}
 }

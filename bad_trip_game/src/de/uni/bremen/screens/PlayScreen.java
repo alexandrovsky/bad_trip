@@ -134,12 +134,12 @@ public class PlayScreen implements Screen {
 		}
 		
 
-		int i = 0;
+		
 		for (Character character : charactersList) {
 			if(character == null)continue;
 			if(!character.isDead)character.draw(batch, deltaTime);
 			//System.out.println("enemy" + i + "loc:" +character.postion);
-			i++;
+			
 			
 			if(character.message!=null && character.message.length()>0)
 			{
@@ -290,7 +290,7 @@ public class PlayScreen implements Screen {
 			Vector2 newpos = new Vector2( newx.floatValue(),
 									      newy.floatValue() );
 			
-			AnimationDictionary animDict;
+			
 			if(name.equals("player"))
 			{
 				AnimationDictionary playerAnimDict = new AnimationDictionary("img/characters/animation_map_character.png", 0.125f, 4,4,3,5 );
@@ -426,7 +426,8 @@ public class PlayScreen implements Screen {
 		map.dispose();
 		tileRenderer.dispose();
 		shapeRenderer.dispose();
-		//player.dispose();
+		mainTheme.dispose();
+		player.dispose();
 	}
 	
 
