@@ -8,10 +8,10 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -47,8 +47,7 @@ public class PlayScreen implements Screen {
 	ShapeRenderer shapeRenderer;
 	private OrthographicCamera camera;
 
-	public Sound mainTheme = Gdx.audio.newSound(Gdx.files
-			.internal("audio/main_theme.mp3"));
+	//public Sound mainTheme = Gdx.audio.newSound(Gdx.files.internal("audio/main_theme.mp3"));
 	long mainThemeId;
 	private Player player;
 
@@ -66,6 +65,13 @@ public class PlayScreen implements Screen {
 
 	int width, height;
 
+	Color rect_red_dark = new Color(0.15f, 0.15f, 0.32f, 1.0f);
+	Color rect_red = new Color(0.85f, 0.15f, 0.12f, 1.0f);
+	Color rect_green = new Color(0.45f, 0.85f, 0.12f, 1.0f);
+
+	Vector2 debug;
+
+	
 	Color bg = new Color(0x86C4FD);
 	
 	public PlayScreen(BadTripGame gameref) {
@@ -79,7 +85,7 @@ public class PlayScreen implements Screen {
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
 		
-		init();
+		
 	}
 	
 
@@ -87,6 +93,8 @@ public class PlayScreen implements Screen {
 	public void render(float delta) {
 		// if(gameRef.getScreen()!=this)return;
 
+		
+		
 		if (player.win) {
 			gameRef.end.goodEnd = player.currentHealth < 25 ? false : true;
 			gameRef.end.score = player.score;
@@ -285,27 +293,24 @@ public class PlayScreen implements Screen {
 		shapeRenderer.end();
 	}
 
-	Color rect_red_dark = new Color(0.15f, 0.15f, 0.32f, 1.0f);
-	Color rect_red = new Color(0.85f, 0.15f, 0.12f, 1.0f);
-	Color rect_green = new Color(0.45f, 0.85f, 0.12f, 1.0f);
-
-	Vector2 debug;
-
+	
+	
+	
+	
 	@Override
 	public void show() {
 	
-	}
 	
-	
-	public void init() {
-
-		mainTheme.stop(mainThemeId);
-		mainThemeId = mainTheme.loop(0.6f);
-		map = new TmxMapLoader()
-				.load("maps/laysers/LevelLayerSwitchconstructed.tmx");
+		//mainTheme.stop(mainThemeId);
+		//mainThemeId = mainTheme.loop(0.6f);
+		
+		gameRef.mapManager.finishLoading();
+		
+		map = gameRef.mapManager.get("maps/laysers/LevelLayerSwitchconstructed.tmx");
 		tileRenderer = new OrthogonalTiledMapRenderer(map);
 		TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers()
 				.get("soberforeground");
+		
 		
 		
 		
@@ -326,6 +331,8 @@ public class PlayScreen implements Screen {
 		TiledMapTileLayer objectLayer = (TiledMapTileLayer) map.getLayers()
 				.get("objects");
 
+		//gameRef.textureManager.finishLoading();
+		
 		for (int x = 0; x < objectLayer.getWidth(); x++) {
 			for (int y = 0; y < objectLayer.getHeight(); y++) {
 				Cell cell = objectLayer.getCell(x, y);
@@ -335,12 +342,10 @@ public class PlayScreen implements Screen {
 				TiledMapTile tile = objectLayer.getCell(x, y).getTile();
 				if (tile != null && tile.getProperties().containsKey("player")) {
 					
-					Vector2 newpos = new Vector2((float) x
-							* objectLayer.getTileWidth(), (float) y
-							* objectLayer.getTileHeight());
+					Vector2 newpos = new Vector2((float) x * objectLayer.getTileWidth(), 
+							     				 (float) y * objectLayer.getTileHeight());
 					System.out.println("player spawn tile:  x:" + x + " y:" + y + "coord:" + newpos );
-					AnimationDictionary playerAnimDict = new AnimationDictionary(
-							"img/characters/animation_map_character2.png",
+					AnimationDictionary playerAnimDict = new AnimationDictionary(new Texture("img/characters/animation_map_character2.png"),
 							0.125f, 4, 4, 6);
 					player = new Player(newpos, playerAnimDict,
 							playerAnimDict.animationTime, playerAnimDict.width,
@@ -371,8 +376,7 @@ public class PlayScreen implements Screen {
 
 				if (tile.getProperties().containsKey(GOAL)) {
 					String path = "img/items/apple.png";
-					AnimationDictionary animDict = new AnimationDictionary(
-							path, 0.25f, 1);
+					AnimationDictionary animDict = new AnimationDictionary(new Texture(path), 0.25f, 1);
 					Goal g = new Goal(newpos, animDict, animDict.animationTime,
 							animDict.width, animDict.height);
 					itemsList.add(g);
@@ -393,8 +397,7 @@ public class PlayScreen implements Screen {
 						break;
 					}
 
-					AnimationDictionary animDict = new AnimationDictionary(
-							path, 0.25f, 1);
+					AnimationDictionary animDict = new AnimationDictionary(new Texture(path), 0.25f, 1);
 					Fruit f = new Fruit(newpos, animDict,
 							animDict.animationTime, animDict.width,
 							animDict.height);
@@ -403,8 +406,8 @@ public class PlayScreen implements Screen {
 
 				if (tile.getProperties().containsKey(ENEMY_SPAWN)) {
 					// debug=newpos;
-					AnimationDictionary animDict = new AnimationDictionary(
-							"img/characters/animation_map_doctor-2.png", 0.25f,
+					AnimationDictionary animDict = new AnimationDictionary(new Texture(
+							"img/characters/animation_map_doctor-2.png"), 0.25f,
 							5);
 					Enemy enemy = new Enemy(newpos.add(0.0f, 500.0f), player,
 							animDict, animDict.animationTime, animDict.width,
@@ -414,8 +417,7 @@ public class PlayScreen implements Screen {
 
 				if (tile.getProperties().containsKey("dealer")) {
 					// debug=newpos;
-					AnimationDictionary animDict = new AnimationDictionary(
-							"img/characters/Dealer.png", 0.25f, 6);
+					AnimationDictionary animDict = new AnimationDictionary(new Texture("img/characters/Dealer.png"), 0.25f, 6);
 					Dealer deal = new Dealer(newpos.add(0.0f, 1500.0f),
 							animDict, animDict.animationTime, animDict.width,
 							animDict.height, collisionLayer);
@@ -445,10 +447,9 @@ public class PlayScreen implements Screen {
 						path = "mushroom.png";
 						newkind = Kind.MUSHROOM;
 					}
-					AnimationDictionary animDict = new AnimationDictionary(
-							"img/items/" + path, 0.25f, num);
-					Drug d = new Drug(newpos, animDict, animDict.animationTime,
-							animDict.width, animDict.height);
+					String fullPath = "img/items/" + path;
+					AnimationDictionary animDict = new AnimationDictionary(new Texture(fullPath), 0.25f, num);
+					Drug d = new Drug(newpos, animDict, animDict.animationTime, animDict.width, animDict.height);
 					d.current = newkind; // cheap harcode for testing
 					itemsList.add(d);
 				}
@@ -479,10 +480,9 @@ public class PlayScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		map.dispose();
 		tileRenderer.dispose();
 		shapeRenderer.dispose();
-		mainTheme.dispose();
+		//mainTheme.dispose();
 		player.dispose();
 	}
 
