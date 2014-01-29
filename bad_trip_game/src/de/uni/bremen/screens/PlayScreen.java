@@ -40,7 +40,7 @@ import de.uni.bremen.utils.Kind;
 
 public class PlayScreen implements Screen {
 
-	public static final String LevelName = "maps/laysers/LevelLayerSwitchconstructed.tmx";
+	public static final String LevelName = "maps/laysers/LevelLayerSwitchconstructedcomplete.tmx";
 	
 	private TiledMap map;
 	float levelWidth;
@@ -85,15 +85,14 @@ public class PlayScreen implements Screen {
 		public static void playMusic(String key){
 			if(!currentMusic.equals(key)){
 				stopMusic(currentMusic);
-				
+				music.get(key).play();
+				currentMusic = key;
 			}
-			music.get(key).play();
-			currentMusic = key;
 		}
 		
 		public static void stopMusic(String key){
 			music.get(key).stop();
-			currentMusic = key;
+			//currentMusic = key;
 		}
 		
 		public static void setMusicLooping(boolean isLooping){
@@ -339,7 +338,7 @@ public class PlayScreen implements Screen {
 		// ----- drug timer
 		if (player.currentHealthState != HealthStates.CLEAN) {
 
-			System.out.println(player.drugTime);
+			//System.out.println(player.drugTime);
 			// healthbar:
 			shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 1.0f);
 			shapeRenderer.rect(260, y, 200, h); // drug-bar outer shape
@@ -369,10 +368,10 @@ public class PlayScreen implements Screen {
 	
 	
 	@Override
-	public void show() {
-	
-		playMusic(MUSIC_MAIN_THEME);
-		//music.get(MUSIC_MAIN_THEME).play();
+	public void show() 
+	{
+		
+		music.get(MUSIC_MAIN_THEME).play();
 		
 		gameRef.mapManager.finishLoading();
 		
@@ -445,7 +444,7 @@ public class PlayScreen implements Screen {
 						* objectLayer.getTileHeight());
 
 				if (tile.getProperties().containsKey(GOAL)) {
-					String path = "img/items/apple.png";
+					String path = "img/items/flag.png";
 					AnimationDictionary animDict = new AnimationDictionary(new Texture(path), 0.25f, 1);
 					Goal g = new Goal(newpos, animDict, animDict.animationTime,
 							animDict.width, animDict.height);
