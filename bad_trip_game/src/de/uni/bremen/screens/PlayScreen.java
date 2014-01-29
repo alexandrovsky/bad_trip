@@ -132,8 +132,9 @@ public class PlayScreen implements Screen {
 	
 	Color bg = new Color(0x86C4FD);
 	
-	public PlayScreen(BadTripGame gameref) {
-		// TODO Auto-generated constructor stub
+	public PlayScreen(BadTripGame gameref) 
+	{
+		
 		gameRef = gameref;
 		font = new BitmapFont();
 		messageFont = new BitmapFont();
@@ -447,7 +448,7 @@ public class PlayScreen implements Screen {
 					String path = "img/items/flag.png";
 					AnimationDictionary animDict = new AnimationDictionary(new Texture(path), 0.25f, 1);
 					Goal g = new Goal(newpos, animDict, animDict.animationTime,
-							animDict.width, animDict.height);
+								      animDict.width, animDict.height);
 					itemsList.add(g);
 				}
 

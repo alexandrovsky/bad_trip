@@ -2,6 +2,7 @@ package de.uni.bremen.entities;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
@@ -119,6 +120,7 @@ public class Player extends Character implements InputProcessor, Disposable{
 				if(item instanceof Goal)
 				{
 					win=true;
+					System.out.println("Goal reached");
 				}
 				if(item instanceof Fruit)
 				{
