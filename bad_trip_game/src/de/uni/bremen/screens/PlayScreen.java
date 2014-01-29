@@ -1,10 +1,13 @@
 package de.uni.bremen.screens;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -18,7 +21,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -49,8 +51,63 @@ public class PlayScreen implements Screen {
 	ShapeRenderer shapeRenderer;
 	private OrthographicCamera camera;
 
-	public Sound mainTheme = Gdx.audio.newSound(Gdx.files.internal("audio/main_theme.mp3"));
-	long mainThemeId;
+	public static final String MUSIC_MAIN_THEME = "audio/main_theme.mp3";
+	public static final String MUSIC_WEED_THEME = "audio/weed_theme.mp3";
+	public static final String MUSIC_XTC_THEME = "audio/xtc_theme.mp3";
+	public static final String MUSIC_MUSHROOM_THEME = "audio/mushroom_theme.mp3";
+	
+	
+	
+	
+	
+	public static String currentMusic = MUSIC_MAIN_THEME;
+		public static Map<String, Music> music = new HashMap<String, Music>();
+		{
+		    Map<String,Music> temp = new HashMap<String, Music>();
+		    
+		    
+		    temp.put(MUSIC_MAIN_THEME,
+					Gdx.audio.newMusic(Gdx.files.internal(MUSIC_MAIN_THEME)) );
+		    temp.put(MUSIC_XTC_THEME, 
+					Gdx.audio.newMusic(Gdx.files.internal(MUSIC_XTC_THEME)) );
+		    temp.put(MUSIC_WEED_THEME, 
+					Gdx.audio.newMusic(Gdx.files.internal(MUSIC_WEED_THEME)));
+		    temp.put(MUSIC_MUSHROOM_THEME, Gdx.audio.newMusic(Gdx.files.internal(MUSIC_MUSHROOM_THEME)));
+			
+			
+			
+			setMusicLooping(true);
+			
+			
+		    music = Collections.unmodifiableMap(temp);
+		}
+		
+		public static void playMusic(String key){
+			if(!currentMusic.equals(key)){
+				stopMusic(currentMusic);
+				
+			}
+			music.get(key).play();
+			currentMusic = key;
+		}
+		
+		public static void stopMusic(String key){
+			music.get(key).stop();
+			currentMusic = key;
+		}
+		
+		public static void setMusicLooping(boolean isLooping){
+			for (Map.Entry<String, Music> entry : music.entrySet()){
+				entry.getValue().setLooping(isLooping);
+			}
+		}
+		public static void disposeMusic(){
+			for (Map.Entry<String, Music> entry : music.entrySet()){
+				entry.getValue().dispose();
+			}
+		}
+	
+	
 	private Player player;
 
 	BitmapFont font, messageFont;
@@ -95,6 +152,7 @@ public class PlayScreen implements Screen {
 	public void render(float delta) {
 		// if(gameRef.getScreen()!=this)return;
 
+		// check if level loaded first!!!
 		if(!gameRef.mapManager.update()){
 			return;
 		}
@@ -191,18 +249,26 @@ public class PlayScreen implements Screen {
 		case CLEAN:
 			tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers()
 					.get("soberforeground"));
+			if(!currentMusic.equals(MUSIC_MAIN_THEME)){
+				playMusic(MUSIC_MAIN_THEME);
+			}
 			break;
 		case ON_MUSHRROM:
 			tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers()
 					.get("shroomsforeground"));
+			if(!currentMusic.equals(MUSIC_MUSHROOM_THEME)){
+				playMusic(MUSIC_MUSHROOM_THEME);
+			}
 			break;
 		case ON_WEED:
 			tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers()
 					.get("weedforeground"));
+			playMusic(MUSIC_WEED_THEME);
 			break;
 		case ON_XTC:
 			tileRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers()
 					.get("xtcforeground"));
+			playMusic(MUSIC_XTC_THEME);
 			break;
 		default:
 			break;
@@ -305,9 +371,8 @@ public class PlayScreen implements Screen {
 	@Override
 	public void show() {
 	
-	
-		mainTheme.stop(mainThemeId);
-		mainThemeId = mainTheme.loop(0.6f);
+		playMusic(MUSIC_MAIN_THEME);
+		//music.get(MUSIC_MAIN_THEME).play();
 		
 		gameRef.mapManager.finishLoading();
 		
@@ -487,7 +552,10 @@ public class PlayScreen implements Screen {
 	public void dispose() {
 		tileRenderer.dispose();
 		shapeRenderer.dispose();
-		mainTheme.dispose();
+		
+		disposeMusic();
+		
+		
 		player.dispose();
 	}
 
