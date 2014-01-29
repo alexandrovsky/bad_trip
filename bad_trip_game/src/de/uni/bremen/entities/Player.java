@@ -356,6 +356,7 @@ public class Player extends Character implements InputProcessor, Disposable{
 	
 	
 	public void dispose(){
+		
 		jumpSound.dispose();
 		hitSound.dispose();
 	}

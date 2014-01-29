@@ -191,8 +191,9 @@ public class PlayScreen implements Screen {
 
 		// GUI
 
-		font.draw(batch, "Score: " + player.score, player.postion.x + 100,
-				player.postion.y + 400);
+		font.draw(batch, "Score: " + player.score, 
+				camera.position.x + camera.viewportWidth/2-180,
+				camera.position.y + camera.viewportHeight/2-30);
 
 		if (player.message != null && player.message.length() > 0) {
 			// messageFont.scale(player.messageScale);
@@ -218,6 +219,8 @@ public class PlayScreen implements Screen {
 
 		shapeRenderer.begin(ShapeType.Filled);
 
+		
+		
 		// health bar:
 		float x, y, h;
 		h = 40;
@@ -323,8 +326,8 @@ public class PlayScreen implements Screen {
 							* objectLayer.getTileHeight());
 
 					AnimationDictionary playerAnimDict = new AnimationDictionary(
-							"img/characters/animation_map_character.png",
-							0.125f, 4, 4, 3, 5);
+							"img/characters/animation_map_character2.png",
+							0.125f, 4, 4, 6);
 					player = new Player(newpos, playerAnimDict,
 							playerAnimDict.animationTime, playerAnimDict.width,
 							playerAnimDict.height, collisionLayer);
