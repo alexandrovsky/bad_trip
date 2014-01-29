@@ -38,6 +38,8 @@ import de.uni.bremen.utils.Kind;
 public class PlayScreen implements Screen {
 
 	private TiledMap map;
+	float levelWidth;
+	float levelHeight;
 	private OrthogonalTiledMapRenderer tileRenderer;
 	ShapeRenderer shapeRenderer;
 	private OrthographicCamera camera;
@@ -98,11 +100,18 @@ public class PlayScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		float deltaTime = Gdx.graphics.getDeltaTime();
-
-		camera.position.set(new Vector3(player.postion.x + player.width / 2,
+		
+		//
+		if(player.postion.x - camera.viewportWidth/2 > 0 &&
+		   player.postion.x + camera.viewportWidth/2 < levelWidth &&
+		   player.postion.y - camera.viewportHeight/2 > 0 &&
+		   player.postion.y + camera.viewportHeight/2 < levelHeight){
+		
+			camera.position.set(new Vector3(player.postion.x + player.width / 2,
 				player.postion.y + player.height / 2, 0));
-		camera.update();
-
+			camera.update();
+		}
+		
 		tileRenderer.setView(camera);
 
 		SpriteBatch batch = tileRenderer.getSpriteBatch();
@@ -210,8 +219,7 @@ public class PlayScreen implements Screen {
 		shapeRenderer.begin(ShapeType.Filled);
 
 		// health bar:
-		float x, y, w, h;
-		w = 22;
+		float x, y, h;
 		h = 40;
 		x = 50;
 		y = camera.viewportHeight - 2 * h;
@@ -283,6 +291,12 @@ public class PlayScreen implements Screen {
 		tileRenderer = new OrthogonalTiledMapRenderer(map);
 		TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers()
 				.get("soberforeground");
+		
+		
+		
+		levelWidth = collisionLayer.getWidth() * collisionLayer.getTileWidth();
+		levelHeight = collisionLayer.getHeight() * collisionLayer.getTileHeight();
+		
 
 		shapeRenderer = new ShapeRenderer();
 		camera = new OrthographicCamera();
