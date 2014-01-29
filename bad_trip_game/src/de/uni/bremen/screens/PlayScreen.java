@@ -38,6 +38,8 @@ import de.uni.bremen.utils.Kind;
 
 public class PlayScreen implements Screen {
 
+	public static final String LevelName = "maps/laysers/LevelLayerSwitchconstructed.tmx";
+	
 	private TiledMap map;
 	float levelWidth;
 	float levelHeight;
@@ -47,7 +49,7 @@ public class PlayScreen implements Screen {
 	ShapeRenderer shapeRenderer;
 	private OrthographicCamera camera;
 
-	//public Sound mainTheme = Gdx.audio.newSound(Gdx.files.internal("audio/main_theme.mp3"));
+	public Sound mainTheme = Gdx.audio.newSound(Gdx.files.internal("audio/main_theme.mp3"));
 	long mainThemeId;
 	private Player player;
 
@@ -93,6 +95,9 @@ public class PlayScreen implements Screen {
 	public void render(float delta) {
 		// if(gameRef.getScreen()!=this)return;
 
+		if(!gameRef.mapManager.update()){
+			return;
+		}
 		
 		
 		if (player.win) {
@@ -301,12 +306,12 @@ public class PlayScreen implements Screen {
 	public void show() {
 	
 	
-		//mainTheme.stop(mainThemeId);
-		//mainThemeId = mainTheme.loop(0.6f);
+		mainTheme.stop(mainThemeId);
+		mainThemeId = mainTheme.loop(0.6f);
 		
 		gameRef.mapManager.finishLoading();
 		
-		map = gameRef.mapManager.get("maps/laysers/LevelLayerSwitchconstructed.tmx");
+		map = gameRef.mapManager.get(LevelName);
 		tileRenderer = new OrthogonalTiledMapRenderer(map);
 		TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers()
 				.get("soberforeground");
@@ -482,7 +487,7 @@ public class PlayScreen implements Screen {
 	public void dispose() {
 		tileRenderer.dispose();
 		shapeRenderer.dispose();
-		//mainTheme.dispose();
+		mainTheme.dispose();
 		player.dispose();
 	}
 

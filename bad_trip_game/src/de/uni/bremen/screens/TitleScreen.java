@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.sun.java.swing.plaf.gtk.GTKConstants.ShadowType;
 
 import de.uni.bremen.BadTripGame;
 
@@ -21,7 +24,7 @@ public class TitleScreen implements Screen {
 	BitmapFont font;
 	
 	BadTripGame gameRef;
-	
+	ShapeRenderer shapeRenderer;
 	public TitleScreen(BadTripGame gamref) {
 		// TODO Auto-generated constructor stub
 		gameRef = gamref;
@@ -29,10 +32,11 @@ public class TitleScreen implements Screen {
 		font= new BitmapFont();
 		font.setColor(.89f,.41f,.26f,1f);
 		font.scale(1.6f);
+		shapeRenderer = new ShapeRenderer();
 	}
 	
 	Color bg = new Color(0x86C4FD);
-
+	float progress = 0.0f;
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
@@ -46,13 +50,36 @@ public class TitleScreen implements Screen {
 			font.draw(batch, "PRESS ENTER", 700, 80);
 		batch.end();
 		
-		  if (Gdx.input.isButtonPressed(Buttons.LEFT)
-				  || Gdx.input.isKeyPressed(Keys.ENTER)){
-			  // use your own criterion here
-			  System.out.println("Enter game");
-			  gameRef.initMain();
-		  }
-              
+		
+		int screen_w = Gdx.graphics.getWidth();
+		int screen_h = Gdx.graphics.getHeight();
+		int w = 200;
+		int h = 60;
+		int x = screen_w/2-w/2;
+		int y = screen_h/4;
+		
+		if(!gameRef.mapManager.update()){
+			
+			shapeRenderer.begin(ShapeType.Filled);
+			
+			shapeRenderer.setColor(1.0f, 0.5f, 0.3f, 1.0f);
+			shapeRenderer.rect(x, y, w*progress, h);
+			progress = (progress + Gdx.graphics.getDeltaTime() ) % w;
+			shapeRenderer.end();
+		}else{
+			System.out.println("Enter game");
+			gameRef.initMain();
+		}
+		
+		
+		/*
+		if (Gdx.input.isButtonPressed(Buttons.LEFT)
+			  || Gdx.input.isKeyPressed(Keys.ENTER)){
+		  // use your own criterion here
+		  System.out.println("Enter game");
+			gameRef.initMain();
+		}
+        */      
 
 	}
 

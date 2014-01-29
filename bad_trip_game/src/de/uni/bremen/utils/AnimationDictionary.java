@@ -15,8 +15,8 @@ public class AnimationDictionary extends HashMap {
 	public float animationTime;
 	Texture sheet;
 	
-	public AnimationDictionary(String path, float animationTime, int... numAnimations) {
-		sheet = new Texture(path);
+	public AnimationDictionary(Texture texture, float animationTime, int... numAnimations) {
+		sheet = texture;
 		this.animationTime = animationTime;
 		
 		int framesSum = 0;

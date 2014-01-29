@@ -25,7 +25,7 @@ public class BadTripGame extends Game {
 		
 		mapManager = new AssetManager();
 		mapManager.setLoader(TiledMap.class,new TmxMapLoader(new InternalFileHandleResolver()));
-		mapManager.load("maps/laysers/LevelLayerSwitchconstructed.tmx", TiledMap.class);
+		mapManager.load(mainScreen.LevelName, TiledMap.class);
 		
 		end = new EndScreen(this);
 		setScreen(new TitleScreen(this));
@@ -41,7 +41,8 @@ public class BadTripGame extends Game {
 	@Override
 	public void dispose() {
 		super.dispose();
-		mapManager.dispose();
+		//mapManager.clear();
+		//mapManager.dispose();
 	}
 
 	@Override
