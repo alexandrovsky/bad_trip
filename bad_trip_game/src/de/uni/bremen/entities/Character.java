@@ -89,6 +89,10 @@ public class Character extends Entity{
 	 */
 	protected float tileHeight;
 	
+	// dimension of the level in tiles
+	protected float levelWidth;
+	protected float levelHeight;
+	
 	protected boolean isOrientationLeft;
 	
 	protected States currentState = States.IDLE;
@@ -122,6 +126,8 @@ public class Character extends Entity{
 		
 		tileWidth = collisionLayer.getTileWidth();
 		tileHeight = collisionLayer.getTileHeight();
+		levelWidth = collisionLayer.getWidth();
+		levelHeight = collisionLayer.getHeight();
 	}
 	
 	
@@ -180,6 +186,17 @@ public class Character extends Entity{
 		
 		//3) move on x:
 		postion.x += velocity.x * deltaTime;
+		
+		// calm movement to level bounds:
+		if(postion.x+tileWidth < 0.0f){
+			postion.x = 0.0f;
+		}else if (postion.x > levelWidth*tileWidth) {
+			postion.x = levelWidth * tileWidth - tileWidth;
+		}else if (postion.y +tileHeight < 0.0f) {
+			postion.y = 0.0f;
+		}else if(postion.y > levelHeight * tileHeight){
+			postion.y = levelHeight * tileHeight - tileHeight;
+		}
 		
 		// moving left:
 		if(velocity.x < 0){

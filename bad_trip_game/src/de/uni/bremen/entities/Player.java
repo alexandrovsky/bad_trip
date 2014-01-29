@@ -201,7 +201,7 @@ public class Player extends Character implements InputProcessor, Disposable{
 		if(currentHealth<=0)isDead=true;
 		
 		
-		if(score<0)score=0;
+		//if(score<0)score=0; disable negative values?
 		
 		
 		

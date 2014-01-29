@@ -8,6 +8,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
@@ -40,6 +41,8 @@ public class PlayScreen implements Screen {
 	private TiledMap map;
 	float levelWidth;
 	float levelHeight;
+	float tileWidth;
+	float tileHeight;
 	private OrthogonalTiledMapRenderer tileRenderer;
 	ShapeRenderer shapeRenderer;
 	private OrthographicCamera camera;
@@ -63,6 +66,8 @@ public class PlayScreen implements Screen {
 
 	int width, height;
 
+	Color bg = new Color(0x86C4FD);
+	
 	public PlayScreen(BadTripGame gameref) {
 		// TODO Auto-generated constructor stub
 		gameRef = gameref;
@@ -73,8 +78,10 @@ public class PlayScreen implements Screen {
 		font.setColor(1.0f, .7f, 0.0f, 1.0f);
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
+		
+		init();
 	}
-	Color bg = new Color(0x86C4FD);
+	
 
 	@Override
 	public void render(float delta) {
@@ -102,10 +109,10 @@ public class PlayScreen implements Screen {
 		float deltaTime = Gdx.graphics.getDeltaTime();
 		
 		//
-		if(player.postion.x - camera.viewportWidth/2 > 0 &&
-		   player.postion.x + camera.viewportWidth/2 < levelWidth &&
-		   player.postion.y - camera.viewportHeight/2 > 0 &&
-		   player.postion.y + camera.viewportHeight/2 < levelHeight){
+		if(player.postion.x - camera.viewportWidth/2-tileWidth > 0 &&
+		   player.postion.x + camera.viewportWidth/2+tileWidth < levelWidth &&
+		   player.postion.y - camera.viewportHeight/2-tileHeight > 0 &&
+		   player.postion.y + camera.viewportHeight/2+tileHeight < levelHeight){
 		
 			camera.position.set(new Vector3(player.postion.x + player.width / 2,
 				player.postion.y + player.height / 2, 0));
@@ -286,6 +293,11 @@ public class PlayScreen implements Screen {
 
 	@Override
 	public void show() {
+	
+	}
+	
+	
+	public void init() {
 
 		mainTheme.stop(mainThemeId);
 		mainThemeId = mainTheme.loop(0.6f);
@@ -299,7 +311,8 @@ public class PlayScreen implements Screen {
 		
 		levelWidth = collisionLayer.getWidth() * collisionLayer.getTileWidth();
 		levelHeight = collisionLayer.getHeight() * collisionLayer.getTileHeight();
-		
+		tileWidth = collisionLayer.getTileWidth();
+		tileHeight = collisionLayer.getTileHeight();
 
 		shapeRenderer = new ShapeRenderer();
 		camera = new OrthographicCamera();
@@ -321,10 +334,11 @@ public class PlayScreen implements Screen {
 				}
 				TiledMapTile tile = objectLayer.getCell(x, y).getTile();
 				if (tile != null && tile.getProperties().containsKey("player")) {
+					
 					Vector2 newpos = new Vector2((float) x
 							* objectLayer.getTileWidth(), (float) y
 							* objectLayer.getTileHeight());
-
+					System.out.println("player spawn tile:  x:" + x + " y:" + y + "coord:" + newpos );
 					AnimationDictionary playerAnimDict = new AnimationDictionary(
 							"img/characters/animation_map_character2.png",
 							0.125f, 4, 4, 6);
@@ -445,18 +459,21 @@ public class PlayScreen implements Screen {
 	@Override
 	public void hide() {
 		dispose();
+		
+		
+		
 
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
+		System.out.println("resume");
 
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
+		System.out.println("resume");
 
 	}
 

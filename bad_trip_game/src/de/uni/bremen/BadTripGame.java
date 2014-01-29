@@ -15,8 +15,8 @@ public class BadTripGame extends Game {
 	@Override
 	public void create() {		
 		end = new EndScreen(this);
-		//setScreen(new TitleScreen(this));
-		initMain();
+		setScreen(new TitleScreen(this));
+		//initMain();
 	}
 
 	public void initMain()
