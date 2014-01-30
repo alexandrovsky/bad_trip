@@ -52,8 +52,8 @@ public class TitleScreen implements Screen {
 		int screen_h = Gdx.graphics.getHeight();
 		int w = 200;
 		int h = 60;
-		int x = screen_w/2-w/2;
-		int y = screen_h/4;
+		int x = 10;//screen_w/2-w/2;
+		int y = 40;//screen_h/4;
 		
 		if(!gameRef.mapManager.update()){
 			

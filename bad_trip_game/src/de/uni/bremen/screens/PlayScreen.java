@@ -286,7 +286,7 @@ public class PlayScreen implements Screen {
 		// GUI
 
 		font.draw(batch, "Score: " + player.score, 
-				camera.position.x + camera.viewportWidth/2-180,
+				camera.position.x + camera.viewportWidth/2-210,
 				camera.position.y + camera.viewportHeight/2-30);
 
 		if (player.message != null && player.message.length() > 0) {
