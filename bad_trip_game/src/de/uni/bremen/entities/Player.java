@@ -258,13 +258,13 @@ public class Player extends Character implements InputProcessor, Disposable{
 					canJump = false;
 					currentState = States.JUMP;
 					
-					final long id = jumpSound.loop();
+					final long id = jumpSound.play();
 					Timer.schedule(new Task(){
 					   @Override
 					   public void run(){
 						   jumpSound.stop(id);
 					      }
-					   }, 0.8f);
+					   }, 0.5f);
 				}
 				break;
 			case Keys.R: // reset;
