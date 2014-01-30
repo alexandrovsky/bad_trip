@@ -167,15 +167,15 @@ public class PlayScreen implements Screen {
 			//	finalScore -= player.currentHealth;
 			//}
 			 
-			gameRef.end.goodEnd = player.score - player.currentHealth > 0 ? true : false;
+			gameRef.end.goodEnd = finalScore > 0 ? true : false;
 			gameRef.end.score = finalScore;
 			gameRef.setScreen(gameRef.end);
 			return;
 		}
 
-		if (player.isDead)// TODO fix this y by create a new tile layer
+		if (player.isDead)
 		{
-			gameRef.end.goodEnd = false;
+			gameRef.end.dead = true;
 			gameRef.end.score = player.score;
 			gameRef.setScreen(gameRef.end);
 			return;
@@ -425,7 +425,7 @@ public class PlayScreen implements Screen {
 					System.out.println("player spawn tile:  x:" + x + " y:" + y + "coord:" + newpos );
 					AnimationDictionary playerAnimDict = new AnimationDictionary(new Texture("img/characters/animation_map_character2.png"),
 							0.125f, 4, 4, 6);
-					player = new Player(newpos, playerAnimDict,
+					player = new Player(newpos.add(0,100), playerAnimDict,
 							playerAnimDict.animationTime, playerAnimDict.width,
 							playerAnimDict.height, collisionLayer);
 					Gdx.input.setInputProcessor(player);
