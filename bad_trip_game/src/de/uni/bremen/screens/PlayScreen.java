@@ -508,7 +508,7 @@ public class PlayScreen implements Screen {
 				if (tile.getProperties().containsKey(DRUG_SPAWN)) {
 					String type = (String) tile.getProperties().get("type");
 					String path = "xtc.png";
-					int num = 1;
+					int num = 6;
 					Kind newkind = Kind.XTC;
 					if (type.equals("xtc")) {
 						num = 6;
