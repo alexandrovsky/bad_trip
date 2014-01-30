@@ -67,10 +67,19 @@ public class EndScreen implements Screen {
 	
 		batch.draw(currentFrame,0,0,0,0, width, height, 1.0f, 1,0f);
     
-		enterFont.draw(batch, "You took too many drugs!", 10, height-30);
+		if(!dead)
+		{
+			if(goodEnd)
+			{
+				enterFont.draw(batch, "You recovered by living a healthier lifestyle!", 10, height-30);
+			}else{
+				enterFont.draw(batch, "You took too many drugs!", 10, height-30);
+			}
+			font.draw(batch, "your score is "+score, 10, 120);
+		}
 		
-		font.draw(batch, "your score is "+score, 10, 120);
-		enterFont.draw(batch, "PRESS ENTER TO PLAY AGAIN!", 10, 60);
+		
+		enterFont.draw(batch, "PRESS ENTER TO TRY AGAIN!", 10, 60);
 		
 		batch.end();
 	}
@@ -84,17 +93,27 @@ public class EndScreen implements Screen {
 	AnimationDictionary playerAnimDict;
 	SpriteBatch batch;
 	
+	public boolean dead;
+	
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
 		batch=new SpriteBatch();
-		if(!goodEnd)
+		
+		if(dead)
 		{
 			playerAnimDict = new AnimationDictionary(new Texture("img/screens/end.png"), 0.125f, 5);
 		}else{
-			playerAnimDict = new AnimationDictionary(new Texture("img/screens/sadend2.png"), 0.125f, 6);
+			if(!goodEnd)
+			{
+				System.out.println("sadend");
+				playerAnimDict = new AnimationDictionary(new Texture("img/screens/sadend2.png"), 0.125f, 6);
+			}else{
+				System.out.println("happyend");
+				playerAnimDict = new AnimationDictionary(new Texture("img/screens/happyend2.png"), 0.25f, 23);
+			}
 		}
-
+		
 		width = Gdx.graphics.getWidth();
 		height=Gdx.graphics.getHeight();
 		

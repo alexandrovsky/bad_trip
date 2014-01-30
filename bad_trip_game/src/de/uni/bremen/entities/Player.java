@@ -79,6 +79,8 @@ public class Player extends Character implements InputProcessor, Disposable{
 		drugTime = 100.0f;
 		
 		drugTimerActivationTime = TimeUtils.millis();
+		
+		drugTimer.clear();
 		this.drugTimer.scheduleTask(new Task(){
 		    @Override
 		    public void run() {
@@ -134,6 +136,7 @@ public class Player extends Character implements InputProcessor, Disposable{
 					score-=100;
 					Drug d = (Drug)item;
 					currentHealth-=5;
+					resetStatus();
 					switch (d.current) {
 					case MUSHROOM:
 						currentHealthState = HealthStates.ON_MUSHRROM;
