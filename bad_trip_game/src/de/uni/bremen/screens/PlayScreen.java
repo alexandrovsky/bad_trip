@@ -462,15 +462,15 @@ public class PlayScreen implements Screen {
 
 				if (tile.getProperties().containsKey(FRUIT_SPAWN)) {
 					String path = "img/items/apple.png";
-					int rand = (int) Math.random() * 3;
+					int rand = (int)(Math.random()*4+1);
 					switch (rand) {
-					case 0:
+					case 1:
 						path = "img/items/orange.png";
 						break;
-					case 1:
+					case 2:
 						path = "img/items/apple.png";
 						break;
-					case 2:
+					case 3:
 						path = "img/items/pear.png";
 						break;
 					}
