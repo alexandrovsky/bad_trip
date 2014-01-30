@@ -40,7 +40,7 @@ import de.uni.bremen.utils.Kind;
 
 public class PlayScreen implements Screen {
 
-	public static final String LevelName = "maps/laysers/LevelLayerSwitchconstructedcomplete.tmx";
+	public static final String LevelName = "maps/laysers/LevelLayerSwitchconstructed.tmx";
 	
 	private TiledMap map;
 	float levelWidth;
