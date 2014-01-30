@@ -2,7 +2,6 @@ package de.uni.bremen.entities;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
@@ -267,6 +266,8 @@ public class Player extends Character implements InputProcessor, Disposable{
 				break;
 			case Keys.R: // reset;
 				resetStatus();
+				//reset position separatly:
+				postion = new Vector2(initPostion.x, initPostion.y);
 				break;
 			default:
 				break;
@@ -283,7 +284,7 @@ public class Player extends Character implements InputProcessor, Disposable{
 		maxJumpHeight = normalJumpHeight;
 		currentHealthState= HealthStates.CLEAN;
 		score -= 50;
-		postion = new Vector2(initPostion.x, initPostion.y);
+		//
 	}
 
 	@Override
