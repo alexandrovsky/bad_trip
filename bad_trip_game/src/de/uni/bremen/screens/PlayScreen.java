@@ -161,11 +161,11 @@ public class PlayScreen implements Screen {
 		if (player.win) {
 			
 			long finalScore = player.score;
-			if(player.currentHealth == player.maxHealth){
+			//if(player.currentHealth == player.maxHealth){
 				finalScore += player.currentHealth;
-			}else{
-				finalScore -= player.currentHealth;
-			}
+			//}else{
+			//	finalScore -= player.currentHealth;
+			//}
 			 
 			gameRef.end.goodEnd = player.score - player.currentHealth > 0 ? true : false;
 			gameRef.end.score = finalScore;
