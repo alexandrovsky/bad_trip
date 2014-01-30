@@ -282,6 +282,8 @@ public class Player extends Character implements InputProcessor, Disposable{
 		maxSpeed=normalSpeed;
 		maxJumpHeight = normalJumpHeight;
 		currentHealthState= HealthStates.CLEAN;
+		score -= 50;
+		postion = new Vector2(initPostion.x, initPostion.y);
 	}
 
 	@Override

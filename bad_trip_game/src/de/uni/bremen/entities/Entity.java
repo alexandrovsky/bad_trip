@@ -31,6 +31,7 @@ public class Entity
 	protected float animationTime;
 	
 	public Vector2 postion;
+	public Vector2 initPostion;
 	public float height, width; 
 
 	public boolean isDead;
@@ -40,6 +41,7 @@ public class Entity
 		this.animationDict = animationDict;
 		this.animationTime = animationTime;
 		this.postion = position;
+		this.initPostion = new Vector2(position.x, position.y);
 		this.width = width;
 		this.height = height;
 	}

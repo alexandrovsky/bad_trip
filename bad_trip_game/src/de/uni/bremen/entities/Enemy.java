@@ -2,6 +2,7 @@ package de.uni.bremen.entities;
 
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 
@@ -32,13 +33,14 @@ public class Enemy extends Character {
 			Vector2 enemyPos = postion.cpy(); 
 			Vector2 delta = playerPos.sub(enemyPos);
 			
-			//if(delta.len() < Gdx.graphics.getWidth() ){
-			if(delta.x > 0.0){
-				velocity.x = maxSpeed;
-				isOrientationLeft= false;
-			}else{
-				velocity.x = -maxSpeed;
-				isOrientationLeft = true;
+			if(delta.len() < Gdx.graphics.getWidth()/2 ){
+				if(delta.x > width/2){
+					velocity.x = maxSpeed;
+					isOrientationLeft= false;
+				}else {
+					velocity.x = -maxSpeed;
+					isOrientationLeft = true;
+				}
 			}
 			
 		}
