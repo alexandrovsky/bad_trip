@@ -104,8 +104,9 @@ public class Character extends Entity{
 	 */
 		protected enum States{
 			WALK(0),
-			IDLE(1),
-			JUMP(2),
+			JUMP(1),
+			IDLE(2),
+			
 			ZERO(0);
 			
 			public int key;
