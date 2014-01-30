@@ -44,7 +44,7 @@ public class EndScreen implements Screen {
 	public boolean goodEnd;
 	public long score;
 	
-	Color bg = new Color(0x86C4FD);
+	Color bg = new Color(0.522f,0.769f,0.992f,1.0f);
 	
 	@Override
 	public void render(float delta) {
@@ -70,7 +70,7 @@ public class EndScreen implements Screen {
 		enterFont.draw(batch, "You took too many drugs!", 10, height-30);
 		
 		font.draw(batch, "your score is "+score, 10, 120);
-		enterFont.draw(batch, "PRESS ENTER AND PLAY AGAIN!", 10, 60);
+		enterFont.draw(batch, "PRESS ENTER TO PLAY AGAIN!", 10, 60);
 		
 		batch.end();
 	}

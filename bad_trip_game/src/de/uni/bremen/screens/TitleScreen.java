@@ -32,7 +32,7 @@ public class TitleScreen implements Screen {
 		shapeRenderer = new ShapeRenderer();
 	}
 	
-	Color bg = new Color(0x86C4FD);
+	Color bg = new Color(0.522f,0.769f,0.992f,1.0f);
 	float progress = 0.0f;
 	@Override
 	public void render(float delta) {

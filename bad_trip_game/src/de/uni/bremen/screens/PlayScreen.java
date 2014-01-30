@@ -130,7 +130,7 @@ public class PlayScreen implements Screen {
 	Vector2 debug;
 
 	
-	Color bg = new Color(0x86C4FD);
+	Color bg = new Color(0.522f,0.769f,0.992f,1.0f);
 	
 	public PlayScreen(BadTripGame gameref) 
 	{
