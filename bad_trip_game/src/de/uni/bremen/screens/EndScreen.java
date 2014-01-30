@@ -110,7 +110,8 @@ public class EndScreen implements Screen {
 				playerAnimDict = new AnimationDictionary(new Texture("img/screens/sadend2.png"), 0.125f, 6);
 			}else{
 				System.out.println("happyend");
-				playerAnimDict = new AnimationDictionary(new Texture("img/screens/happyend2.png"), 0.25f, 23);
+				
+				playerAnimDict = new AnimationDictionary(new Texture("img/screens/happy3.png"), 0.25f, 23);
 			}
 		}
 		
