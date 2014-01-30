@@ -21,6 +21,8 @@ public class EndScreen implements Screen {
 	private BitmapFont font;
 	private BitmapFont enterFont;
 	
+	
+	
 	public EndScreen(BadTripGame gameref) {
 		// TODO Auto-generated constructor stub
 		gameRef =gameref;
@@ -103,15 +105,17 @@ public class EndScreen implements Screen {
 		if(dead)
 		{
 			playerAnimDict = new AnimationDictionary(new Texture("img/screens/end.png"), 0.125f, 5);
+			BadTripGame.playMusic(BadTripGame.MUSIC_BAD_END_THEME);
 		}else{
 			if(!goodEnd)
 			{
 				System.out.println("sadend");
 				playerAnimDict = new AnimationDictionary(new Texture("img/screens/sadend2.png"), 0.125f, 6);
+				BadTripGame.playMusic(BadTripGame.MUSIC_GOOD_END_THEME);
 			}else{
 				System.out.println("happyend");
-				
 				playerAnimDict = new AnimationDictionary(new Texture("img/screens/happy3.png"), 0.25f, 23);
+				BadTripGame.playMusic(BadTripGame.MUSIC_GOOD_END_THEME);
 			}
 		}
 		
