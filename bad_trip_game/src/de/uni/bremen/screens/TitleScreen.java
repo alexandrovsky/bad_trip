@@ -57,9 +57,10 @@ public class TitleScreen implements Screen {
 		
 		if(!gameRef.mapManager.update()){
 			
+			
 			shapeRenderer.begin(ShapeType.Filled);
 			
-			shapeRenderer.setColor(1.0f, 0.5f, 0.3f, 1.0f);
+			shapeRenderer.setColor(0.153f,0.557f, 0.122f, 1.0f);
 			shapeRenderer.rect(x, y, w*progress, h);
 			progress = (progress + Gdx.graphics.getDeltaTime() ) % w;
 			shapeRenderer.end();
