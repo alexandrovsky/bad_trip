@@ -269,6 +269,7 @@ public class Player extends Character implements InputProcessor, Disposable{
 				break;
 			case Keys.R: // reset;
 				resetStatus();
+				win=false;
 				//reset position separatly:
 				postion = new Vector2(initPostion.x, initPostion.y);
 				break;

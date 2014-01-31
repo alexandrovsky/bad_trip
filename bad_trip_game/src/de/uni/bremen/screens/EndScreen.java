@@ -106,6 +106,8 @@ public class EndScreen implements Screen {
 		{
 			playerAnimDict = new AnimationDictionary(new Texture("img/screens/end.png"), 0.125f, 5);
 			BadTripGame.playMusic(BadTripGame.MUSIC_BAD_END_THEME);
+			dead = false;
+			goodEnd = false;
 		}else{
 			if(!goodEnd)
 			{
