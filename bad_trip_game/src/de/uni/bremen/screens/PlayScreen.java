@@ -309,12 +309,27 @@ public class PlayScreen implements Screen {
 		// healthbar:
 		shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 1.0f);
 		shapeRenderer.rect(60, y, 200, h); // health-bar outer shape
-
-		// shapeRenderer.setColor();
-		shapeRenderer.rect(60 + offset, y + offset, player.getCurrentHealth()
-				* 2 - 2 * offset, h - 2 * offset, rect_red, rect_green,
-				rect_green, rect_red); // health-bar inner shape
-
+		
+		if(player.getCurrentHealth()>100/2){
+			 shapeRenderer.setColor(0.153f,0.557f, 0.122f, 1.0f);
+		}
+		else if(player.getCurrentHealth()<100/2 && player.getCurrentHealth()>100/5){
+			shapeRenderer.setColor(0.945f,0.396f,0.133f, 1.0f );
+		}
+		else if(player.getCurrentHealth()<100/5){
+			shapeRenderer.setColor(0.925f, 0.11f, 0.141f, 1.0f );
+		}
+		
+		if(player.getCurrentHealth()>=100){
+			shapeRenderer.rect(60 + offset, y + offset, 100* 2 - 2 * offset, h - 2 * offset); // health-bar inner shape
+		}
+		else if(player.getCurrentHealth()<100 && player.getCurrentHealth()>0){
+			shapeRenderer.rect(60 + offset, y + offset, player.getCurrentHealth()* 2 - 2 * offset, h - 2 * offset); // health-bar inner shape
+		}
+		else {
+			shapeRenderer.rect(60 + offset, y + offset/2, offset, h - 2 * offset); // health-bar inner shape
+		}
+		
 		// TODO Render image for current drug state here
 
 		shapeRenderer.end();
