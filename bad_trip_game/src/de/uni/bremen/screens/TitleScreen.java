@@ -44,7 +44,7 @@ public class TitleScreen implements Screen {
 		batch.begin();
 			splash.draw(batch);
 			
-			font.draw(batch, "PRESS ENTER", 700, 80);
+			//font.draw(batch, "PRESS ENTER", 700, 80);
 		batch.end();
 		
 		

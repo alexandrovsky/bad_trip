@@ -283,13 +283,13 @@ public class PlayScreen implements Screen {
 		float cross_x = x - h + offset;
 		float cross_y = y + offset + cross_w / 3;
 
-		shapeRenderer.rect(cross_x, cross_y, cross_w, cross_h); // cross
+		shapeRenderer.rect(cross_x+3, cross_y, cross_w-6, cross_h); // cross
 																// horizontal
 																// part
 		cross_x = x - h + offset + cross_w / 3;
 		cross_y = y + offset;
 		cross_h = h - 2 * offset - (2 * cross_w / 3);
-		shapeRenderer.rect(cross_x, cross_y, cross_h, cross_w);// cross vertical
+		shapeRenderer.rect(cross_x, cross_y+3, cross_h, cross_w-6);// cross vertical
 																// part
 
 		// ----- drug timer
